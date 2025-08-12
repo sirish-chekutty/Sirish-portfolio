@@ -1,10 +1,14 @@
-# sirishchekutty.info  
+# ░░▒▒▓▓ sirishchekutty.info ▓▓▒▒░░
 
-> *“Prepared. Precise. Relentless.”* — *John Wick*  
-> *“Fear is the mind-killer.”* — *Dune*  
+> *“Prepared. Precise. Relentless.”* — **John Wick**  
+> *“Fear is the mind-killer.”* — **Dune**  
 
-This is my personal website — a clean, efficient hub for my work, projects, and thoughts.  
-Built with simplicity in mind, but ready to evolve, adapt, and take on any challenge.  
+A digital stronghold — built with precision, maintained with discipline.  
+Every pixel in place, every line of code deliberate.  
+
+---
+
+
 
 ---
 
