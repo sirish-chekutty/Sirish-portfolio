@@ -75,7 +75,30 @@ footer{color:var(--muted);font-size:13px;margin:40px 0;text-align:center}
 @media (max-width: 600px){
   html,body{ font-size: 1em; }
   .wrap{ padding: 22px; }
-  .portrait{ display:none; }
+
+  /* Portrait as faded watermark under text */
+  .portrait{
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.15;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .portrait img{
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    object-position: center top;
+    object-fit: cover;
+  }
+  .wrap, .title, .lead{
+    position: relative;
+    z-index: 2;
+  }
+
   .actions{ gap:10px }
   .cta{ width:100%; justify-content:center; padding:14px 16px; font-size:1em }
   .grid{
@@ -123,8 +146,8 @@ footer{color:var(--muted);font-size:13px;margin:40px 0;text-align:center}
         <button id="contactBtn" class="cta" type="button">Contact me</button>
       </div>
       <div id="contactPanel" class="contact-panel" aria-hidden="true">
-        <div class="contact-row"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm8 5L4.5 7.5h15L12 11z"/></svg></span><a href="mailto:Sirish.chekutty@gmail.com">Sirish.chekutty@gmail.com</a></div>
-        <div class="contact-row"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" xmlns="http://www.w3.org/2000/svg"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.8v2h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.77 2.65 4.77 6.1V23h-3.98v-6.5c0-1.55-.03-3.54-2.16-3.54-2.16 0-2.49 1.68-2.49 3.42V23H8V8.5z"/></svg></span><a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noopener">linkedin.com/in/sirishchekutty</a></div>
+        <div class="contact-row"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm8 5L4.5 7.5h15L12 11z"/></svg></span><a href="mailto:Sirish.chekutty@gmail.com">Sirish.chekutty@gmail.com</a></div>
+        <div class="contact-row"><span class="icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.8v2h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.77 2.65 4.77 6.1V23h-3.98v-6.5c0-1.55-.03-3.54-2.16-3.54-2.16 0-2.49 1.68-2.49 3.42V23H8V8.5z"/></svg></span><a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noopener">linkedin.com/in/sirishchekutty</a></div>
       </div>
     </section>
 
