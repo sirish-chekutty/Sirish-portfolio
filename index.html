@@ -59,6 +59,33 @@ footer{color:var(--muted);font-size:13px;margin:40px 0;text-align:center}
   .grid{animation:none}
   .parallax{transition:none}
 }
+
+/* Mobile Enhancements */
+.grid{
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, black 45%, transparent 80%);
+}
+@media (max-width: 900px){
+  .wrap{ padding-right: 20px; }
+  .portrait{ opacity:.5; top:auto; bottom:6vh; right:-10vw; }
+  .portrait img{ width:min(60vw, 420px); }
+  .title h1{ font-size: clamp(28px, 7vw, 40px); }
+  .lead{ font-size: 1em; }
+  .console{ font-size: .98em; }
+}
+@media (max-width: 600px){
+  html,body{ font-size: 1em; }
+  .wrap{ padding: 22px; }
+  .portrait{ display:none; }
+  .actions{ gap:10px }
+  .cta{ width:100%; justify-content:center; padding:14px 16px; font-size:1em }
+  .grid{
+    background-size:36px 36px;
+    mask-image: radial-gradient(circle at 50% 45%, black 55%, transparent 85%);
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, black 55%, transparent 85%);
+  }
+  .contact-row{ padding:12px 14px; font-size:.98em }
+  footer{ font-size:12px; margin:32px 0 }
+}
 </style>
 </head>
 <body>
@@ -66,32 +93,33 @@ footer{color:var(--muted);font-size:13px;margin:40px 0;text-align:center}
   <div class="layer grid parallax" data-depth="6"></div>
   <div class="layer noise"></div>
   <div class="portrait parallax" data-depth="1">
-    <img id="portrait" src="sirish.jpeg" alt="Portrait of Sirish">
+    <img id="portrait" src="sirish.jpeg" alt="Portrait of Sirish" loading="lazy" decoding="async">
   </div>
 
   <main class="wrap">
     <header class="fadeIn parallax" data-depth="2">
       <div class="title">
         <h1>Sirish Yadav</h1>
-       <small>IT Network & Systems Administrator @ The 401 Group of Companies</small>
-<p class="lead" style="margin:10px 0 0">
-    I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.
-</p>
-<p class="lead" style="margin:10px 0 0">
-    Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.
-</p>
-<p class="lead" style="margin:10px 0 0">
-    I keep things simple, reliable, and worry-free.
-</p>
-</div>
-</header>
+        <small>IT Network & Systems Administrator @ 401 Group of Companies</small>
+        <p class="lead" style="margin:10px 0 0">
+            I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.
+        </p>
+        <p class="lead" style="margin:10px 0 0">
+            Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.
+        </p>
+        <p class="lead" style="margin:10px 0 0">
+            I keep things simple, reliable, and worry-free.
+        </p>
+      </div>
+    </header>
 
-<section class="section fadeIn parallax" data-depth="1.5">
-    <div class="console"><pre id="term"></pre></div>
-</section>
-  <section class="section fadeIn parallax" data-depth="1">
+    <section class="section fadeIn parallax" data-depth="1.5">
+      <div class="console"><pre id="term"></pre></div>
+    </section>
+
+    <section class="section fadeIn parallax" data-depth="1">
       <div class="actions">
-        <a class="cta" href="Sirish-Yadav-Network and Systems Administrator.pdf" download><span>⬇</span> Resume</a>
+        <a class="cta" href="Sirish-Yadav-IT Networking Specialist.pdf" download><span>⬇</span> Resume</a>
         <button id="contactBtn" class="cta" type="button">Contact me</button>
       </div>
       <div id="contactPanel" class="contact-panel" aria-hidden="true">
@@ -133,6 +161,7 @@ function tick(){
   requestAnimationFrame(()=>setTimeout(tick,18));
 }
 tick();
+
 const layers=[...document.querySelectorAll('.parallax')];
 function parallax(e){
   const x=(e.clientX/window.innerWidth-0.5)*2;
@@ -142,7 +171,16 @@ function parallax(e){
     el.style.transform=`translate(${x*d*4}px, ${y*d*3}px)`;
   });
 }
-window.addEventListener('mousemove',parallax);
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const smallScreen = window.matchMedia('(max-width: 900px)').matches;
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+if(!(prefersReduced || smallScreen || isTouch)){
+  window.addEventListener('mousemove', parallax);
+}else{
+  layers.forEach(el=> el.style.transform='none');
+}
+
 document.getElementById('yy').textContent=new Date().getFullYear();
 const portrait=document.getElementById('portrait');
 portrait.addEventListener('error',()=>{ portrait.src='sirish.jpg'; });
