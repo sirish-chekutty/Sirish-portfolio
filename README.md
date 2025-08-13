@@ -9,9 +9,6 @@ Every pixel in place, every line of code deliberate.
 ---
 
 
-
----
-
 ## ⚙️ Tech Stack  
 - **HTML5** / **CSS3** / **JavaScript**  
 - Deployed via **GitHub Pages**  
