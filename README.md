@@ -1,3 +1,8 @@
+![Last commit](https://img.shields.io/github/last-commit/sirish-chekutty/Sirish-portfolio)
+
+
+
+
 # ░░▒▒▓▓ sirishchekutty.info ▓▓▒▒░░
 
 > *“Prepared. Precise. Relentless.”* — **John Wick**  
