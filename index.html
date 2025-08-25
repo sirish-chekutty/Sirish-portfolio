@@ -7,199 +7,192 @@
   <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
   <style>
     :root{
+      --bg:#ffffff;
       --ink:#0b0b0b;
-      --ink-soft:#252525;
-      --bg1:#fff59a;
-      --bg2:#ffd64d;
-      --bg3:#ffe680;
-      --accent:#ffcc00;
-      --card:rgba(255,255,255,.16);
-      --glass-border:rgba(255, 255, 255, .38);
-      --shadow:0 20px 60px rgba(0,0,0,.18);
-      --glow:0 0 0px rgba(255,204,0,.0), 0 0 30px rgba(255,204,0,.25);
-      --radius:24px;
+      --muted:#3a3a3a;
+      --line:#eceff3;
+      --card:rgba(255,255,255,.6);
+      --glass-border:rgba(255,255,255,.9);
+      --accent:#ffd200;   /* yellow */
+      --accent-ink:#111;  /* black */
+      --shadow:0 20px 60px rgba(0,0,0,.12);
+      --radius:22px;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; color:var(--ink); background:#ffdf5f;
+      margin:0;
+      color:var(--ink);
       background:
-        radial-gradient(80vmax 80vmax at -10% -20%, var(--bg1) 0%, transparent 60%),
-        radial-gradient(70vmax 70vmax at 110% 120%, var(--bg3) 0%, transparent 60%),
-        linear-gradient(180deg, var(--bg2), var(--bg1));
-      font:16px/1.5 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+        radial-gradient(1400px 700px at 85% -10%, rgba(255,210,0,.08), transparent 60%),
+        radial-gradient(1000px 500px at -10% 110%, rgba(255,210,0,.06), transparent 60%),
+        var(--bg);
+      font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing: antialiased;
       overflow-x:hidden;
     }
 
-    /* subtle animated sun streaks */
-    .beams{
-      position:fixed; inset:0; pointer-events:none; z-index:0;
-      background:
-        conic-gradient(from 0turn at 70% -10%, rgba(255,255,255,.45), transparent 30% 100%),
-        conic-gradient(from .1turn at 80% 0%, rgba(255,255,255,.35), transparent 35% 100%);
-      mix-blend-mode:soft-light; filter:blur(6px) saturate(1.2);
-      animation: drift 20s linear infinite alternate;
-      opacity:.65;
-    }
-    @keyframes drift{to{transform:translateY(12px)}}
+    .wrap{ min-height:100dvh; display:grid; place-items:center; padding:56px 18px }
+    .shell{ width:min(1150px, 94vw); display:grid; gap:26px }
 
-    .wrap{
-      position:relative; z-index:2;
-      min-height:100dvh; display:grid; place-items:center; padding:48px 20px;
-    }
-
-    .shell{
-      width:min(1080px, 94vw);
-      position:relative;
-      display:grid; gap:22px;
-      grid-template-columns: 1fr;
-    }
-
-    /* watermark photo on the right */
+    /* watermark photo on the right, mostly visible with feathered edges only */
     .mark{
-      position:fixed; right:max(0px, 2vw); top:50%; transform:translateY(-50%);
+      position:fixed; right:max(8px, 2vw); top:50%; transform:translateY(-50%);
       z-index:1; pointer-events:none; user-select:none;
-      opacity:.55; filter:drop-shadow(0 10px 35px rgba(0,0,0,.25)) saturate(1.1) contrast(1.05);
-      max-height:88vh; width:auto;
+      max-height:88vh; width:auto; opacity:.95; /* mostly visible */
+      filter: drop-shadow(0 14px 40px rgba(0,0,0,.22)) saturate(1.02) contrast(1.02);
+      /* gentle edge feathering so it blends only on the borders */
+      -webkit-mask-image:
+        radial-gradient(140% 140% at 85% 50%, #000 88%, transparent 100%);
+              mask-image:
+        radial-gradient(140% 140% at 85% 50%, #000 88%, transparent 100%);
+      -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+      -webkit-mask-size:100% 100%; mask-size:100% 100%;
     }
 
-    /* glassy card for intro */
+    /* glass card */
     .card{
+      position:relative; z-index:2;
       background:var(--card);
-      backdrop-filter: blur(14px) saturate(1.25);
-      -webkit-backdrop-filter: blur(14px) saturate(1.25);
-      border:1px solid var(--glass-border);
+      backdrop-filter: blur(18px) saturate(1.2);
+      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      border:1px solid rgba(0,0,0,.06);
       border-radius:var(--radius);
-      box-shadow:var(--shadow), var(--glow);
-      padding:28px 28px 22px;
-      outline: 1px solid rgba(0,0,0,.04);
-      position:relative;
+      box-shadow: var(--shadow);
+      padding:28px 26px 20px;
+      outline: 1px solid rgba(255,255,255,.6);
     }
 
     .tag{
       display:inline-block; letter-spacing:.08em; text-transform:uppercase;
       font-size:.72rem; padding:6px 10px; border-radius:999px;
-      background:rgba(0,0,0,.75); color:#ffd700;
-      border:1px solid rgba(255,215,0,.5);
-      box-shadow: inset 0 0 10px rgba(255,215,0,.25);
+      background:var(--accent); color:var(--accent-ink);
+      border:1px solid rgba(0,0,0,.1);
+      box-shadow: 0 6px 18px rgba(255,210,0,.35), inset 0 0 0 1px rgba(255,255,255,.7);
     }
+    h1{ margin:10px 0 6px; font-weight:800; line-height:1.08; font-size: clamp(28px, 6vw, 52px) }
+    .lead{ color:var(--muted); font-size: clamp(14px, 2.2vw, 18px); margin: 6px 0 10px }
 
-    h1{
-      margin:10px 0 8px; font-weight:800; line-height:1.1;
-      color:var(--ink); font-size: clamp(28px, 6vw, 54px);
-      text-shadow: 0 1px 0 rgba(255,255,255,.5);
-    }
-
-    .lead{
-      font-size: clamp(14px, 2.2vw, 18px);
-      color:var(--ink-soft);
-      margin: 8px 0 12px;
-    }
-
-    .cta-row{
-      display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:10px;
-    }
+    .cta-row{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:12px }
 
     .btn{
-      --btn-bg: rgba(0,0,0,.85);
       position:relative; display:inline-flex; align-items:center; gap:10px;
-      padding:14px 18px; border-radius:14px; text-decoration:none; color:#ffe388;
-      background:linear-gradient(180deg, rgba(0,0,0,.9), rgba(0,0,0,.8));
-      border:1px solid rgba(255,212,64,.5);
-      box-shadow: 0 10px 20px rgba(0,0,0,.2), 0 0 0 0 rgba(255,204,0,.35);
-      transition: transform .15s ease, box-shadow .25s ease, filter .25s ease;
+      padding:14px 18px; border-radius:14px; text-decoration:none;
+      color:#111; background:#fff;
+      border:1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(0,0,0,.08), 0 0 0 0 rgba(255,210,0,.0);
+      transition: transform .15s ease, box-shadow .25s ease;
     }
-    .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.25), 0 0 0 6px rgba(255,204,0,.15)}
-    .btn:active{ transform:translateY(0); }
+    .btn::after{
+      content:""; position:absolute; inset:-2px; border-radius:16px; pointer-events:none;
+      box-shadow: 0 0 0 0 rgba(255,210,0,.35); transition: box-shadow .25s ease;
+    }
+    .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 32px rgba(0,0,0,.12) }
+    .btn:hover::after{ box-shadow: 0 0 0 6px rgba(255,210,0,.18) }
 
-    .icons{
-      display:flex; gap:14px; align-items:center;
-    }
+    .icons{ display:flex; gap:14px; align-items:center }
     .icon{
       width:44px; height:44px; display:grid; place-items:center; border-radius:12px;
-      background:rgba(0,0,0,.82); border:1px solid rgba(255,212,64,.5);
-      box-shadow: 0 8px 18px rgba(0,0,0,.25);
-      transition: transform .25s ease, filter .25s ease, box-shadow .25s ease;
+      background:#111; border:1px solid #222;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
     }
-    .icon svg{ width:22px; height:22px; fill:#ffda47 }
-    .icon:hover{ transform: translateY(-4px) rotate(-2deg) scale(1.04); box-shadow: 0 12px 26px rgba(0,0,0,.28), 0 0 22px rgba(255,204,0,.35) }
-    .icon:active{ transform:translateY(0) scale(1.01) }
+    .icon svg{ width:22px; height:22px; fill:var(--accent) }
+    .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-    /* MacBook with terminal */
-    .mac-wrap{
-      display:grid; grid-template-columns: 1fr; gap:18px;
-    }
+    /* laptop */
+    .mac-wrap{ z-index:2; }
     .mac{
-      width:min(880px, 96%); margin-inline:auto;
-      filter: drop-shadow(0 25px 60px rgba(0,0,0,.25));
+      width:min(980px, 96%); margin: 10px auto 0; position:relative;
+      filter: drop-shadow(0 28px 60px rgba(0,0,0,.12));
     }
+    /* lid + screen */
     .lid{
-      position:relative; width:100%; height: 420px; border-radius:16px 16px 0 0;
-      background: linear-gradient(180deg, #0b0b0b 0%, #1a1a1a 60%, #0d0d0d 100%);
-      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px 18px 12px 12px;
+      background: linear-gradient(180deg, #f0f0f0, #e5e5e5 55%, #d9d9d9);
+      border:1px solid rgba(0,0,0,.08);
+      padding:14px;
+    }
+    .bezel{
+      border-radius:12px;
+      background: #0c0c0c;
+      padding:10px;
+      position:relative;
       overflow:hidden;
-    }
-    .camera{
-      position:absolute; top:8px; left:50%; transform:translateX(-50%);
-      width:64px; height:8px; border-radius:10px; background:rgba(255,255,255,.08);
-      box-shadow: inset 0 0 8px rgba(0,0,0,.8);
-    }
-    .screen{
-      position:absolute; inset:30px 24px 26px; border-radius:10px; overflow:hidden;
-      background: radial-gradient(120% 120% at -10% -10%, rgba(255,255,255,.06), transparent 40%),
-                  linear-gradient(180deg, #0a0a0a, #111);
       border:1px solid rgba(255,255,255,.06);
     }
+    .cam{ position:absolute; top:6px; left:50%; transform:translateX(-50%); width:62px; height:8px; border-radius:10px; background:#151515 }
+
+    /* actual screen content area with a fixed inner max-width so code never spills horizontally */
+    .screen{
+      border-radius:8px; background:#0d0f12;
+      min-height: 340px; display:flex; align-items:stretch; justify-content:center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 20px 50px rgba(255,255,255,.02);
+    }
+
+    /* terminal sits inside screen and is width-capped to prevent wide overflow */
+    .term{
+      flex: 1 1 auto;
+      display:flex; align-items:flex-start; justify-content:center;
+      padding:18px 18px 22px;
+    }
+    .term-inner{
+      width: min(92%, 72ch);            /* hard cap by characters so it never overflows */
+      margin: 6px auto 0;
+      border-radius:10px; background: #0b0f12;
+      border:1px solid rgba(255,255,255,.06);
+      box-shadow: 0 20px 60px rgba(0,0,0,.25), inset 0 0 0 1px rgba(0,0,0,.45);
+      position:relative; overflow:hidden;
+    }
+    .term-bar{
+      height:34px; display:flex; align-items:center; gap:10px; padding:0 10px;
+      background: linear-gradient(180deg, #121416, #0f1113);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      color:#d2d2d2; font:12px/1 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    .dots{ display:inline-flex; gap:6px; margin-right:8px }
+    .dot{ width:10px; height:10px; border-radius:50%; background:#3a3a3a }
+    .dot:nth-child(1){ background:#ff5f56 }
+    .dot:nth-child(2){ background:#ffbd2e }
+    .dot:nth-child(3){ background:#27c93f }
+
+    .term-body{
+      font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      color:#b6f3b1;
+      padding:12px 14px 16px;
+      white-space:pre-wrap;          /* keep formatting but allow wraps */
+      overflow-wrap:anywhere;        /* wrap long tokens if needed */
+      text-shadow:0 0 12px rgba(77,255,77,.16);
+      min-height: 220px;
+    }
+    .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:#b6f3b1; animation: blink .9s steps(1,end) infinite }
+    @keyframes blink{ 50%{ opacity:0 } }
+
+    /* base of laptop */
     .base{
-      width:104%; height:20px; margin-left:-2%;
-      background: linear-gradient(180deg, #c9c9c9, #adadad);
-      border-radius:0 0 18px 18px; position:relative;
-      border:1px solid rgba(0,0,0,.15);
+      height:20px; border-radius:0 0 18px 18px;
+      background: linear-gradient(180deg, #dcdcdc, #c8c8c8);
+      border:1px solid rgba(0,0,0,.08); border-top: none;
+      position:relative;
     }
     .notch{
       position:absolute; left:50%; top:-8px; transform:translateX(-50%);
       width:30%; height:10px; border-radius:0 0 14px 14px;
-      background:linear-gradient(180deg, #d5d5d5, #b0b0b0);
-      border:1px solid rgba(0,0,0,.1);
+      background:linear-gradient(180deg, #e6e6e6, #c9c9c9);
+      border:1px solid rgba(0,0,0,.08);
     }
 
-    /* terminal content */
-    .term{
-      position:absolute; inset:0; color:#b6f3b1; font: 14px/1.45 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      padding:22px; overflow:auto; white-space:pre-wrap; -webkit-font-smoothing: antialiased;
-    }
-    .term::before{
-      content:"●  ●  ●   Sirish@MacBook — zsh";
-      position:absolute; top:0; left:0; right:0; height:32px;
-      background: linear-gradient(180deg, #151515, #0c0c0c);
-      color:#ffd84a; display:flex; align-items:center; gap:10px; padding:0 14px;
-      font-size:12px; letter-spacing:.04em; border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .term-content{
-      margin-top:36px; /* space under the bar */
-      text-shadow:0 0 12px rgba(77,255,77,.18);
-    }
-    .caret{
-      display:inline-block; width:10px; height:1.2em; vertical-align:-.2em; margin-left:2px;
-      background:#b6f3b1; animation:blink .95s steps(1) infinite;
-    }
-    @keyframes blink{ 50%{ opacity:0 } }
-
-    /* layout tweaks for small screens */
-    @media (max-width: 900px){
-      .mark{ opacity:.45; max-height:55vh; right:-40px }
-      .lid{ height: 340px }
+    @media (max-width: 920px){
+      .mark{ max-height:60vh; opacity:.9; right:-20px }
+      .term-inner{ width:min(94%, 64ch) }
     }
 
-    /* accessibility focus */
-    a:focus-visible{ outline:3px solid #000; outline-offset:2px; border-radius:6px }
+    a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
   </style>
 </head>
 <body>
-  <div class="beams" aria-hidden="true"></div>
-
-  <!-- watermark portrait on the right side -->
+  <!-- watermark portrait on the right side with feathered edges -->
   <img class="mark" src="sirish.jpeg" alt="Watermark portrait of Sirish Yadav" />
 
   <main class="wrap">
@@ -207,118 +200,121 @@
       <article class="card" aria-label="Intro">
         <span class="tag">hello</span>
         <h1>I'm Sirish Yadav</h1>
-        <p class="lead">
-          IT Network &amp; Systems Administrator @ 401 Group of Companies
-        </p>
-        <p class="lead">
-          I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.
-        </p>
-        <p class="lead">
-          Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.
-        </p>
-        <p class="lead">
-          I keep things simple, reliable, and worry‑free.
-        </p>
+        <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
+        <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+        <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
+        <p class="lead">I keep things simple, reliable, and worry‑free.</p>
 
         <div class="cta-row">
           <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#ffda47" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#ffe388" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
             <span>download resume</span>
           </a>
 
           <nav class="icons" aria-label="Social links">
             <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 5.333-8-5.333V6h16zM4 18V8.245l7.386 4.915a2 2 0 0 0 2.228 0L21 8.245V18H4z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
             </a>
+
+            <!-- correct linkedin icon -->
             <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24"><path d="M6.94 6.5A2.44 2.44 0 1 1 6.94 1.62a2.44 2.44 0 0 1 0 4.88zM2.75 22.38h4.38V8.74H2.75v13.64zM13.03 8.59c-2.35 0-3.37 1.29-3.96 2.19V8.74H4.73c.06 1.25 0 13.64 0 13.64h4.34V15.7c0-.35.03-.71.13-.97.29-.71.96-1.45 2.08-1.45 1.47 0 2.06 1.09 2.06 2.69v6.4h4.38v-6.86c0-3.67-1.96-5.37-4.58-5.37z"/></svg>
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
+              </svg>
             </a>
+
             <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg viewBox="0 0 24 24"><path d="M12 .5A11.5 11.5 0 0 0 .5 12c0 5.07 3.29 9.36 7.86 10.88.58.11.79-.25.79-.56 0-.27-.01-1.17-.02-2.13-3.2.69-3.87-1.36-3.87-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.18.08 1.8 1.22 1.8 1.22 1.04 1.79 2.73 1.27 3.4.97.11-.75.41-1.27.75-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .98-.31 3.21 1.18a11.2 11.2 0 0 1 2.93-.39c.99 0 1.99.13 2.92.39 2.23-1.49 3.21-1.18 3.21-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.69 5.4-5.25 5.69.42.36.8 1.08.8 2.18 0 1.57-.02 2.84-.02 3.23 0 .31.21.67.8.55A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
             </a>
           </nav>
         </div>
       </article>
 
-      <div class="mac-wrap">
-        <div class="mac" aria-label="MacBook with live terminal">
+      <!-- laptop with contained terminal -->
+      <section class="mac-wrap" aria-label="Laptop with live terminal">
+        <div class="mac">
           <div class="lid">
-            <div class="camera" aria-hidden="true"></div>
-            <div class="screen">
-              <div class="term">
-                <pre id="terminal" class="term-content" aria-live="polite"></pre>
+            <div class="bezel">
+              <div class="cam" aria-hidden="true"></div>
+              <div class="screen">
+                <div class="term">
+                  <div class="term-inner">
+                    <div class="term-bar">
+                      <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+                      <span>sirish@macbook — zsh</span>
+                    </div>
+                    <pre id="terminal" class="term-body" aria-live="polite"></pre>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="base"><div class="notch"></div></div>
         </div>
-      </div>
+      </section>
     </section>
   </main>
 
   <script>
-    // Typewriter loop for the terminal content inside the MacBook
+    // typewriter loop: prints each line separately and then restarts
     (function(){
       const lines = [
-`$ sirish@edge  az group create -n rg-calm-networks -l canadacentral # because chaos is expensive`,
-`$ sirish@edge  az network vnet peering create --name make-friends --allow-vnet-access`,
-`$ sirish@edge  ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'`,
-`$ sirish@edge  for i in users/*; do onboard $i --no-drama; done`,
-`$ sirish@edge  printf 'uptime: good\\n' && echo 'alerts: napping'`,
-`✔`
+"sirish@edge $  az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
+"sirish@edge $  az network vnet peering create --name make-friends --allow-vnet-access",
+"sirish@edge $  ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
+"sirish@edge $  for i in users/*; do onboard $i --no-drama; done",
+"sirish@edge $  printf 'uptime: good\\n' && echo 'alerts: napping'",
+"✔"
       ];
 
       const term = document.getElementById('terminal');
       const caret = document.createElement('span');
       caret.className = 'caret';
 
-      let l = 0, c = 0, printing = true;
+      let li = 0, ci = 0, running = true;
 
-      function reset(){
+      function loopStart(){
         term.textContent = '';
-        l = 0; c = 0; printing = true;
+        li = 0; ci = 0; running = true;
         tick();
       }
 
       function tick(){
-        if(!printing) return;
+        if(!running) return;
 
-        // ensure caret is always last child
         if (term.lastElementChild !== caret) term.appendChild(caret);
 
-        const current = lines[l];
-        // insert a new line node if we are at start of this line
-        if (c === 0){
-          if (l > 0) term.appendChild(document.createTextNode('\n'));
+        const current = lines[li];
+
+        if (ci === 0 && li > 0){
+          term.insertBefore(document.createTextNode("\n"), caret);
         }
 
-        if (c < current.length){
-          term.insertBefore(document.createTextNode(current.charAt(c)), caret);
-          c++;
-          setTimeout(tick, 13 + Math.random()*60);
+        if (ci < current.length){
+          term.insertBefore(document.createTextNode(current.charAt(ci)), caret);
+          ci++;
+          setTimeout(tick, 12 + Math.random()*55);
         } else {
-          // finished a line
-          l++; c = 0;
-          if (l < lines.length){
-            setTimeout(tick, 380);
+          // finished line
+          li++; ci = 0;
+          if (li < lines.length){
+            setTimeout(tick, 320);
           } else {
-            // finished all lines -> pause, then loop
-            printing = false;
+            running = false;
             setTimeout(()=>{
               caret.remove();
-              // smooth fade-out, then reset
-              term.style.transition = 'opacity .5s ease';
+              term.style.transition = 'opacity .45s ease';
               term.style.opacity = '0';
               setTimeout(()=>{
                 term.style.transition = 'none';
                 term.style.opacity = '1';
-                reset();
-              }, 520);
-            }, 1200);
+                loopStart();
+              }, 480);
+            }, 1100);
           }
         }
       }
-      reset();
+      loopStart();
     })();
   </script>
 </body>
