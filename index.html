@@ -1,238 +1,117 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { Download, Mail, Github, Linkedin, Terminal as TerminalIcon, ChevronRight } from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sirish Yadav — IT Network & Systems Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.umd.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:Inter,system-ui,sans-serif;background:#0b0d12;color:#e6e8ee;overflow-x:hidden}
+    .terminal-line span.prompt{color:#9ca3af}
+    .terminal-line span.cmd{color:#e5e7eb}
+    .terminal-line span.ok{color:#10b981;margin-left:.3em}
+    .caret{display:inline-block;width:10px;background:#e5e7eb;animation:blink 1s infinite}
+    @keyframes blink{0%,50%{opacity:1}50.1%,100%{opacity:0}}
+    .gradient-blur{position:absolute;filter:blur(80px);border-radius:50%;}
+  </style>
+</head>
+<body class="relative min-h-screen">
 
-// single‑file React app for a minimal, modern, animated CV site with a looping terminal
-// drop a photo named "sirish.jpeg" (or sirish.jpg as fallback) in the public folder
-// and place your pdf resume at: 
-//   public/"Sirish-Yadav-Network and Systems Administrator.pdf"
-// this component assumes TailwindCSS is available
+  <!-- gradient background blobs -->
+  <div class="gradient-blur w-[60vmin] h-[60vmin] -top-24 -left-24 opacity-50" style="background:radial-gradient(circle at 30% 30%,rgba(124,58,237,.5),transparent 60%)"></div>
+  <div class="gradient-blur w-[70vmin] h-[70vmin] -bottom-24 -right-24 opacity-50" style="background:radial-gradient(circle at 70% 70%,rgba(6,182,212,.45),transparent 60%)"></div>
 
-const consoleLines = [
+  <main class="relative max-w-6xl mx-auto px-6 py-12">
+    <header class="grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-zinc-300">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3-3 3 3m0 6l-3 3-3-3"/></svg>
+          cloud & network engineer
+        </div>
+        <h1 class="mt-3 text-4xl md:text-5xl font-extrabold">Sirish Yadav</h1>
+        <p class="mt-3 text-zinc-300">I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+        <p class="mt-2 text-zinc-300">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.</p>
+        <p class="mt-2 text-zinc-300">I keep things simple, reliable, and worry-free.</p>
+
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download
+             class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-tr from-purple-500 to-cyan-400 text-[#0b0d12] font-extrabold px-4 py-3 shadow hover:-translate-y-0.5 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/></svg>
+            Resume
+          </a>
+          <button onclick="toggleContact()" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10 transition">Contact me</button>
+        </div>
+
+        <div id="contactPanel" class="hidden mt-3 divide-y divide-white/10 rounded-xl border border-white/10 bg-white/[.06] backdrop-blur">
+          <a href="mailto:Sirish.chekutty@gmail.com" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
+            📧 Sirish.chekutty@gmail.com
+          </a>
+          <a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
+            🔗 linkedin.com/in/sirishchekutty
+          </a>
+          <a href="https://github.com/sirish-chekutty" target="_blank" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
+            💻 github.com/sirish-chekutty
+          </a>
+        </div>
+      </div>
+
+      <div class="justify-self-center">
+        <img src="sirish.jpeg" onerror="this.src='sirish.jpg'" alt="portrait" class="w-72 md:w-80 rounded-2xl shadow-lg border border-white/10">
+      </div>
+    </header>
+
+    <section class="mt-12 grid lg:grid-cols-3 gap-6 items-start">
+      <div class="lg:col-span-2">
+        <div class="bg-[#0e1117]/90 border border-white/10 rounded-2xl p-5 font-mono text-[0.95rem] text-zinc-200 shadow-xl overflow-hidden">
+          <div class="space-y-2" id="terminal"></div>
+        </div>
+      </div>
+      <div class="lg:col-span-1">
+        <div class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur shadow-xl">
+          <h2 class="text-xl font-semibold">what I focus on</h2>
+          <ul class="mt-3 space-y-2 text-zinc-300">
+            <li>• azure, entra id, hybrid identity</li>
+            <li>• firewalls, vpn, site networking</li>
+            <li>• automation with powershell & python</li>
+            <li>• voip/pbx and qos that works</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="mt-16 text-center text-sm text-zinc-400">© <span id="year"></span> Sirish Yadav</footer>
+  </main>
+
+<script>
+const lines = [
   "az group create -n rg-401-prod -l canadacentral",
   "az network vnet create -g rg-401-prod -n vnet-hub --address-prefix 10.130.0.0/16",
   "az network vnet peering create --name hub-spoke --allow-vnet-access",
   "fortictl vpn up --site wawa --ddns starlink.401group.ddns.net",
   "entra groups create --dynamic --unit dealerships --no-drama",
   "intune autopilot enroll --profile 'Standard Workstation' --hash @devices.csv",
-  "ssh pbx 'qos --enable && echo call quality: chefs kiss'",
-  "printf 'uptime: good\\n' && echo 'alerts: napping'",
+  "ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
+  "printf 'uptime: good\\\\n' && echo 'alerts: napping'"
 ];
-
-function useTypeLoop(lines: string[], speed = 26, hold = 800) {
-  const [history, setHistory] = useState<string[]>([]);
-  const [current, setCurrent] = useState("");
-  const [i, setI] = useState(0);
-  const [j, setJ] = useState(0);
-
-  useEffect(() => {
-    let timer: number;
-    const type = () => {
-      const line = lines[i % lines.length] ?? "";
-      if (j < line.length) {
-        setCurrent((prev) => prev + line[j]);
-        setJ((v) => v + 1);
-        timer = window.setTimeout(type, speed);
-      } else {
-        // line finished, push to history, wait, then next
-        timer = window.setTimeout(() => {
-          setHistory((h) => [...h, line]);
-          setCurrent("");
-          setJ(0);
-          setI((v) => v + 1);
-        }, hold);
-      }
-    };
-    // if we've printed too many lines, reset with a brief pause
-    if (history.length >= lines.length) {
-      const t = window.setTimeout(() => {
-        setHistory([]);
-        setCurrent("");
-        setI(0);
-        setJ(0);
-      }, 1000);
-      return () => window.clearTimeout(t);
-    }
-    timer = window.setTimeout(type, 300);
-    return () => window.clearTimeout(timer);
-  }, [i, j, lines, speed, hold, history.length]);
-
-  return { history, current };
+let idx=0, char=0, current="", history=[];
+function tick(){
+  const term=document.getElementById("terminal");
+  const line=lines[idx%lines.length];
+  if(char<line.length){
+    current+=line[char++];
+  }else{
+    history.push(line);
+    idx++; char=0; current=\"\";
+    if(history.length>6) history.shift();
+  }
+  term.innerHTML=history.map(l=>`<div class='terminal-line'><span class='prompt'>$</span> <span class='cmd'>${l}</span><span class='ok'>✔</span></div>`).join(\"\")+`<div class='terminal-line'><span class='prompt'>$</span> <span class='cmd'>${current}</span><span class='caret'></span></div>`;
+  setTimeout(tick,40);
 }
-
-function TerminalLoop() {
-  const { history, current } = useTypeLoop(consoleLines, 24, 700);
-  return (
-    <div className="bg-[#0e1117]/90 border border-white/10 rounded-2xl p-4 md:p-6 font-mono text-[0.96rem] text-zinc-200 shadow-2xl backdrop-blur relative overflow-hidden">
-      {/* traffic lights */}
-      <div className="absolute left-4 top-3 flex gap-2 text-zinc-500 select-none">
-        <span>●</span><span>●</span><span>●</span>
-      </div>
-      <div className="mt-4 space-y-2">
-        {history.map((line, idx) => (
-          <div key={idx} className=""> 
-            <span className="text-zinc-500">sirish@edge</span> <span className="text-zinc-400">$</span> <span className="text-zinc-100">{line}</span>
-            <span className="ml-2 text-emerald-400">✔</span>
-          </div>
-        ))}
-        <div>
-          <span className="text-zinc-500">sirish@edge</span> <span className="text-zinc-400">$</span> <span className="text-zinc-100">{current}</span>
-          <span className="inline-block w-3 bg-zinc-200/90 ml-0.5 animate-pulse h-[1.15em] align-[-0.15em]" />
-        </div>
-      </div>
-      <div className="pointer-events-none absolute inset-0" style={{
-        background: "radial-gradient(1200px 400px at 10% -10%, rgba(124,58,237,.15), transparent 40%), radial-gradient(1000px 300px at 110% 120%, rgba(6,182,212,.16), transparent 40%)"
-      }} />
-    </div>
-  );
-}
-
-function Background() {
-  return (
-    <div aria-hidden className="fixed inset-0 -z-10">
-      {/* gradient blobs */}
-      <div className="absolute -top-24 -left-24 w-[60vmin] h-[60vmin] rounded-full blur-3xl opacity-60" style={{background:"radial-gradient(circle at 30% 30%, rgba(124,58,237,.45), transparent 60%)"}} />
-      <div className="absolute -bottom-24 -right-24 w-[70vmin] h-[70vmin] rounded-full blur-3xl opacity-60" style={{background:"radial-gradient(circle at 70% 70%, rgba(6,182,212,.45), transparent 60%)"}} />
-      {/* subtle grid */}
-      <div className="absolute inset-0 [mask-image:radial-gradient(circle_at_60%_40%,black_45%,transparent_80%)] opacity-[.10]" style={{
-        backgroundImage: "linear-gradient(rgba(255,255,255,.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.16)_1px,transparent_1px)",
-        backgroundSize: "42px 42px"
-      }} />
-      {/* film grain */}
-      <div className="absolute inset-0 opacity-10 mix-blend-overlay" style={{backgroundImage:"url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'140\' height=\'140\'><filter id=\'n\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.8\' numOctaves=\'4\' stitchTiles=\'stitch\'/></filter><rect width=\'100%\' height=\'100%\' filter=\'url(%23n)\' opacity=\'0.6\'/></svg>')"}} />
-    </div>
-  );
-}
-
-function Headshot() {
-  const [src, setSrc] = useState("sirish.jpeg");
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const rotateX = useTransform(mouseY, [0, 1], [6, -6]);
-  const rotateY = useTransform(mouseX, [0, 1], [-6, 6]);
-
-  const onMove = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width);
-    mouseY.set((e.clientY - rect.top) / rect.height);
-  };
-
-  return (
-    <motion.div
-      onMouseMove={onMove}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className="relative"
-    >
-      <div className="absolute -inset-2 rounded-[28px] bg-gradient-to-tr from-purple-500/25 via-fuchsia-400/20 to-cyan-400/25 blur-xl" />
-      <img
-        src={src}
-        onError={() => setSrc("sirish.jpg")}
-        alt="portrait of Sirish Yadav"
-        className="relative z-10 w-[320px] md:w-[380px] h-auto rounded-[24px] object-cover shadow-[0_20px_60px_rgba(0,0,0,.45)] border border-white/10"
-        style={{ transform: "translateZ(36px)" }}
-      />
-    </motion.div>
-  );
-}
-
-export default function App() {
-  const [contactOpen, setContactOpen] = useState(false);
-  const year = new Date().getFullYear();
-
-  const bounce = {
-    initial: { opacity: 0, y: 14 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  } as const;
-
-  return (
-    <div className="min-h-dvh bg-[#0b0d12] text-zinc-100 selection:bg-purple-500/30 selection:text-white">
-      <Background />
-
-      <main className="relative mx-auto max-w-6xl px-6 md:px-10 pt-10 pb-20">
-        <header className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <motion.div {...bounce}>
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[13px] text-zinc-300">
-              <TerminalIcon size={16} className="opacity-80" />
-              cloud and network engineer
-            </div>
-            <h1 className="mt-3 text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-              Sirish Yadav
-            </h1>
-            <p className="mt-3 text-zinc-300 max-w-prose">
-              I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.
-            </p>
-            <p className="mt-2 text-zinc-300 max-w-prose">
-              Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.
-            </p>
-            <p className="mt-2 text-zinc-300">I keep things simple, reliable, and worry‑free.</p>
-
-            <div className="mt-5 flex flex-wrap items-center gap-3">
-              <a
-                href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf"
-                download
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-tr from-purple-500 to-cyan-400 text-[#0b0d12] font-extrabold px-4 py-3 shadow-[0_12px_40px_rgba(0,0,0,.3)] hover:translate-y-[-1px] transition-transform"
-              >
-                <Download size={18} />
-                resume
-              </a>
-
-              <button
-                onClick={() => setContactOpen((v) => !v)}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10 transition-colors"
-              >
-                contact me <ChevronRight size={16} className={`transition-transform ${contactOpen ? "rotate-90" : ""}`} />
-              </button>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: contactOpen ? 1 : 0, y: contactOpen ? 0 : -6 }}
-              className={`mt-3 overflow-hidden ${contactOpen ? "pointer-events-auto" : "pointer-events-none"}`}
-            >
-              <div className="divide-y divide-white/10 rounded-xl border border-white/10 bg-white/[.06] backdrop-blur">
-                <a href="mailto:Sirish.chekutty@gmail.com" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
-                  <Mail size={18} />
-                  Sirish.chekutty@gmail.com
-                </a>
-                <a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
-                  <Linkedin size={18} />
-                  linkedin.com/in/sirishchekutty
-                </a>
-                <a href="https://github.com/sirish-chekutty" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
-                  <Github size={18} />
-                  sirish-chekutty
-                </a>
-              </div>
-            </motion.div>
-          </motion.div>
-
-          <motion.div {...bounce} className="justify-self-center md:justify-self-end">
-            <Headshot />
-          </motion.div>
-        </header>
-
-        <section className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-          <motion.div {...bounce} className="lg:col-span-2">
-            <TerminalLoop />
-          </motion.div>
-
-            <motion.div {...bounce} className="lg:col-span-1">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur shadow-xl">
-                <h2 className="text-xl font-semibold">what I focus on</h2>
-                <ul className="mt-3 space-y-2 text-zinc-300">
-                  <li className="flex items-start gap-2"><span className="mt-1 h-2 w-2 rounded-full bg-emerald-400"/> azure, entra id, and hybrid identity</li>
-                  <li className="flex items-start gap-2"><span className="mt-1 h-2 w-2 rounded-full bg-cyan-400"/> firewalls, vpn, and site networking</li>
-                  <li className="flex items-start gap-2"><span className="mt-1 h-2 w-2 rounded-full bg-fuchsia-400"/> automation with powershell and python</li>
-                  <li className="flex items-start gap-2"><span className="mt-1 h-2 w-2 rounded-full bg-purple-400"/> voip/pbx and qos that actually works</li>
-                </ul>
-              </div>
-            </motion.div>
-        </section>
-
-        <footer className="mt-16 text-center text-sm text-zinc-400">
-          © {year} Sirish Yadav
-        </footer>
-      </main>
-    </div>
-  );
-}
+tick();
+function toggleContact(){document.getElementById(\"contactPanel\").classList.toggle(\"hidden\");}
+document.getElementById(\"year\").textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
