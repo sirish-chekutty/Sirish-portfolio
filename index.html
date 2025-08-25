@@ -1,226 +1,273 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sirish Yadav — IT Network & Systems Administrator</title>
-  <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sirish Yadav — IT Network & Systems Administrator</title>
+<meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-  <!-- Handwriting fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<!-- Handwriting fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      /* keep intro clear of the photo: this is ALSO the photo width */
-      --picW: clamp(280px, 36vw, 560px);
+<style>
+  :root{
+    --ink:#0b0b0b;
+    --muted:#1f1f1f;
+    --line:#e9edf3;
+    --accent:#ffd200;
 
-      --ink:#0b0b0b;
-      --muted:#1f1f1f;
-      --line:#e9edf3;
-      --accent:#ffd200;
+    --card-bg: rgba(255,255,255,.82);
+    --shadow:0 22px 60px rgba(0,0,0,.12);
+    --radius:24px;
 
-      --card-bg: rgba(255,255,255,.78);
-      --shadow:0 22px 60px rgba(0,0,0,.12);
-      --radius:24px;
+    /* terminal palette */
+    --term-bg:#0b0f12;
+    --term-username:#ffd200;  /* yellow */
+    --term-dollar:#9b5de5;    /* purple */
+    --term-text:#ffffff;      /* white */
+    --term-ok:#22c55e;        /* green */
+    --caret:#ffffff;
+  }
 
-      /* terminal palette */
-      --term-bg:#0b0f12;
-      --term-username:#ffd200;  /* yellow */
-      --term-dollar:#9b5de5;    /* purple */
-      --term-text:#ffffff;      /* white */
-      --term-ok:#22c55e;        /* green */
-      --caret:#ffffff;
-    }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; color:var(--ink); background:#ffffff;
+    font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    -webkit-font-smoothing: antialiased;
+    overflow-x:hidden;
+  }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--ink); background:#ffffff;
-      font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      -webkit-font-smoothing: antialiased;
-      overflow-x:hidden;
-    }
+  /* === LAYERED BACKGROUND ===
+     We use TWO absolutely-positioned SVGs:
+     1) the binary layer (z-index:0)
+     2) the cloud layer (z-index:1) — drawn on top so binary goes “under” clouds.
+     Content sits above both (z-index:2+). */
+  .bg{
+    position:fixed; inset:0; pointer-events:none;
+  }
+  .bg-binary{ z-index:0; opacity:.9 }
+  .bg-clouds{ z-index:1; opacity:.85 } /* higher than binary so it covers it */
 
-    /* ===== Animated “cloud computing” sky with flowing binary ===== */
-    .sky{
-      position:fixed; inset:0; z-index:-3; pointer-events:none;
-    }
-    /* keep it faint */
-    .sky .cloud { fill:#bfe2ff; opacity:.25; filter:url(#blur1); }
-    .sky .binary { fill:#7db8ff; opacity:.45; font:700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    /* binary moves along the paths */
-    @keyframes flowA{ to { offset-distance: 100%; } }
-    @keyframes flowB{ to { offset-distance: 100%; } }
-    .flow-a { offset-path: path("M 160 140 C 320 60 560 60 720 140 S 1080 220 1240 140"); animation: flowA 12s linear infinite; }
-    .flow-b { offset-path: path("M 180 520 C 360 620 560 640 720 560 S 1040 440 1220 520"); animation: flowB 15s linear infinite reverse; }
-    .binary::after{ content: " 0101 1010 0011 1101"; }
-    /* duplicate strings by hand so all browsers show motion even without ::after support */
-    .binary { white-space:nowrap }
+  /* give clouds some gentle motion to feel “alive” */
+  .clouds-drift{ animation: cloudsDrift 26s ease-in-out infinite alternate; transform-origin: 50% 50% }
+  @keyframes cloudsDrift{
+    0%   { transform: translate3d(0,0,0) scale(1); }
+    50%  { transform: translate3d(-1.5%, .8%, 0) scale(1.02); }
+    100% { transform: translate3d(1.2%, -1%, 0) scale(1.01); }
+  }
 
-    /* ===== Hero layout (full‑width; no columns) ===== */
-    .hero{ position:relative; padding:56px 20px 40px; min-height:100dvh; }
+  /* === BINARY MOTION (CSS Motion Path) === */
+  @keyframes flowA{ to { offset-distance: 100%; } }
+  @keyframes flowB{ to { offset-distance: 100%; } }
+  .packet{
+    position:absolute; left:0; top:0;
+    font:700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color:#2b7cff;
+    white-space:nowrap;
+    letter-spacing:.1em;
+    filter: drop-shadow(0 1px 0 rgba(0,0,0,.08));
+    opacity:.8;
+    /* default motion path; overridden per element via inline style OR extra classes */
+    offset-distance: 0%;
+  }
+  /* we define the paths in CSS with path() so packets move across the viewport.
+     These match the <path> shapes you’ll see in the SVG comments below (not rendered). */
+  .path-a { offset-path: path("M 5vw 20vh C 25vw 8vh, 55vw 8vh, 75vw 20vh S 105vw 32vh, 125vw 20vh"); animation: flowA 12s linear infinite; }
+  .path-b { offset-path: path("M 8vw 75vh C 28vw 85vh, 52vw 88vh, 72vw 78vh S 106vw 60vh, 124vw 74vh"); animation: flowB 16s linear infinite reverse; }
+  .path-c { offset-path: path("M -5vw 45vh C 15vw 30vh, 40vw 30vh, 60vw 45vh S 100vw 60vh, 125vw 48vh"); animation: flowA 18s linear infinite; }
 
-    /* Photo on the right — not fixed behind; we simply reserve space for it */
-    .photo{
-      position:absolute; right:max(12px, 2vw); top:50%; transform:translateY(-50%);
-      width:var(--picW); z-index:1; pointer-events:none;
-    }
-    .photo img{
-      width:100%; height:auto; display:block; border-radius:22px;
-      filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
-    }
-    /* soft edge‑blend glow (image intact) */
-    .photo::after{
-      content:"";
-      position:absolute; inset:-1.5%;
-      border-radius:24px; pointer-events:none;
-      background:
-        radial-gradient(220px 220px at 0 0,       rgba(255,255,255,.9), transparent 55%),
-        radial-gradient(220px 220px at 100% 0,    rgba(255,255,255,.9), transparent 55%),
-        radial-gradient(220px 220px at 0 100%,    rgba(255,255,255,.9), transparent 55%),
-        radial-gradient(220px 220px at 100% 100%, rgba(255,255,255,.9), transparent 55%);
-      mix-blend-mode:screen;
-    }
+  /* === CONTENT LAYOUT (TWO COLUMNS) === */
+  .wrap{
+    position:relative; z-index:2; /* sits above background layers */
+    min-height:100dvh; padding:48px 18px;
+    display:grid; place-items:center;
+  }
+  .shell{
+    width:min(1200px, 96vw);
+    display:grid; gap:26px;
+    grid-template-columns: 1.05fr .95fr; /* left: intro, right: photo */
+    align-items:start;
+  }
 
-    /* Intro card spans full width but pads RIGHT by photo width so there’s no overlap */
-    .intro{
-      position:relative; z-index:2;
-      width:min(1400px, 96vw);
-      margin:0 auto;
-      padding:28px 26px 26px;
-      padding-right: calc(var(--picW) + 56px); /* <-- guarantees no overlap */
-      background:var(--card-bg);
-      backdrop-filter: blur(16px) saturate(1.15);
-      -webkit-backdrop-filter: blur(16px) saturate(1.15);
-      border:1px solid rgba(0,0,0,.06);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-    }
+  /* LEFT: intro card */
+  .card{
+    background:var(--card-bg);
+    backdrop-filter: blur(16px) saturate(1.15);
+    -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:28px 26px 24px;
+  }
 
-    h1{
-      margin:0 0 10px;
-      font-family:"Caveat", system-ui;
-      font-weight:700;
-      font-size: clamp(36px, 7vw, 64px);
-      line-height:1.02;
-    }
-    .lead{
-      font-family:"Patrick Hand", system-ui;
-      font-size: clamp(18px, 2.4vw, 22px);
-      line-height:1.55;
-      color:var(--muted);
-      margin: 6px 0 10px;
-    }
+  h1{
+    margin:0 0 10px;
+    font-family:"Caveat", system-ui;
+    font-weight:700;
+    font-size: clamp(36px, 7vw, 64px);
+    line-height:1.02;
+  }
+  .lead{
+    font-family:"Patrick Hand", system-ui;
+    font-size: clamp(18px, 2.4vw, 22px);
+    line-height:1.55;
+    color:var(--muted);
+    margin: 6px 0 10px;
+  }
 
-    .cta-row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px }
-    .btn{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:12px 16px; border-radius:14px; text-decoration:none;
-      color:#111; background:#fff; border:1px solid var(--line);
-      box-shadow: 0 8px 22px rgba(0,0,0,.08);
-      transition: transform .15s ease, box-shadow .25s ease;
-      font: 600 16px/1.1 system-ui, -apple-system;
-    }
-    .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.12) }
+  .cta-row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:12px 16px; border-radius:14px; text-decoration:none;
+    color:#111; background:#fff; border:1px solid var(--line);
+    box-shadow: 0 8px 22px rgba(0,0,0,.08);
+    transition: transform .15s ease, box-shadow .25s ease;
+    font: 600 16px/1.1 system-ui, -apple-system;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.12) }
 
-    .icons{ display:flex; gap:12px; align-items:center }
-    .icon{
-      width:44px; height:44px; display:grid; place-items:center; border-radius:12px;
-      background:#111; border:1px solid #222;
-      box-shadow: 0 10px 22px rgba(0,0,0,.18);
-      transition: transform .25s ease, box-shadow .25s ease;
-    }
-    .icon svg{ width:22px; height:22px; fill:var(--accent) }
-    .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
+  .icons{ display:flex; gap:12px; align-items:center }
+  .icon{
+    width:44px; height:44px; display:grid; place-items:center; border-radius:12px;
+    background:#111; border:1px solid #222;
+    box-shadow: 0 10px 22px rgba(0,0,0,.18);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .icon svg{ width:22px; height:22px; fill:var(--accent) }
+  .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-    /* ===== Terminal ===== */
-    .terminal{
-      margin-top:24px;
-      border-radius:18px;
-      background:var(--term-bg);
-      border:1px solid rgba(0,0,0,.25);
-      box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
-      overflow:hidden;
-      max-width: 70ch; /* no horizontal overflow */
-    }
-    .term-bar{
-      height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
-      background:linear-gradient(180deg, #121416, #0f1113);
-      border-bottom:1px solid rgba(255,255,255,.06);
-      color:#d2d2d2; font:12px/1 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-    }
-    .dots{ display:inline-flex; gap:6px; margin-right:8px }
-    .dot{ width:10px; height:10px; border-radius:50%; background:#3a3a3a }
-    .dot:nth-child(1){ background:#ff5f56 }
-    .dot:nth-child(2){ background:#ffbd2e }
-    .dot:nth-child(3){ background:#27c93f }
+  /* Terminal */
+  .terminal{
+    margin-top:24px;
+    border-radius:18px;
+    background:var(--term-bg);
+    border:1px solid rgba(0,0,0,.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
+    overflow:hidden;
+    max-width: 70ch; /* no horizontal overflow */
+  }
+  .term-bar{
+    height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
+    background:linear-gradient(180deg, #121416, #0f1113);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    color:#d2d2d2; font:12px/1 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  }
+  .dots{ display:inline-flex; gap:6px; margin-right:8px }
+  .dot{ width:10px; height:10px; border-radius:50%; background:#3a3a3a }
+  .dot:nth-child(1){ background:#ff5f56 }
+  .dot:nth-child(2){ background:#ffbd2e }
+  .dot:nth-child(3){ background:#27c93f }
 
-    .term-body{
-      font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      color:var(--term-text);
-      padding:14px 16px 18px;
-      white-space:pre-wrap;
-      overflow-wrap:anywhere;
-      min-height: 220px;
-    }
-    .u{ color:var(--term-username) } /* username - yellow */
-    .d{ color:var(--term-dollar) }   /* $ - purple */
-    .t{ color:var(--term-text) }     /* command - white */
-    .ok{ color:var(--term-ok) }      /* tick - green */
-    .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
-    @keyframes blink{ 50%{ opacity:0 } }
+  .term-body{
+    font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    color:var(--term-text);
+    padding:14px 16px 18px;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    min-height: 220px;
+  }
+  .u{ color:var(--term-username) } /* username - yellow */
+  .d{ color:var(--term-dollar) }   /* $ - purple */
+  .t{ color:var(--term-text) }     /* command - white */
+  .ok{ color:var(--term-ok) }      /* tick - green */
+  .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
+  @keyframes blink{ 50%{ opacity:0 } }
 
-    /* responsive: shrink photo & reserved area on narrow screens */
-    @media (max-width: 900px){
-      :root{ --picW: clamp(240px, 44vw, 480px); }
-      .intro{ padding-right: calc(var(--picW) + 40px); }
-    }
-    @media (max-width: 640px){
-      :root{ --picW: clamp(0px, 0vw, 0px); }   /* stop reserving space */
-      .photo{ right:-25vw; opacity:.18 }       /* gently out of the way */
-      .intro{ padding-right: 18px; }
-    }
+  /* RIGHT: photo (no overlap) */
+  .photo-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+  }
+  .photo{
+    position:relative;
+    display:inline-block;
+    border-radius:22px; /* just shape; we do NOT crop content */
+  }
+  .photo img{
+    display:block;
+    width:min(520px, 36vw);
+    height:auto;
+    border-radius:22px;
+    opacity:1;
+    filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
+  }
+  /* soft edge‑blend overlay (image intact, just a glow near the corners) */
+  .photo::after{
+    content:"";
+    position:absolute; inset:-2%;
+    border-radius:24px; pointer-events:none;
+    background:
+      radial-gradient(220px 220px at 0 0,       rgba(255,255,255,.9), transparent 55%),
+      radial-gradient(220px 220px at 100% 0,    rgba(255,255,255,.9), transparent 55%),
+      radial-gradient(220px 220px at 0 100%,    rgba(255,255,255,.9), transparent 55%),
+      radial-gradient(220px 220px at 100% 100%, rgba(255,255,255,.9), transparent 55%);
+    mix-blend-mode:screen;
+  }
 
-    a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
-  </style>
+  /* responsive: stack on narrow screens */
+  @media (max-width: 900px){
+    .shell{ grid-template-columns: 1fr; }
+    .photo-wrap{ order:2; justify-content:center }
+    .photo img{ width:min(520px, 78vw) }
+  }
+
+  a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
+</style>
 </head>
 <body>
-  <!-- SVG sky with cartoon clouds + binary traffic -->
-  <svg class="sky" viewBox="0 0 1280 720" preserveAspectRatio="none" aria-hidden="true">
+
+<!-- 1) BINARY LAYER (under clouds) -->
+<div class="bg bg-binary" aria-hidden="true">
+  <!-- We render nothing here except absolutely-positioned “packets” that move along CSS paths. -->
+  <div class="packet path-a" style="top:0; left:0;">0101→ 1100→ 0011→ 1010→ 0110→</div>
+  <div class="packet path-a" style="animation-delay:-6s; top:0; left:0;">0101→ 1100→ 0011→ 1010→ 0110→</div>
+
+  <div class="packet path-b" style="top:0; left:0;">←0010 ←1110 ←0101 ←1001 ←0111</div>
+  <div class="packet path-b" style="animation-delay:-8s; top:0; left:0;">←0010 ←1110 ←0101 ←1001 ←0111</div>
+
+  <div class="packet path-c" style="top:0; left:0;">0101→ 0011→ 1110→ 0100→ 1011→</div>
+  <div class="packet path-c" style="animation-delay:-9s; top:0; left:0;">0101→ 0011→ 1110→ 0100→ 1011→</div>
+</div>
+
+<!-- 2) CLOUD LAYER (front of binary; slightly darker/blurred so binary disappears inside) -->
+<div class="bg bg-clouds clouds-drift" aria-hidden="true">
+  <svg viewBox="0 0 1280 720" preserveAspectRatio="none" width="100%" height="100%">
     <defs>
-      <filter id="blur1"><feGaussianBlur stdDeviation="2"/></filter>
+      <filter id="softBlur"><feGaussianBlur stdDeviation="2.5"/></filter>
+      <linearGradient id="cloudFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#cfe8ff"/>
+        <stop offset="100%" stop-color="#a9d2ff"/>
+      </linearGradient>
+      <linearGradient id="cloudFill2" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#c5e2ff"/>
+        <stop offset="100%" stop-color="#8fc2ff"/>
+      </linearGradient>
     </defs>
 
-    <!-- top clouds -->
-    <g class="cloud">
-      <path d="M140 150c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H160c-34 0-60-26-60-58z"/>
-      <path d="M480 110c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H500c-32 0-56-24-56-54z"/>
-      <path d="M860 120c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H880c-32 0-56-24-56-54z"/>
+    <!-- top clouds (drawn AFTER binary -> cover it) -->
+    <g filter="url(#softBlur)" opacity="0.55">
+      <path fill="url(#cloudFill)" d="M120 150c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H140c-34 0-60-26-60-58z"/>
+      <path fill="url(#cloudFill2)" d="M460 110c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H480c-32 0-56-24-56-54z"/>
+      <path fill="url(#cloudFill)" d="M840 120c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H860c-32 0-56-24-56-54z"/>
     </g>
 
     <!-- bottom clouds -->
-    <g class="cloud">
-      <path d="M160 560c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H180c-34 0-60-26-60-58z"/>
-      <path d="M600 610c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H620c-32 0-56-24-56-54z"/>
-      <path d="M980 560c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H1000c-32 0-56-24-56-54z"/>
-    </g>
-
-    <!-- binary traffic along two invisible paths (CSS motion) -->
-    <g class="binary">
-      <text class="flow-a">0101→ 1100→ 0011→ 1010→ 0110→</text>
-      <text class="flow-b">←0010 ←1110 ←0101 ←1001 ←0111</text>
+    <g filter="url(#softBlur)" opacity="0.55">
+      <path fill="url(#cloudFill2)" d="M140 560c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H160c-34 0-60-26-60-58z"/>
+      <path fill="url(#cloudFill)" d="M580 610c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H600c-32 0-56-24-56-54z"/>
+      <path fill="url(#cloudFill2)" d="M960 560c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H980c-32 0-56-24-56-54z"/>
     </g>
   </svg>
+</div>
 
-  <!-- full‑width hero -->
-  <section class="hero">
-    <!-- right‑side portrait (no overlap; intro reserves space equal to its width) -->
-    <figure class="photo" aria-hidden="true">
-      <img src="sirish.jpeg" alt="" />
-    </figure>
-
-    <!-- intro card -->
-    <article class="intro" aria-label="Intro">
+<!-- 3) CONTENT (two columns, no overlap) -->
+<main class="wrap">
+  <section class="shell">
+    <!-- LEFT: intro -->
+    <article class="card" aria-label="Intro">
       <h1>I'm Sirish Yadav</h1>
 
       <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
@@ -238,13 +285,11 @@
           <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
             <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
           </a>
-
           <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
               <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
             </svg>
           </a>
-
           <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
             <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
           </a>
@@ -260,106 +305,113 @@
         <pre id="terminal" class="term-body" aria-live="polite"></pre>
       </section>
     </article>
+
+    <!-- RIGHT: photo -->
+    <aside class="photo-wrap" aria-label="Portrait watermark">
+      <figure class="photo">
+        <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+      </figure>
+    </aside>
   </section>
+</main>
 
-  <script>
-    // Lines to print (command portion only; we'll prepend user + $ at runtime)
-    const LINES = [
-      "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
-      "az network vnet peering create --name make-friends --allow-vnet-access",
-      "ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
-      "for i in users/*; do onboard $i --no-drama; done",
-      "printf 'uptime: good\\n' && echo 'alerts: napping'",
-      "✔"
-    ];
+<script>
+  // Terminal typing loop (username yellow, $ purple, command white, tick green)
+  const LINES = [
+    "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
+    "az network vnet peering create --name make-friends --allow-vnet-access",
+    "ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
+    "for i in users/*; do onboard $i --no-drama; done",
+    "printf 'uptime: good\\n' && echo 'alerts: napping'",
+    "✔"
+  ];
+  const term = document.getElementById('terminal');
+  const caret = document.createElement('span');
+  caret.className = 'caret';
 
-    const term = document.getElementById('terminal');
-    const caret = document.createElement('span');
-    caret.className = 'caret';
-
-    function makeLine(text){
-      if (text === "✔"){
-        const wrap = document.createElement('span');
-        const ok = document.createElement('span');
-        ok.className = 'ok';
-        ok.textContent = "✔";
-        wrap.appendChild(ok);
-        return { node: wrap, target: ok, isTick:true };
-      }
+  function makeLine(text){
+    if (text === "✔"){
       const wrap = document.createElement('span');
-
-      const u = document.createElement('span');
-      u.className = 'u';
-      u.textContent = 'sirish@edge';
-
-      const sp1 = document.createTextNode(' ');
-      const d = document.createElement('span');
-      d.className = 'd';
-      d.textContent = '$';
-
-      const sp2 = document.createTextNode('  ');
-      const t = document.createElement('span');
-      t.className = 't';
-      t.textContent = '';
-
-      wrap.appendChild(u); wrap.appendChild(sp1);
-      wrap.appendChild(d); wrap.appendChild(sp2);
-      wrap.appendChild(t);
-
-      return { node: wrap, target: t, text, isTick:false };
+      const ok = document.createElement('span');
+      ok.className = 'ok';
+      ok.textContent = "✔";
+      wrap.appendChild(ok);
+      return { node: wrap, target: ok, isTick:true };
     }
+    const wrap = document.createElement('span');
 
-    let i=0, j=0, typing=true, current;
+    const u = document.createElement('span');
+    u.className = 'u';
+    u.textContent = 'sirish@edge';
 
-    function start(){
-      term.textContent = '';
-      i=0; j=0; typing=true;
-      typeNext();
+    const sp1 = document.createTextNode(' ');
+    const d = document.createElement('span');
+    d.className = 'd';
+    d.textContent = '$';
+
+    const sp2 = document.createTextNode('  ');
+    const t = document.createElement('span');
+    t.className = 't';
+    t.textContent = '';
+
+    wrap.appendChild(u); wrap.appendChild(sp1);
+    wrap.appendChild(d); wrap.appendChild(sp2);
+    wrap.appendChild(t);
+
+    return { node: wrap, target: t, text, isTick:false };
+  }
+
+  let i=0, j=0, typing=true, current;
+
+  function start(){
+    term.textContent = '';
+    i=0; j=0; typing=true;
+    typeNext();
+  }
+
+  function typeNext(){
+    if (i >= LINES.length) return loop();
+    current = makeLine(LINES[i]);
+    if (i>0) term.appendChild(document.createTextNode('\n'));
+    term.appendChild(current.node);
+    appendCaret();
+    if (current.isTick){
+      setTimeout(()=>{ i++; typeNext(); }, 450);
+    } else {
+      j=0; tick();
     }
+  }
 
-    function typeNext(){
-      if (i >= LINES.length) return loop();
-      current = makeLine(LINES[i]);
-      if (i>0) term.appendChild(document.createTextNode('\n'));
-      term.appendChild(current.node);
-      appendCaret();
-      if (current.isTick){
-        setTimeout(()=>{ i++; typeNext(); }, 450);
-      } else {
-        j=0; tick();
-      }
+  function tick(){
+    if (!typing) return;
+    const s = LINES[i];
+    if (j < s.length){
+      current.target.textContent += s.charAt(j++);
+      setTimeout(tick, 12 + Math.random()*55);
+    } else {
+      i++; setTimeout(typeNext, 300);
     }
+  }
 
-    function tick(){
-      if (!typing) return;
-      const s = LINES[i];
-      if (j < s.length){
-        current.target.textContent += s.charAt(j++);
-        setTimeout(tick, 12 + Math.random()*55);
-      } else {
-        i++; setTimeout(typeNext, 300);
-      }
-    }
-
-    function loop(){
-      typing=false;
+  function loop(){
+    typing=false;
+    setTimeout(()=>{
+      caret.remove();
+      term.style.transition = 'opacity .45s ease';
+      term.style.opacity = '0';
       setTimeout(()=>{
-        caret.remove();
-        term.style.transition = 'opacity .45s ease';
-        term.style.opacity = '0';
-        setTimeout(()=>{
-          term.style.transition = 'none';
-          term.style.opacity = '1';
-          start();
-        }, 480);
-      }, 900);
-    }
+        term.style.transition = 'none';
+        term.style.opacity = '1';
+        start();
+      }, 480);
+    }, 900);
+  }
 
-    function appendCaret(){
-      if (term.lastElementChild !== caret) term.appendChild(caret);
-    }
-    new MutationObserver(appendCaret).observe(term, {childList:true});
-    start();
-  </script>
+  function appendCaret(){
+    if (term.lastElementChild !== caret) term.appendChild(caret);
+  }
+  new MutationObserver(appendCaret).observe(term, {childList:true});
+  start();
+</script>
 </body>
 </html>
