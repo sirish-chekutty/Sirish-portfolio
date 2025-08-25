@@ -6,7 +6,6 @@
 <title>Sirish Yadav — IT Network & Systems Administrator</title>
 <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-<!-- Handwriting fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
@@ -16,7 +15,7 @@
     --line:#e9edf3;
     --accent:#ffd200;
 
-    --card-bg: rgba(255,255,255,.82);
+    --card-bg: rgba(255,255,255,.85);
     --shadow:0 22px 60px rgba(0,0,0,.12);
     --radius:24px;
 
@@ -38,59 +37,65 @@
     overflow-x:hidden;
   }
 
-  /* === LAYERED BACKGROUND ===
-     We use TWO absolutely-positioned SVGs:
-     1) the binary layer (z-index:0)
-     2) the cloud layer (z-index:1) — drawn on top so binary goes “under” clouds.
-     Content sits above both (z-index:2+). */
+  /* background layers */
   .bg{
     position:fixed; inset:0; pointer-events:none;
   }
-  .bg-binary{ z-index:0; opacity:.9 }
-  .bg-clouds{ z-index:1; opacity:.85 } /* higher than binary so it covers it */
+  .bg-binary{ z-index:0; }
+  .bg-clouds{ z-index:1; }
 
-  /* give clouds some gentle motion to feel “alive” */
-  .clouds-drift{ animation: cloudsDrift 26s ease-in-out infinite alternate; transform-origin: 50% 50% }
+  /* use your uploaded SVG as the cloud layer */
+  .clouds-img{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    opacity:.95;               /* make clouds clearly visible */
+    filter: saturate(1.05) contrast(1.02) drop-shadow(0 8px 24px rgba(0,0,0,.05));
+    animation: cloudsDrift 28s ease-in-out infinite alternate;
+  }
   @keyframes cloudsDrift{
     0%   { transform: translate3d(0,0,0) scale(1); }
-    50%  { transform: translate3d(-1.5%, .8%, 0) scale(1.02); }
+    50%  { transform: translate3d(-1%, .8%, 0) scale(1.01); }
     100% { transform: translate3d(1.2%, -1%, 0) scale(1.01); }
   }
 
-  /* === BINARY MOTION (CSS Motion Path) === */
-  @keyframes flowA{ to { offset-distance: 100%; } }
-  @keyframes flowB{ to { offset-distance: 100%; } }
+  /* binary strings that move UNDER the cloud layer */
   .packet{
     position:absolute; left:0; top:0;
     font:700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     color:#2b7cff;
     white-space:nowrap;
     letter-spacing:.1em;
-    filter: drop-shadow(0 1px 0 rgba(0,0,0,.08));
-    opacity:.8;
-    /* default motion path; overridden per element via inline style OR extra classes */
+    text-shadow: 0 1px 0 rgba(255,255,255,.35);
+    opacity:.9;
     offset-distance: 0%;
   }
-  /* we define the paths in CSS with path() so packets move across the viewport.
-     These match the <path> shapes you’ll see in the SVG comments below (not rendered). */
-  .path-a { offset-path: path("M 5vw 20vh C 25vw 8vh, 55vw 8vh, 75vw 20vh S 105vw 32vh, 125vw 20vh"); animation: flowA 12s linear infinite; }
-  .path-b { offset-path: path("M 8vw 75vh C 28vw 85vh, 52vw 88vh, 72vw 78vh S 106vw 60vh, 124vw 74vh"); animation: flowB 16s linear infinite reverse; }
-  .path-c { offset-path: path("M -5vw 45vh C 15vw 30vh, 40vw 30vh, 60vw 45vh S 100vw 60vh, 125vw 48vh"); animation: flowA 18s linear infinite; }
+  /* motion paths that roughly traverse across typical cloud positions.
+     adjust the control points if your clouds.svg composition differs. */
+  @keyframes flowA{ to { offset-distance: 100%; } }
+  @keyframes flowB{ to { offset-distance: 100%; } }
+  @keyframes flowC{ to { offset-distance: 100%; } }
+  @keyframes flowD{ to { offset-distance: 100%; } }
 
-  /* === CONTENT LAYOUT (TWO COLUMNS) === */
+  .path-a { offset-path: path("M -10vw 22vh C 20vw 8vh, 50vw 10vh, 78vw 22vh S 115vw 34vh, 135vw 22vh"); animation: flowA 12s linear infinite; }
+  .path-b { offset-path: path("M -12vw 48vh C 18vw 36vh, 44vw 36vh, 70vw 48vh S 108vw 60vh, 132vw 50vh"); animation: flowB 14s linear infinite reverse; }
+  .path-c { offset-path: path("M -8vw 70vh C 18vw 82vh, 46vw 86vh, 74vw 76vh S 112vw 60vh, 132vw 74vh"); animation: flowC 16s linear infinite; }
+  .path-d { offset-path: path("M -10vw 32vh C 18vw 18vh, 40vw 18vh, 62vw 32vh S 100vw 46vh, 130vw 34vh"); animation: flowD 18s linear infinite reverse; }
+
+  /* two-column layout */
   .wrap{
-    position:relative; z-index:2; /* sits above background layers */
+    position:relative; z-index:2;
     min-height:100dvh; padding:48px 18px;
     display:grid; place-items:center;
   }
   .shell{
     width:min(1200px, 96vw);
     display:grid; gap:26px;
-    grid-template-columns: 1.05fr .95fr; /* left: intro, right: photo */
+    grid-template-columns: 1.05fr .95fr; /* left intro | right photo */
     align-items:start;
   }
 
-  /* LEFT: intro card */
+  /* left column */
   .card{
     background:var(--card-bg);
     backdrop-filter: blur(16px) saturate(1.15);
@@ -100,7 +105,6 @@
     box-shadow:var(--shadow);
     padding:28px 26px 24px;
   }
-
   h1{
     margin:0 0 10px;
     font-family:"Caveat", system-ui;
@@ -137,7 +141,7 @@
   .icon svg{ width:22px; height:22px; fill:var(--accent) }
   .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-  /* Terminal */
+  /* terminal */
   .terminal{
     margin-top:24px;
     border-radius:18px;
@@ -145,7 +149,7 @@
     border:1px solid rgba(0,0,0,.25);
     box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
     overflow:hidden;
-    max-width: 70ch; /* no horizontal overflow */
+    max-width: 70ch;
   }
   .term-bar{
     height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
@@ -158,7 +162,6 @@
   .dot:nth-child(1){ background:#ff5f56 }
   .dot:nth-child(2){ background:#ffbd2e }
   .dot:nth-child(3){ background:#27c93f }
-
   .term-body{
     font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     color:var(--term-text);
@@ -167,14 +170,14 @@
     overflow-wrap:anywhere;
     min-height: 220px;
   }
-  .u{ color:var(--term-username) } /* username - yellow */
-  .d{ color:var(--term-dollar) }   /* $ - purple */
-  .t{ color:var(--term-text) }     /* command - white */
-  .ok{ color:var(--term-ok) }      /* tick - green */
+  .u{ color:var(--term-username) }
+  .d{ color:var(--term-dollar) }
+  .t{ color:var(--term-text) }
+  .ok{ color:var(--term-ok) }
   .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
   @keyframes blink{ 50%{ opacity:0 } }
 
-  /* RIGHT: photo (no overlap) */
+  /* right column photo */
   .photo-wrap{
     position:relative;
     display:flex;
@@ -184,17 +187,15 @@
   .photo{
     position:relative;
     display:inline-block;
-    border-radius:22px; /* just shape; we do NOT crop content */
+    border-radius:22px;
   }
   .photo img{
     display:block;
     width:min(520px, 36vw);
     height:auto;
     border-radius:22px;
-    opacity:1;
     filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
   }
-  /* soft edge‑blend overlay (image intact, just a glow near the corners) */
   .photo::after{
     content:"";
     position:absolute; inset:-2%;
@@ -207,7 +208,7 @@
     mix-blend-mode:screen;
   }
 
-  /* responsive: stack on narrow screens */
+  /* responsive */
   @media (max-width: 900px){
     .shell{ grid-template-columns: 1fr; }
     .photo-wrap{ order:2; justify-content:center }
@@ -219,54 +220,30 @@
 </head>
 <body>
 
-<!-- 1) BINARY LAYER (under clouds) -->
+<!-- binary layer (under clouds) -->
 <div class="bg bg-binary" aria-hidden="true">
-  <!-- We render nothing here except absolutely-positioned “packets” that move along CSS paths. -->
-  <div class="packet path-a" style="top:0; left:0;">0101→ 1100→ 0011→ 1010→ 0110→</div>
-  <div class="packet path-a" style="animation-delay:-6s; top:0; left:0;">0101→ 1100→ 0011→ 1010→ 0110→</div>
+  <!-- multiple strings so it feels lively and continuous -->
+  <div class="packet path-a">0101→ 1100→ 0011→ 1010→ 0110→</div>
+  <div class="packet path-a" style="animation-delay:-6s;">0101→ 1100→ 0011→ 1010→ 0110→</div>
 
-  <div class="packet path-b" style="top:0; left:0;">←0010 ←1110 ←0101 ←1001 ←0111</div>
-  <div class="packet path-b" style="animation-delay:-8s; top:0; left:0;">←0010 ←1110 ←0101 ←1001 ←0111</div>
+  <div class="packet path-b">←0010 ←1110 ←0101 ←1001 ←0111</div>
+  <div class="packet path-b" style="animation-delay:-8s;">←0010 ←1110 ←0101 ←1001 ←0111</div>
 
-  <div class="packet path-c" style="top:0; left:0;">0101→ 0011→ 1110→ 0100→ 1011→</div>
-  <div class="packet path-c" style="animation-delay:-9s; top:0; left:0;">0101→ 0011→ 1110→ 0100→ 1011→</div>
+  <div class="packet path-c">0101→ 0011→ 1110→ 0100→ 1011→</div>
+  <div class="packet path-c" style="animation-delay:-9s;">0101→ 0011→ 1110→ 0100→ 1011→</div>
+
+  <div class="packet path-d">0010→ 0101→ 1101→ 0111→ 0001→</div>
+  <div class="packet path-d" style="animation-delay:-11s;">0010→ 0101→ 1101→ 0111→ 0001→</div>
 </div>
 
-<!-- 2) CLOUD LAYER (front of binary; slightly darker/blurred so binary disappears inside) -->
-<div class="bg bg-clouds clouds-drift" aria-hidden="true">
-  <svg viewBox="0 0 1280 720" preserveAspectRatio="none" width="100%" height="100%">
-    <defs>
-      <filter id="softBlur"><feGaussianBlur stdDeviation="2.5"/></filter>
-      <linearGradient id="cloudFill" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#cfe8ff"/>
-        <stop offset="100%" stop-color="#a9d2ff"/>
-      </linearGradient>
-      <linearGradient id="cloudFill2" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#c5e2ff"/>
-        <stop offset="100%" stop-color="#8fc2ff"/>
-      </linearGradient>
-    </defs>
-
-    <!-- top clouds (drawn AFTER binary -> cover it) -->
-    <g filter="url(#softBlur)" opacity="0.55">
-      <path fill="url(#cloudFill)" d="M120 150c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H140c-34 0-60-26-60-58z"/>
-      <path fill="url(#cloudFill2)" d="M460 110c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H480c-32 0-56-24-56-54z"/>
-      <path fill="url(#cloudFill)" d="M840 120c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H860c-32 0-56-24-56-54z"/>
-    </g>
-
-    <!-- bottom clouds -->
-    <g filter="url(#softBlur)" opacity="0.55">
-      <path fill="url(#cloudFill2)" d="M140 560c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H160c-34 0-60-26-60-58z"/>
-      <path fill="url(#cloudFill)" d="M580 610c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H600c-32 0-56-24-56-54z"/>
-      <path fill="url(#cloudFill2)" d="M960 560c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H980c-32 0-56-24-56-54z"/>
-    </g>
-  </svg>
+<!-- cloud layer (front) using your uploaded SVG -->
+<div class="bg bg-clouds" aria-hidden="true">
+  <img class="clouds-img" src="clouds.svg" alt="" />
 </div>
 
-<!-- 3) CONTENT (two columns, no overlap) -->
 <main class="wrap">
   <section class="shell">
-    <!-- LEFT: intro -->
+    <!-- left: intro -->
     <article class="card" aria-label="Intro">
       <h1>I'm Sirish Yadav</h1>
 
@@ -296,7 +273,6 @@
         </nav>
       </div>
 
-      <!-- Terminal -->
       <section class="terminal" aria-label="Live terminal">
         <div class="term-bar">
           <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
@@ -306,7 +282,7 @@
       </section>
     </article>
 
-    <!-- RIGHT: photo -->
+    <!-- right: photo -->
     <aside class="photo-wrap" aria-label="Portrait watermark">
       <figure class="photo">
         <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
@@ -316,7 +292,7 @@
 </main>
 
 <script>
-  // Terminal typing loop (username yellow, $ purple, command white, tick green)
+  // Terminal typing loop
   const LINES = [
     "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
     "az network vnet peering create --name make-friends --allow-vnet-access",
@@ -407,9 +383,7 @@
     }, 900);
   }
 
-  function appendCaret(){
-    if (term.lastElementChild !== caret) term.appendChild(caret);
-  }
+  function appendCaret(){ if (term.lastElementChild !== caret) term.appendChild(caret); }
   new MutationObserver(appendCaret).observe(term, {childList:true});
   start();
 </script>
