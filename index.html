@@ -11,8 +11,8 @@
 
   <style>
     :root{
-      /* sizing helper for photo width: same value used by intro padding to avoid overlap */
-      --picW: clamp(260px, 38vw, 540px);
+      /* keep intro clear of the photo: this is ALSO the photo width */
+      --picW: clamp(280px, 36vw, 560px);
 
       --ink:#0b0b0b;
       --muted:#1f1f1f;
@@ -29,7 +29,7 @@
       --term-dollar:#9b5de5;    /* purple */
       --term-text:#ffffff;      /* white */
       --term-ok:#22c55e;        /* green */
-      --caret:#ffffff;          /* white caret */
+      --caret:#ffffff;
     }
 
     *{box-sizing:border-box}
@@ -41,66 +41,54 @@
       overflow-x:hidden;
     }
 
-    /* ===== animated “cloud computing” background ===== */
-    .clouds{
-      position:fixed; inset:-10% -10% -10% -10%;
-      z-index:-2; pointer-events:none;
-      background:
-        radial-gradient(180px 120px at 10% 18%, rgba(138,180,255,.16), transparent 60%),
-        radial-gradient(220px 150px at 55% 8%,  rgba(121,192,255,.14), transparent 60%),
-        radial-gradient(260px 160px at 90% 22%, rgba(173,216,255,.14), transparent 60%),
-        radial-gradient(220px 150px at 20% 80%, rgba(150,205,255,.14), transparent 60%),
-        radial-gradient(280px 160px at 75% 85%, rgba(130,200,255,.14), transparent 60%);
-      filter: blur(2px) saturate(1.02);
-      animation: drift 26s ease-in-out infinite alternate;
+    /* ===== Animated “cloud computing” sky with flowing binary ===== */
+    .sky{
+      position:fixed; inset:0; z-index:-3; pointer-events:none;
     }
-    @keyframes drift{
-      0%   { transform: translate3d(0,0,0) scale(1); }
-      50%  { transform: translate3d(-1.5%, .8%, 0) scale(1.02); }
-      100% { transform: translate3d(1.8%, -1%, 0) scale(1.01); }
-    }
+    /* keep it faint */
+    .sky .cloud { fill:#bfe2ff; opacity:.25; filter:url(#blur1); }
+    .sky .binary { fill:#7db8ff; opacity:.45; font:700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    /* binary moves along the paths */
+    @keyframes flowA{ to { offset-distance: 100%; } }
+    @keyframes flowB{ to { offset-distance: 100%; } }
+    .flow-a { offset-path: path("M 160 140 C 320 60 560 60 720 140 S 1080 220 1240 140"); animation: flowA 12s linear infinite; }
+    .flow-b { offset-path: path("M 180 520 C 360 620 560 640 720 560 S 1040 440 1220 520"); animation: flowB 15s linear infinite reverse; }
+    .binary::after{ content: " 0101 1010 0011 1101"; }
+    /* duplicate strings by hand so all browsers show motion even without ::after support */
+    .binary { white-space:nowrap }
 
-    /* ===== full‑width hero (no column grid) ===== */
-    .hero{
-      position:relative;
-      padding:56px 20px 40px;
-      min-height:100dvh;
-    }
+    /* ===== Hero layout (full‑width; no columns) ===== */
+    .hero{ position:relative; padding:56px 20px 40px; min-height:100dvh; }
 
-    /* right‑side portrait watermark, no masks/cropping */
+    /* Photo on the right — not fixed behind; we simply reserve space for it */
     .photo{
-      position:fixed;
-      right:max(12px, 2vw);
-      top:50%;
-      transform:translateY(-50%);
-      width:var(--picW);
-      z-index:-1;               /* sits behind content; never overlaps */
-      pointer-events:none;
+      position:absolute; right:max(12px, 2vw); top:50%; transform:translateY(-50%);
+      width:var(--picW); z-index:1; pointer-events:none;
     }
     .photo img{
       width:100%; height:auto; display:block; border-radius:22px;
       filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
     }
-    /* soft edge‑blend overlay for a watermark feel (image fully intact) */
+    /* soft edge‑blend glow (image intact) */
     .photo::after{
       content:"";
-      position:absolute; inset:-1%;
-      border-radius:24px;
-      pointer-events:none;
+      position:absolute; inset:-1.5%;
+      border-radius:24px; pointer-events:none;
       background:
-        radial-gradient(210px 210px at 0 0,       rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(210px 210px at 100% 0,    rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(210px 210px at 0 100%,    rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(210px 210px at 100% 100%, rgba(255,255,255,.85), transparent 55%);
+        radial-gradient(220px 220px at 0 0,       rgba(255,255,255,.9), transparent 55%),
+        radial-gradient(220px 220px at 100% 0,    rgba(255,255,255,.9), transparent 55%),
+        radial-gradient(220px 220px at 0 100%,    rgba(255,255,255,.9), transparent 55%),
+        radial-gradient(220px 220px at 100% 100%, rgba(255,255,255,.9), transparent 55%);
       mix-blend-mode:screen;
     }
 
-    /* intro card spans the page, padded on the right so it never touches photo */
+    /* Intro card spans full width but pads RIGHT by photo width so there’s no overlap */
     .intro{
-      width:min(1200px, 96vw);
+      position:relative; z-index:2;
+      width:min(1400px, 96vw);
       margin:0 auto;
       padding:28px 26px 26px;
-      padding-right: calc(var(--picW) + 40px);
+      padding-right: calc(var(--picW) + 56px); /* <-- guarantees no overlap */
       background:var(--card-bg);
       backdrop-filter: blur(16px) saturate(1.15);
       -webkit-backdrop-filter: blur(16px) saturate(1.15);
@@ -145,7 +133,7 @@
     .icon svg{ width:22px; height:22px; fill:var(--accent) }
     .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-    /* ===== iOS/macOS style terminal ===== */
+    /* ===== Terminal ===== */
     .terminal{
       margin-top:24px;
       border-radius:18px;
@@ -182,14 +170,14 @@
     .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
     @keyframes blink{ 50%{ opacity:0 } }
 
-    /* responsive: on narrow screens, shrink photo and reduce right padding */
+    /* responsive: shrink photo & reserved area on narrow screens */
     @media (max-width: 900px){
-      :root{ --picW: clamp(220px, 46vw, 420px); }
-      .intro{ padding-right: calc(var(--picW) + 24px); }
+      :root{ --picW: clamp(240px, 44vw, 480px); }
+      .intro{ padding-right: calc(var(--picW) + 40px); }
     }
     @media (max-width: 640px){
-      :root{ --picW: clamp(0px, 0vw, 0px); }   /* effectively hides overlap spacing */
-      .photo{ opacity:.15; right: -20vw }      /* push further right to keep focus on text */
+      :root{ --picW: clamp(0px, 0vw, 0px); }   /* stop reserving space */
+      .photo{ right:-25vw; opacity:.18 }       /* gently out of the way */
       .intro{ padding-right: 18px; }
     }
 
@@ -197,12 +185,36 @@
   </style>
 </head>
 <body>
-  <!-- animated cloud layer -->
-  <div class="clouds" aria-hidden="true"></div>
+  <!-- SVG sky with cartoon clouds + binary traffic -->
+  <svg class="sky" viewBox="0 0 1280 720" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <filter id="blur1"><feGaussianBlur stdDeviation="2"/></filter>
+    </defs>
+
+    <!-- top clouds -->
+    <g class="cloud">
+      <path d="M140 150c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H160c-34 0-60-26-60-58z"/>
+      <path d="M480 110c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H500c-32 0-56-24-56-54z"/>
+      <path d="M860 120c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H880c-32 0-56-24-56-54z"/>
+    </g>
+
+    <!-- bottom clouds -->
+    <g class="cloud">
+      <path d="M160 560c0-28 24-50 54-50 10-25 38-42 70-42 41 0 75 27 80 62 27-3 50 17 50 42 0 26-22 46-50 46H180c-34 0-60-26-60-58z"/>
+      <path d="M600 610c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H620c-32 0-56-24-56-54z"/>
+      <path d="M980 560c0-24 22-44 50-44 12-22 38-36 66-36 39 0 72 26 76 58 25-3 46 16 46 39 0 24-21 42-46 42H1000c-32 0-56-24-56-54z"/>
+    </g>
+
+    <!-- binary traffic along two invisible paths (CSS motion) -->
+    <g class="binary">
+      <text class="flow-a">0101→ 1100→ 0011→ 1010→ 0110→</text>
+      <text class="flow-b">←0010 ←1110 ←0101 ←1001 ←0111</text>
+    </g>
+  </svg>
 
   <!-- full‑width hero -->
   <section class="hero">
-    <!-- right‑side portrait watermark (no overlap with text) -->
+    <!-- right‑side portrait (no overlap; intro reserves space equal to its width) -->
     <figure class="photo" aria-hidden="true">
       <img src="sirish.jpeg" alt="" />
     </figure>
@@ -251,7 +263,7 @@
   </section>
 
   <script>
-    // Lines to print (command portion only, we'll prepend user + $ at runtime)
+    // Lines to print (command portion only; we'll prepend user + $ at runtime)
     const LINES = [
       "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
       "az network vnet peering create --name make-friends --allow-vnet-access",
