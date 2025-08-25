@@ -5,149 +5,148 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sirish Yadav — IT Network & Systems Administrator</title>
   <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
+
+  <!-- Handwriting fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --bg:#ffffff;
       --ink:#0b0b0b;
       --muted:#3a3a3a;
-      --line:#eceff3;
-      --card:rgba(255,255,255,.6);
-      --glass-border:rgba(255,255,255,.9);
-      --accent:#ffd200;   /* yellow */
-      --accent-ink:#111;  /* black */
+      --line:#e9edf3;
+      --accent:#ffd200;           /* yellow */
+      --accent-ink:#111;          /* black */
       --shadow:0 20px 60px rgba(0,0,0,.12);
-      --radius:22px;
+      --radius:24px;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      color:var(--ink);
+      margin:0; color:var(--ink); background:var(--bg);
       background:
-        radial-gradient(1400px 700px at 85% -10%, rgba(255,210,0,.08), transparent 60%),
-        radial-gradient(1000px 500px at -10% 110%, rgba(255,210,0,.06), transparent 60%),
-        var(--bg);
-      font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+        radial-gradient(1100px 600px at 90% 0%, rgba(255,210,0,.08), transparent 60%),
+        radial-gradient(900px 500px at 0% 100%, rgba(255,210,0,.06), transparent 60%),
+        #fff;
+      font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
       -webkit-font-smoothing: antialiased;
-      overflow-x:hidden;
     }
 
-    .wrap{ min-height:100dvh; display:grid; place-items:center; padding:56px 18px }
-    .shell{ width:min(1150px, 94vw); display:grid; gap:26px }
+    main{min-height:100dvh; padding:48px 18px}
+    .shell{
+      width:min(1200px, 96vw);
+      margin:0 auto;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;   /* intro | photo */
+      gap:28px;
+      align-items:start;
+    }
 
-    /* watermark photo on the right, mostly visible with feathered edges only */
+    /* --- RIGHT COLUMN PHOTO (no overlap) --- */
+    .photo-wrap{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+    }
     .mark{
-      position:fixed; right:max(8px, 2vw); top:50%; transform:translateY(-50%);
-      z-index:1; pointer-events:none; user-select:none;
-      max-height:88vh; width:auto; opacity:.95; /* mostly visible */
-      filter: drop-shadow(0 14px 40px rgba(0,0,0,.22)) saturate(1.02) contrast(1.02);
-      /* gentle edge feathering so it blends only on the borders */
-      -webkit-mask-image:
-        radial-gradient(140% 140% at 85% 50%, #000 88%, transparent 100%);
-              mask-image:
-        radial-gradient(140% 140% at 85% 50%, #000 88%, transparent 100%);
-      -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-      -webkit-mask-size:100% 100%; mask-size:100% 100%;
+      width:min(520px, 36vw);
+      height:auto;
+      display:block;
+      opacity:.98; /* mostly visible */
+      filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
+      /* Feather only corners/edges while keeping most of image visible */
+      -webkit-mask:
+        radial-gradient(240px 240px at 0 0,       transparent 0, transparent 22%, #000 40%),
+        radial-gradient(240px 240px at 100% 0,    transparent 0, transparent 22%, #000 40%),
+        radial-gradient(240px 240px at 0 100%,    transparent 0, transparent 22%, #000 40%),
+        radial-gradient(240px 240px at 100% 100%, transparent 0, transparent 22%, #000 40%),
+        linear-gradient(#000,#000);
+              mask:
+        radial-gradient(240px 240px at 0 0,       transparent 0, transparent 22%, #000 40%),
+        radial-gradient(240px 240px at 100% 0,    transparent 0, transparent 22%, #000 40%),
+        radial-gradient(240px 240px at 0 100%,    transparent 0, transparent 22%, #000 40%),
+        radial-gradient(240px 240px at 100% 100%, transparent 0, transparent 22%, #000 40%),
+        linear-gradient(#000,#000);
+      -webkit-mask-composite: source-over, source-over, source-over, source-over, xor;
+              mask-composite: exclude; /* works in modern browsers */
+      border-radius:22px;
     }
 
-    /* glass card */
+    /* --- LEFT COLUMN INTRO CARD --- */
     .card{
-      position:relative; z-index:2;
-      background:var(--card);
-      backdrop-filter: blur(18px) saturate(1.2);
-      -webkit-backdrop-filter: blur(18px) saturate(1.2);
+      background:rgba(255,255,255,.7);
+      backdrop-filter: blur(16px) saturate(1.15);
+      -webkit-backdrop-filter: blur(16px) saturate(1.15);
       border:1px solid rgba(0,0,0,.06);
       border-radius:var(--radius);
-      box-shadow: var(--shadow);
-      padding:28px 26px 20px;
-      outline: 1px solid rgba(255,255,255,.6);
+      box-shadow:var(--shadow);
+      padding:28px 26px 24px;
+      position:relative;
     }
 
-    .tag{
-      display:inline-block; letter-spacing:.08em; text-transform:uppercase;
-      font-size:.72rem; padding:6px 10px; border-radius:999px;
-      background:var(--accent); color:var(--accent-ink);
-      border:1px solid rgba(0,0,0,.1);
-      box-shadow: 0 6px 18px rgba(255,210,0,.35), inset 0 0 0 1px rgba(255,255,255,.7);
+    /* HELLO = styled text, not a button */
+    .hello{
+      display:inline-block;
+      color:var(--accent-ink);
+      background:linear-gradient(180deg, #ffe564, #ffd200);
+      padding:2px 8px;
+      border-radius:8px;
+      border:1px solid rgba(0,0,0,.18);
+      font: 700 14px/1 "Patrick Hand", system-ui;
+      letter-spacing:.02em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
     }
-    h1{ margin:10px 0 6px; font-weight:800; line-height:1.08; font-size: clamp(28px, 6vw, 52px) }
-    .lead{ color:var(--muted); font-size: clamp(14px, 2.2vw, 18px); margin: 6px 0 10px }
 
-    .cta-row{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:12px }
+    h1{
+      margin:12px 0 10px;
+      font-family:"Caveat", system-ui;
+      font-weight:700;
+      font-size: clamp(36px, 7vw, 64px);
+      line-height:1.02;
+    }
+    .lead{
+      font-family:"Patrick Hand", system-ui;
+      font-size: clamp(18px, 2.4vw, 22px);
+      line-height:1.55;
+      color:#1d1d1d;
+      margin: 6px 0 10px;
+    }
 
+    .cta-row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px }
     .btn{
-      position:relative; display:inline-flex; align-items:center; gap:10px;
-      padding:14px 18px; border-radius:14px; text-decoration:none;
-      color:#111; background:#fff;
-      border:1px solid var(--line);
-      box-shadow: 0 10px 24px rgba(0,0,0,.08), 0 0 0 0 rgba(255,210,0,.0);
+      display:inline-flex; align-items:center; gap:10px;
+      padding:12px 16px; border-radius:14px; text-decoration:none;
+      color:#111; background:#fff; border:1px solid var(--line);
+      box-shadow: 0 8px 22px rgba(0,0,0,.08);
       transition: transform .15s ease, box-shadow .25s ease;
+      font: 600 16px/1.1 system-ui, -apple-system;
     }
-    .btn::after{
-      content:""; position:absolute; inset:-2px; border-radius:16px; pointer-events:none;
-      box-shadow: 0 0 0 0 rgba(255,210,0,.35); transition: box-shadow .25s ease;
-    }
-    .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 32px rgba(0,0,0,.12) }
-    .btn:hover::after{ box-shadow: 0 0 0 6px rgba(255,210,0,.18) }
+    .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.12) }
 
-    .icons{ display:flex; gap:14px; align-items:center }
+    .icons{ display:flex; gap:12px; align-items:center }
     .icon{
       width:44px; height:44px; display:grid; place-items:center; border-radius:12px;
       background:#111; border:1px solid #222;
       box-shadow: 0 10px 22px rgba(0,0,0,.18);
-      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+      transition: transform .25s ease, box-shadow .25s ease;
     }
     .icon svg{ width:22px; height:22px; fill:var(--accent) }
     .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-    /* laptop */
-    .mac-wrap{ z-index:2; }
-    .mac{
-      width:min(980px, 96%); margin: 10px auto 0; position:relative;
-      filter: drop-shadow(0 28px 60px rgba(0,0,0,.12));
-    }
-    /* lid + screen */
-    .lid{
-      border-radius:18px 18px 12px 12px;
-      background: linear-gradient(180deg, #f0f0f0, #e5e5e5 55%, #d9d9d9);
-      border:1px solid rgba(0,0,0,.08);
-      padding:14px;
-    }
-    .bezel{
-      border-radius:12px;
-      background: #0c0c0c;
-      padding:10px;
-      position:relative;
+    /* --- macOS/iOS style terminal window (no laptop) --- */
+    .terminal{
+      margin-top:24px;
+      border-radius:18px;
+      background:#0b0f12;
+      border:1px solid rgba(0,0,0,.25);
+      box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.06);
-    }
-    .cam{ position:absolute; top:6px; left:50%; transform:translateX(-50%); width:62px; height:8px; border-radius:10px; background:#151515 }
-
-    /* actual screen content area with a fixed inner max-width so code never spills horizontally */
-    .screen{
-      border-radius:8px; background:#0d0f12;
-      min-height: 340px; display:flex; align-items:stretch; justify-content:center;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05), inset 0 20px 50px rgba(255,255,255,.02);
-    }
-
-    /* terminal sits inside screen and is width-capped to prevent wide overflow */
-    .term{
-      flex: 1 1 auto;
-      display:flex; align-items:flex-start; justify-content:center;
-      padding:18px 18px 22px;
-    }
-    .term-inner{
-      width: min(92%, 72ch);            /* hard cap by characters so it never overflows */
-      margin: 6px auto 0;
-      border-radius:10px; background: #0b0f12;
-      border:1px solid rgba(255,255,255,.06);
-      box-shadow: 0 20px 60px rgba(0,0,0,.25), inset 0 0 0 1px rgba(0,0,0,.45);
-      position:relative; overflow:hidden;
     }
     .term-bar{
-      height:34px; display:flex; align-items:center; gap:10px; padding:0 10px;
-      background: linear-gradient(180deg, #121416, #0f1113);
+      height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
+      background:linear-gradient(180deg, #121416, #0f1113);
       border-bottom:1px solid rgba(255,255,255,.06);
       color:#d2d2d2; font:12px/1 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     }
@@ -160,46 +159,32 @@
     .term-body{
       font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
       color:#b6f3b1;
-      padding:12px 14px 16px;
-      white-space:pre-wrap;          /* keep formatting but allow wraps */
-      overflow-wrap:anywhere;        /* wrap long tokens if needed */
-      text-shadow:0 0 12px rgba(77,255,77,.16);
+      padding:14px 16px 18px;
+      white-space:pre-wrap;          /* preserve formatting but allow wrapping */
+      overflow-wrap:anywhere;        /* wrap long tokens safely */
       min-height: 220px;
+      max-width: 70ch;               /* hard cap so it never overflows */
     }
     .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:#b6f3b1; animation: blink .9s steps(1,end) infinite }
     @keyframes blink{ 50%{ opacity:0 } }
 
-    /* base of laptop */
-    .base{
-      height:20px; border-radius:0 0 18px 18px;
-      background: linear-gradient(180deg, #dcdcdc, #c8c8c8);
-      border:1px solid rgba(0,0,0,.08); border-top: none;
-      position:relative;
-    }
-    .notch{
-      position:absolute; left:50%; top:-8px; transform:translateX(-50%);
-      width:30%; height:10px; border-radius:0 0 14px 14px;
-      background:linear-gradient(180deg, #e6e6e6, #c9c9c9);
-      border:1px solid rgba(0,0,0,.08);
-    }
-
-    @media (max-width: 920px){
-      .mark{ max-height:60vh; opacity:.9; right:-20px }
-      .term-inner{ width:min(94%, 64ch) }
+    @media (max-width: 990px){
+      .shell{ grid-template-columns: 1fr; }
+      .photo-wrap{ order:2; justify-content:center }
+      .mark{ width:min(520px, 78vw) }
     }
 
     a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
   </style>
 </head>
 <body>
-  <!-- watermark portrait on the right side with feathered edges -->
-  <img class="mark" src="sirish.jpeg" alt="Watermark portrait of Sirish Yadav" />
-
-  <main class="wrap">
+  <main>
     <section class="shell">
+      <!-- LEFT: intro -->
       <article class="card" aria-label="Intro">
-        <span class="tag">hello</span>
+        <span class="hello">hello</span>
         <h1>I'm Sirish Yadav</h1>
+
         <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
         <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
         <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
@@ -207,8 +192,8 @@
 
         <div class="cta-row">
           <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
-            <span>download resume</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
+            download resume
           </a>
 
           <nav class="icons" aria-label="Social links">
@@ -216,7 +201,7 @@
               <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
             </a>
 
-            <!-- correct linkedin icon -->
+            <!-- Correct LinkedIn icon -->
             <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
               <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
                 <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
@@ -228,35 +213,26 @@
             </a>
           </nav>
         </div>
+
+        <!-- iOS/macOS styled terminal -->
+        <section class="terminal" aria-label="Live terminal">
+          <div class="term-bar">
+            <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+            <span>sirish@mac — zsh</span>
+          </div>
+          <pre id="terminal" class="term-body" aria-live="polite"></pre>
+        </section>
       </article>
 
-      <!-- laptop with contained terminal -->
-      <section class="mac-wrap" aria-label="Laptop with live terminal">
-        <div class="mac">
-          <div class="lid">
-            <div class="bezel">
-              <div class="cam" aria-hidden="true"></div>
-              <div class="screen">
-                <div class="term">
-                  <div class="term-inner">
-                    <div class="term-bar">
-                      <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
-                      <span>sirish@macbook — zsh</span>
-                    </div>
-                    <pre id="terminal" class="term-body" aria-live="polite"></pre>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="base"><div class="notch"></div></div>
-        </div>
-      </section>
+      <!-- RIGHT: photo (separate column so no overlap) -->
+      <aside class="photo-wrap" aria-label="Portrait watermark">
+        <img class="mark" src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+      </aside>
     </section>
   </main>
 
   <script>
-    // typewriter loop: prints each line separately and then restarts
+    // Typewriter loop: prints each line separately, then restarts
     (function(){
       const lines = [
 "sirish@edge $  az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
@@ -273,7 +249,7 @@
 
       let li = 0, ci = 0, running = true;
 
-      function loopStart(){
+      function start(){
         term.textContent = '';
         li = 0; ci = 0; running = true;
         tick();
@@ -295,7 +271,6 @@
           ci++;
           setTimeout(tick, 12 + Math.random()*55);
         } else {
-          // finished line
           li++; ci = 0;
           if (li < lines.length){
             setTimeout(tick, 320);
@@ -308,13 +283,13 @@
               setTimeout(()=>{
                 term.style.transition = 'none';
                 term.style.opacity = '1';
-                loopStart();
+                start();
               }, 480);
             }, 1100);
           }
         }
       }
-      loopStart();
+      start();
     })();
   </script>
 </body>
