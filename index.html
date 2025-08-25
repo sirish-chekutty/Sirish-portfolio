@@ -6,94 +6,107 @@
   <title>Sirish Yadav — IT Network & Systems Administrator</title>
   <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-  <!-- Handwriting fonts for the intro -->
+  <!-- Handwriting fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#ffffff;
+      /* sizing helper for photo width: same value used by intro padding to avoid overlap */
+      --picW: clamp(260px, 38vw, 540px);
+
       --ink:#0b0b0b;
-      --muted:#3a3a3a;
+      --muted:#1f1f1f;
       --line:#e9edf3;
-      --accent:#ffd200;           /* yellow accents */
-      --shadow:0 20px 60px rgba(0,0,0,.12);
+      --accent:#ffd200;
+
+      --card-bg: rgba(255,255,255,.78);
+      --shadow:0 22px 60px rgba(0,0,0,.12);
       --radius:24px;
 
       /* terminal palette */
       --term-bg:#0b0f12;
-      --term-username:#ffd200;    /* yellow */
-      --term-dollar:#9b5de5;      /* purple */
-      --term-text:#ffffff;        /* white for command */
-      --term-ok:#22c55e;          /* green tick */
+      --term-username:#ffd200;  /* yellow */
+      --term-dollar:#9b5de5;    /* purple */
+      --term-text:#ffffff;      /* white */
+      --term-ok:#22c55e;        /* green */
+      --caret:#ffffff;          /* white caret */
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; color:var(--ink); background:var(--bg);
-      background:
-        radial-gradient(1100px 600px at 90% 0%, rgba(255,210,0,.08), transparent 60%),
-        radial-gradient(900px 500px at 0% 100%, rgba(255,210,0,.06), transparent 60%),
-        #fff;
+      margin:0; color:var(--ink); background:#ffffff;
       font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
       -webkit-font-smoothing: antialiased;
+      overflow-x:hidden;
     }
 
-    main{min-height:100dvh; padding:48px 18px}
-    .shell{
-      width:min(1200px, 96vw);
-      margin:0 auto;
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;   /* intro | photo */
-      gap:28px;
-      align-items:start;
+    /* ===== animated “cloud computing” background ===== */
+    .clouds{
+      position:fixed; inset:-10% -10% -10% -10%;
+      z-index:-2; pointer-events:none;
+      background:
+        radial-gradient(180px 120px at 10% 18%, rgba(138,180,255,.16), transparent 60%),
+        radial-gradient(220px 150px at 55% 8%,  rgba(121,192,255,.14), transparent 60%),
+        radial-gradient(260px 160px at 90% 22%, rgba(173,216,255,.14), transparent 60%),
+        radial-gradient(220px 150px at 20% 80%, rgba(150,205,255,.14), transparent 60%),
+        radial-gradient(280px 160px at 75% 85%, rgba(130,200,255,.14), transparent 60%);
+      filter: blur(2px) saturate(1.02);
+      animation: drift 26s ease-in-out infinite alternate;
+    }
+    @keyframes drift{
+      0%   { transform: translate3d(0,0,0) scale(1); }
+      50%  { transform: translate3d(-1.5%, .8%, 0) scale(1.02); }
+      100% { transform: translate3d(1.8%, -1%, 0) scale(1.01); }
     }
 
-    /* --- RIGHT COLUMN PHOTO (restored image) --- */
-    .photo-wrap{
+    /* ===== full‑width hero (no column grid) ===== */
+    .hero{
       position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
+      padding:56px 20px 40px;
+      min-height:100dvh;
     }
+
+    /* right‑side portrait watermark, no masks/cropping */
     .photo{
-      position:relative;
-      display:inline-block;
-      border-radius:22px;          /* just for a modern shape; image is not cropped by masks */
-      overflow:visible;
+      position:fixed;
+      right:max(12px, 2vw);
+      top:50%;
+      transform:translateY(-50%);
+      width:var(--picW);
+      z-index:-1;               /* sits behind content; never overlaps */
+      pointer-events:none;
     }
     .photo img{
-      display:block;
-      width:min(520px, 36vw);
-      height:auto;
-      border-radius:22px;
-      opacity:1; /* bright and clearly visible */
+      width:100%; height:auto; display:block; border-radius:22px;
       filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
     }
-    /* Edge-blend overlay that gently lightens the extreme edges to blend like a watermark */
+    /* soft edge‑blend overlay for a watermark feel (image fully intact) */
     .photo::after{
       content:"";
-      position:absolute; inset:-2%;
-      pointer-events:none;
+      position:absolute; inset:-1%;
       border-radius:24px;
+      pointer-events:none;
       background:
-        radial-gradient(220px 220px at 0 0,       rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(220px 220px at 100% 0,    rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(220px 220px at 0 100%,    rgba(255,255,255,.85), transparent 55%),
-        radial-gradient(220px 220px at 100% 100%, rgba(255,255,255,.85), transparent 55%);
-      mix-blend-mode:screen; /* softly blend into the page instead of hiding image pixels */
+        radial-gradient(210px 210px at 0 0,       rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(210px 210px at 100% 0,    rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(210px 210px at 0 100%,    rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(210px 210px at 100% 100%, rgba(255,255,255,.85), transparent 55%);
+      mix-blend-mode:screen;
     }
 
-    /* --- LEFT COLUMN INTRO CARD --- */
-    .card{
-      background:rgba(255,255,255,.7);
+    /* intro card spans the page, padded on the right so it never touches photo */
+    .intro{
+      width:min(1200px, 96vw);
+      margin:0 auto;
+      padding:28px 26px 26px;
+      padding-right: calc(var(--picW) + 40px);
+      background:var(--card-bg);
       backdrop-filter: blur(16px) saturate(1.15);
       -webkit-backdrop-filter: blur(16px) saturate(1.15);
       border:1px solid rgba(0,0,0,.06);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:28px 26px 24px;
-      position:relative;
     }
 
     h1{
@@ -107,7 +120,7 @@
       font-family:"Patrick Hand", system-ui;
       font-size: clamp(18px, 2.4vw, 22px);
       line-height:1.55;
-      color:#1d1d1d;
+      color:var(--muted);
       margin: 6px 0 10px;
     }
 
@@ -132,7 +145,7 @@
     .icon svg{ width:22px; height:22px; fill:var(--accent) }
     .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-    /* --- iOS/macOS style terminal --- */
+    /* ===== iOS/macOS style terminal ===== */
     .terminal{
       margin-top:24px;
       border-radius:18px;
@@ -140,7 +153,7 @@
       border:1px solid rgba(0,0,0,.25);
       box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
       overflow:hidden;
-      max-width: 70ch; /* hard cap so it never overflows horizontally */
+      max-width: 70ch; /* no horizontal overflow */
     }
     .term-bar{
       height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
@@ -162,80 +175,83 @@
       overflow-wrap:anywhere;
       min-height: 220px;
     }
-    .u{ color:var(--term-username) } /* username */
-    .d{ color:var(--term-dollar) }   /* $ sign */
-    .t{ color:var(--term-text) }     /* command text (white) */
-    .ok{ color:var(--term-ok) }      /* green tick */
-    .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:#ffffff; animation: blink .9s steps(1,end) infinite }
+    .u{ color:var(--term-username) } /* username - yellow */
+    .d{ color:var(--term-dollar) }   /* $ - purple */
+    .t{ color:var(--term-text) }     /* command - white */
+    .ok{ color:var(--term-ok) }      /* tick - green */
+    .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
     @keyframes blink{ 50%{ opacity:0 } }
 
-    @media (max-width: 990px){
-      .shell{ grid-template-columns: 1fr; }
-      .photo-wrap{ order:2; justify-content:center }
-      .photo img{ width:min(520px, 78vw) }
+    /* responsive: on narrow screens, shrink photo and reduce right padding */
+    @media (max-width: 900px){
+      :root{ --picW: clamp(220px, 46vw, 420px); }
+      .intro{ padding-right: calc(var(--picW) + 24px); }
+    }
+    @media (max-width: 640px){
+      :root{ --picW: clamp(0px, 0vw, 0px); }   /* effectively hides overlap spacing */
+      .photo{ opacity:.15; right: -20vw }      /* push further right to keep focus on text */
+      .intro{ padding-right: 18px; }
     }
 
     a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
   </style>
 </head>
 <body>
-  <main>
-    <section class="shell">
-      <!-- LEFT: intro -->
-      <article class="card" aria-label="Intro">
-        <h1>I'm Sirish Yadav</h1>
+  <!-- animated cloud layer -->
+  <div class="clouds" aria-hidden="true"></div>
 
-        <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
-        <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
-        <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
-        <p class="lead">I keep things simple, reliable, and worry‑free.</p>
+  <!-- full‑width hero -->
+  <section class="hero">
+    <!-- right‑side portrait watermark (no overlap with text) -->
+    <figure class="photo" aria-hidden="true">
+      <img src="sirish.jpeg" alt="" />
+    </figure>
 
-        <div class="cta-row">
-          <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
-            download resume
+    <!-- intro card -->
+    <article class="intro" aria-label="Intro">
+      <h1>I'm Sirish Yadav</h1>
+
+      <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
+      <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+      <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
+      <p class="lead">I keep things simple, reliable, and worry‑free.</p>
+
+      <div class="cta-row">
+        <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
+          download resume
+        </a>
+
+        <nav class="icons" aria-label="Social links">
+          <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
           </a>
 
-          <nav class="icons" aria-label="Social links">
-            <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
-            </a>
+          <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
+            </svg>
+          </a>
 
-            <!-- Correct LinkedIn icon -->
-            <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-                <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
-              </svg>
-            </a>
+          <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
+          </a>
+        </nav>
+      </div>
 
-            <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
-            </a>
-          </nav>
+      <!-- Terminal -->
+      <section class="terminal" aria-label="Live terminal">
+        <div class="term-bar">
+          <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+          <span>sirish@mac — zsh</span>
         </div>
-
-        <!-- iOS/macOS styled terminal -->
-        <section class="terminal" aria-label="Live terminal">
-          <div class="term-bar">
-            <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
-            <span>sirish@mac — zsh</span>
-          </div>
-          <pre id="terminal" class="term-body" aria-live="polite"></pre>
-        </section>
-      </article>
-
-      <!-- RIGHT: photo in its own column (no overlap) -->
-      <aside class="photo-wrap" aria-label="Portrait watermark">
-        <figure class="photo">
-          <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
-        </figure>
-      </aside>
-    </section>
-  </main>
+        <pre id="terminal" class="term-body" aria-live="polite"></pre>
+      </section>
+    </article>
+  </section>
 
   <script>
-    // Each command line is composed of 3 logical parts:
-    // [username-span] [dollar-span] [command-span typed gradually]
+    // Lines to print (command portion only, we'll prepend user + $ at runtime)
     const LINES = [
       "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
       "az network vnet peering create --name make-friends --allow-vnet-access",
@@ -249,96 +265,72 @@
     const caret = document.createElement('span');
     caret.className = 'caret';
 
-    function lineFactory(content, isTick=false){
-      const line = document.createElement('span');
-
-      if (isTick){
+    function makeLine(text){
+      if (text === "✔"){
+        const wrap = document.createElement('span');
         const ok = document.createElement('span');
         ok.className = 'ok';
         ok.textContent = "✔";
-        line.appendChild(ok);
-        return { line, target: ok, typeWhole: true };
+        wrap.appendChild(ok);
+        return { node: wrap, target: ok, isTick:true };
       }
+      const wrap = document.createElement('span');
 
-      const user = document.createElement('span');
-      user.className = 'u';
-      user.textContent = 'sirish@edge';
+      const u = document.createElement('span');
+      u.className = 'u';
+      u.textContent = 'sirish@edge';
 
-      const space1 = document.createTextNode(' ');
+      const sp1 = document.createTextNode(' ');
+      const d = document.createElement('span');
+      d.className = 'd';
+      d.textContent = '$';
 
-      const dollar = document.createElement('span');
-      dollar.className = 'd';
-      dollar.textContent = '$';
+      const sp2 = document.createTextNode('  ');
+      const t = document.createElement('span');
+      t.className = 't';
+      t.textContent = '';
 
-      const space2 = document.createTextNode('  ');
+      wrap.appendChild(u); wrap.appendChild(sp1);
+      wrap.appendChild(d); wrap.appendChild(sp2);
+      wrap.appendChild(t);
 
-      const cmd = document.createElement('span');
-      cmd.className = 't';
-      cmd.textContent = ''; // will be typed
-
-      line.appendChild(user);
-      line.appendChild(space1);
-      line.appendChild(dollar);
-      line.appendChild(space2);
-      line.appendChild(cmd);
-
-      return { line, target: cmd, typeWhole: false, prefixNodes: [user, dollar] };
+      return { node: wrap, target: t, text, isTick:false };
     }
 
-    let li = 0, ci = 0, active, typing = false;
+    let i=0, j=0, typing=true, current;
 
     function start(){
       term.textContent = '';
-      li = 0; ci = 0; typing = true;
-      typeNextLine();
+      i=0; j=0; typing=true;
+      typeNext();
     }
 
-    function typeNextLine(){
-      if (li >= LINES.length){ return endCycle(); }
-
-      const isTick = (LINES[li] === '✔');
-      const { line, target, typeWhole } = lineFactory(LINES[li], isTick);
-
-      // new line except the very first
-      if (li > 0) term.appendChild(document.createTextNode('\n'));
-
-      term.appendChild(line);
-      active = target;
-
-      if (term.lastElementChild !== caret) term.appendChild(caret);
-
-      if (typeWhole){
-        // type the single tick
-        ci = 0;
-        tickChar('✔', true);
+    function typeNext(){
+      if (i >= LINES.length) return loop();
+      current = makeLine(LINES[i]);
+      if (i>0) term.appendChild(document.createTextNode('\n'));
+      term.appendChild(current.node);
+      appendCaret();
+      if (current.isTick){
+        setTimeout(()=>{ i++; typeNext(); }, 450);
       } else {
-        ci = 0;
-        tickChar(LINES[li]);
+        j=0; tick();
       }
     }
 
-    function tickChar(str, tickOnly=false){
+    function tick(){
       if (!typing) return;
-
-      if (tickOnly){
-        active.textContent = '✔';
-        li++;
-        setTimeout(typeNextLine, 500);
-        return;
-      }
-
-      if (ci < str.length){
-        active.textContent += str.charAt(ci);
-        ci++;
-        setTimeout(() => tickChar(str), 12 + Math.random()*55);
+      const s = LINES[i];
+      if (j < s.length){
+        current.target.textContent += s.charAt(j++);
+        setTimeout(tick, 12 + Math.random()*55);
       } else {
-        li++;
-        setTimeout(typeNextLine, 320);
+        i++; setTimeout(typeNext, 300);
       }
     }
 
-    function endCycle(){
-      typing = false;
+    function loop(){
+      typing=false;
       setTimeout(()=>{
         caret.remove();
         term.style.transition = 'opacity .45s ease';
@@ -348,15 +340,13 @@
           term.style.opacity = '1';
           start();
         }, 480);
-      }, 1100);
+      }, 900);
     }
 
-    // ensure caret is always last
-    const obs = new MutationObserver(()=>{
+    function appendCaret(){
       if (term.lastElementChild !== caret) term.appendChild(caret);
-    });
-    obs.observe(term, {childList:true});
-
+    }
+    new MutationObserver(appendCaret).observe(term, {childList:true});
     start();
   </script>
 </body>
