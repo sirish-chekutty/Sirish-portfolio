@@ -1,117 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sirish Yadav — IT Network & Systems Admin</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.umd.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sirish Yadav — CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
-    body{font-family:Inter,system-ui,sans-serif;background:#0b0d12;color:#e6e8ee;overflow-x:hidden}
-    .terminal-line span.prompt{color:#9ca3af}
-    .terminal-line span.cmd{color:#e5e7eb}
-    .terminal-line span.ok{color:#10b981;margin-left:.3em}
-    .caret{display:inline-block;width:10px;background:#e5e7eb;animation:blink 1s infinite}
-    @keyframes blink{0%,50%{opacity:1}50.1%,100%{opacity:0}}
-    .gradient-blur{position:absolute;filter:blur(80px);border-radius:50%;}
+    :root{
+      --bg:#f7f8fb; --ink:#111827; --muted:#5b6577; --card:#ffffff; --line:#e6e9f0;
+      --accent:#2563eb; --accent2:#22c55e; --accent3:#f59e0b; --shadow:0 14px 40px rgba(15,23,42,.08);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;overflow-x:hidden}
+
+    /* bright, minimal backdrop with subtle animated stripes */
+    .backdrop{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+      background:
+        linear-gradient(120deg, rgba(37,99,235,.08), transparent 55%),
+        linear-gradient(300deg, rgba(34,197,94,.06), transparent 60%),
+        linear-gradient(0deg, #ffffff, #ffffff);
+    }
+    .stripes{
+      position:fixed; inset:0; z-index:-1; opacity:.25; mask-image:radial-gradient(circle at 60% 40%, black 45%, transparent 80%);
+      background-image:linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.05) 1px, transparent 1px);
+      background-size:44px 44px; animation:pan 26s linear infinite;
+    }
+    @keyframes pan{from{background-position:0 0,0 0}to{background-position:240px 120px, 120px 240px}}
+
+    .wrap{max-width:1150px;margin:0 auto;padding:28px}
+    header{display:grid;grid-template-columns:1.2fr .8fr;gap:34px;align-items:center}
+    @media (max-width: 900px){ header{grid-template-columns:1fr} }
+
+    .chip{display:inline-flex;gap:10px;align-items:center;background:#eef2ff;color:#1e3a8a;border:1px solid #dbe2ff;padding:8px 12px;border-radius:999px;font-size:.92em}
+    .title{margin:10px 0 0;font-size:clamp(28px,6vw,42px);letter-spacing:-.02em}
+    .lead{color:var(--muted);max-width:700px;margin:10px 0 0}
+
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:12px 16px;border-radius:14px;border:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff,#f4f7fb); box-shadow:var(--shadow);
+      text-decoration:none; color:#0b1220; font-weight:800; transform:translateZ(0);
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .btn:hover{ transform:translateY(-2px) }
+    .btn.primary{ background:linear-gradient(135deg, #60a5fa, #22c55e); color:white; border-color:rgba(0,0,0,.04) }
+
+    /* contact panel */
+    .panel{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;max-height:0;opacity:0;transform:translateY(-6px);transition:max-height .5s ease, opacity .35s ease, transform .35s ease}
+    .panel.open{max-height:300px;opacity:1;transform:none}
+    .row{display:flex;gap:12px;align-items:center;padding:14px 16px;border-top:1px solid var(--line);font-size:1.02em}
+    .row:first-child{border-top:none}
+    .row a{color:var(--ink);text-decoration:none}
+
+    /* photo */
+    .photo{
+      position:relative; width:min(380px, 88%); margin:0 auto;
+      border-radius:24px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--line);
+      background:linear-gradient(180deg,#fff, #f4f7fb);
+      transform:translateZ(0);
+    }
+    .photo::before{
+      content:""; position:absolute; inset:-2px; border-radius:26px; z-index:0;
+      background:conic-gradient(from 120deg, rgba(37,99,235,.18), rgba(34,197,94,.18), rgba(245,158,11,.18), rgba(37,99,235,.18));
+      filter:blur(20px); opacity:.7; animation:spin 8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .photo img{position:relative; z-index:1; display:block; width:100%; height:auto; object-fit:cover}
+
+    /* terminal (light theme, tech/clean) */
+    .terminal{
+      background:#ffffff;border:1px solid var(--line);border-radius:20px;padding:16px 16px 18px;
+      font-family:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace; font-size:.98rem; color:#0f172a;
+      box-shadow:var(--shadow); position:relative; overflow:hidden;
+    }
+    .termbar{position:absolute; top:8px; left:10px; color:#94a3b8; font-size:18px; letter-spacing:6px}
+    .term-body{margin-top:18px}
+    .prompt{color:#6b7280}
+    .cmd{color:#0f172a}
+    .ok{color:#16a34a; margin-left:.4em}
+    .caret{display:inline-block; width:10px; height:1.2em; background:#0f172a; vertical-align:-0.15em; animation:blink 1s steps(1) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    .cards{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-top:26px}
+    @media (max-width: 900px){ .cards{grid-template-columns:1fr} }
+
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    .card h2{margin:0 0 6px 0;font-size:1.12rem}
+    .list{color:var(--muted);padding-left:18px;margin:10px 0}
+    footer{color:#6b7280;font-size:13px;margin:34px 0;text-align:center}
   </style>
 </head>
-<body class="relative min-h-screen">
+<body>
+  <div class="backdrop"></div>
+  <div class="stripes"></div>
 
-  <!-- gradient background blobs -->
-  <div class="gradient-blur w-[60vmin] h-[60vmin] -top-24 -left-24 opacity-50" style="background:radial-gradient(circle at 30% 30%,rgba(124,58,237,.5),transparent 60%)"></div>
-  <div class="gradient-blur w-[70vmin] h-[70vmin] -bottom-24 -right-24 opacity-50" style="background:radial-gradient(circle at 70% 70%,rgba(6,182,212,.45),transparent 60%)"></div>
-
-  <main class="relative max-w-6xl mx-auto px-6 py-12">
-    <header class="grid md:grid-cols-2 gap-10 items-center">
+  <main class="wrap">
+    <header>
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 text-sm text-zinc-300">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3-3 3 3m0 6l-3 3-3-3"/></svg>
-          cloud & network engineer
-        </div>
-        <h1 class="mt-3 text-4xl md:text-5xl font-extrabold">Sirish Yadav</h1>
-        <p class="mt-3 text-zinc-300">I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
-        <p class="mt-2 text-zinc-300">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.</p>
-        <p class="mt-2 text-zinc-300">I keep things simple, reliable, and worry-free.</p>
+        <span class="chip">tech / terminal themed</span>
+        <h1 class="title">Sirish Yadav</h1>
+        <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. networks, servers, pbx, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+        <p class="lead">firewalls, vlans, vpns, azure, entra id — from building azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. if it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
+        <p class="lead">I keep things simple, reliable, and worry‑free.</p>
 
-        <div class="mt-5 flex flex-wrap gap-3">
-          <a href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download
-             class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-gradient-to-tr from-purple-500 to-cyan-400 text-[#0b0d12] font-extrabold px-4 py-3 shadow hover:-translate-y-0.5 transition">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/></svg>
-            Resume
+        <div class="actions">
+          <a class="btn primary" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l4-4m-4 4l-4-4M5 21h14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            resume
           </a>
-          <button onclick="toggleContact()" class="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 hover:bg-white/10 transition">Contact me</button>
+          <button class="btn" id="contactBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4z" stroke="#0b1220" stroke-width="2"/><path d="M4 8l8 5 8-5" stroke="#0b1220" stroke-width="2"/></svg>
+            contact me
+          </button>
         </div>
 
-        <div id="contactPanel" class="hidden mt-3 divide-y divide-white/10 rounded-xl border border-white/10 bg-white/[.06] backdrop-blur">
-          <a href="mailto:Sirish.chekutty@gmail.com" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
-            📧 Sirish.chekutty@gmail.com
-          </a>
-          <a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
-            🔗 linkedin.com/in/sirishchekutty
-          </a>
-          <a href="https://github.com/sirish-chekutty" target="_blank" class="flex items-center gap-3 px-4 py-3 hover:bg-white/10">
-            💻 github.com/sirish-chekutty
-          </a>
+        <div id="contactPanel" class="panel" aria-hidden="true">
+          <div class="row">
+            <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 5h16a2 2 0 012 2v.5l-10 6-10-6V7a2 2 0 012-2zm0 5.382l9.445 5.667a1 1 0 001.11 0L24 10.382V17a2 2 0 01-2 2H4a2 2 0 01-2-2v-6.618z"/></svg>
+            <a href="mailto:Sirish.chekutty@gmail.com">Sirish.chekutty@gmail.com</a>
+          </div>
+          <div class="row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.8v2h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.77 2.65 4.77 6.1V23h-3.98v-6.5c0-1.55-.03-3.54-2.16-3.54-2.16 0-2.49 1.68-2.49 3.42V23H8V8.5z"/></svg>
+            <a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noopener">linkedin.com/in/sirishchekutty</a>
+          </div>
+          <div class="row">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.24.79-.55 0-.27-.01-.98-.02-1.92-3.05.66-3.7-1.3-3.7-1.3-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.04 1.78 2.72 1.27 3.38.97.11-.75.4-1.27.73-1.56-2.44-.28-5-1.22-5-5.44 0-1.2.43-2.18 1.14-2.95-.11-.28-.5-1.41.11-2.93 0 0 .95-.31 3.1 1.17a10.8 10.8 0 0 1 5.86 0c2.15-1.48 3.1-1.17 3.1-1.17.61 1.52.22 2.65.11 2.93.71.77 1.14 1.75 1.14 2.95 0 4.23-2.57 5.15-5.02 5.43.41.35.78 1.04.78 2.11 0 1.52-.01 2.75-.01 3.12 0 .3.21.66.8.55A11.5 11.5 0 0 0 12 .5z"/></svg>
+            <a href="https://github.com/sirish-chekutty" target="_blank" rel="noopener">sirish-chekutty</a>
+          </div>
         </div>
       </div>
 
-      <div class="justify-self-center">
-        <img src="sirish.jpeg" onerror="this.src='sirish.jpg'" alt="portrait" class="w-72 md:w-80 rounded-2xl shadow-lg border border-white/10">
+      <div class="photo">
+        <img src="sirish.jpeg" onerror="this.src='sirish.jpg'" alt="portrait of Sirish">
       </div>
     </header>
 
-    <section class="mt-12 grid lg:grid-cols-3 gap-6 items-start">
-      <div class="lg:col-span-2">
-        <div class="bg-[#0e1117]/90 border border-white/10 rounded-2xl p-5 font-mono text-[0.95rem] text-zinc-200 shadow-xl overflow-hidden">
-          <div class="space-y-2" id="terminal"></div>
-        </div>
+    <section class="cards">
+      <div class="terminal">
+        <div class="termbar">● ● ●</div>
+        <div id="term" class="term-body"></div>
       </div>
-      <div class="lg:col-span-1">
-        <div class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur shadow-xl">
-          <h2 class="text-xl font-semibold">what I focus on</h2>
-          <ul class="mt-3 space-y-2 text-zinc-300">
-            <li>• azure, entra id, hybrid identity</li>
-            <li>• firewalls, vpn, site networking</li>
-            <li>• automation with powershell & python</li>
-            <li>• voip/pbx and qos that works</li>
-          </ul>
-        </div>
+
+      <div class="card">
+        <h2>what I focus on</h2>
+        <ul class="list">
+          <li>azure, entra id, hybrid identity</li>
+          <li>firewalls, vpn, site networking</li>
+          <li>automation with powershell and python</li>
+          <li>voip/pbx and qos that actually works</li>
+        </ul>
       </div>
     </section>
 
-    <footer class="mt-16 text-center text-sm text-zinc-400">© <span id="year"></span> Sirish Yadav</footer>
+    <footer>© <span id="yy"></span> sirish yadav</footer>
   </main>
 
-<script>
-const lines = [
-  "az group create -n rg-401-prod -l canadacentral",
-  "az network vnet create -g rg-401-prod -n vnet-hub --address-prefix 10.130.0.0/16",
-  "az network vnet peering create --name hub-spoke --allow-vnet-access",
-  "fortictl vpn up --site wawa --ddns starlink.401group.ddns.net",
-  "entra groups create --dynamic --unit dealerships --no-drama",
-  "intune autopilot enroll --profile 'Standard Workstation' --hash @devices.csv",
-  "ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
-  "printf 'uptime: good\\\\n' && echo 'alerts: napping'"
-];
-let idx=0, char=0, current="", history=[];
-function tick(){
-  const term=document.getElementById("terminal");
-  const line=lines[idx%lines.length];
-  if(char<line.length){
-    current+=line[char++];
-  }else{
-    history.push(line);
-    idx++; char=0; current=\"\";
-    if(history.length>6) history.shift();
-  }
-  term.innerHTML=history.map(l=>`<div class='terminal-line'><span class='prompt'>$</span> <span class='cmd'>${l}</span><span class='ok'>✔</span></div>`).join(\"\")+`<div class='terminal-line'><span class='prompt'>$</span> <span class='cmd'>${current}</span><span class='caret'></span></div>`;
-  setTimeout(tick,40);
-}
-tick();
-function toggleContact(){document.getElementById(\"contactPanel\").classList.toggle(\"hidden\");}
-document.getElementById(\"year\").textContent=new Date().getFullYear();
-</script>
+  <script>
+    // contact panel toggle
+    const contactBtn = document.getElementById('contactBtn');
+    const panel = document.getElementById('contactPanel');
+    contactBtn.addEventListener('click', () => {
+      panel.classList.toggle('open');
+      panel.setAttribute('aria-hidden', String(!panel.classList.contains('open')));
+    });
+
+    // looping terminal (bright theme)
+    const lines = [
+      "az group create -n rg-401-prod -l canadacentral",
+      "az network vnet create -g rg-401-prod -n vnet-hub --address-prefix 10.130.0.0/16",
+      "az network vnet peering create --name hub-spoke --allow-vnet-access",
+      "fortigate vpn up --site wawa --ddns starlink.401group.ddns.net",
+      "entra groups create --dynamic --unit dealerships",
+      "intune autopilot enroll --profile 'Standard Workstation' --hash @devices.csv",
+      "ssh pbx 'qos --enable && echo call quality: chefs kiss'",
+      "printf 'uptime: good\\n' && echo 'alerts: napping'"
+    ];
+    let i=0, j=0, current="", history=[];
+    const el = document.getElementById('term');
+
+    function render(){
+      const html = history.map(
+        l => `<div><span class="prompt">$</span> <span class="cmd">${l}</span><span class="ok">✔</span></div>`
+      ).join('') + `<div><span class="prompt">$</span> <span class="cmd">${current}</span><span class="caret"></span></div>`;
+      el.innerHTML = html;
+    }
+    function typeTick(){
+      const line = lines[i % lines.length];
+      if(j < line.length){
+        current += line[j++];
+        render();
+        setTimeout(typeTick, 24);
+      } else {
+        history.push(line);
+        if(history.length > 7) history.shift();
+        current=""; j=0; i++;
+        render();
+        setTimeout(typeTick, 700);
+        if(i % lines.length === 0){
+          // brief reset pause after a full loop
+          setTimeout(()=>{ history=[]; render(); }, 500);
+        }
+      }
+    }
+    typeTick();
+
+    // year
+    document.getElementById('yy').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
