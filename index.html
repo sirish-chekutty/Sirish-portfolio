@@ -1,286 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Sirish Yadav — Cloud & Network Engineer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@300;500;700&display=swap" rel="stylesheet"/>
-  <style>
-    :root{
-      --bg:#f8fbff; --ink:#0b1220; --muted:#5b6577; --line:#e7eef8; --card:#ffffff;
-      --p1:#2563eb; --p2:#06b6d4; --ok:#16a34a; --accent:#f59e0b;
-      --shadow:0 14px 40px rgba(20, 36, 70, .08); --r:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    a{color:inherit}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sirish Yadav — IT Network & Systems Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0d12; --muted:#a3a9b6; --text:#e6e8ee; --stroke:rgba(255,255,255,.12);
+  --primary:#7c3aed; --accent:#06b6d4; --good:#10b981; --radius:20px; --shadow:0 12px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{height:100%;font-size:1.05em}
+body{margin:0;color:var(--text);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.65;background:var(--bg);overflow-x:hidden}
 
-    /* header nav */
-    .nav{position:sticky;top:0;backdrop-filter:saturate(140%) blur(10px);
-         background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.65));
-         border-bottom:1px solid var(--line); z-index:10}
-    .nav .wrap{display:flex;gap:18px;align-items:center;justify-content:space-between;padding:12px 20px}
-    .nav a.logo{font-weight:800;text-decoration:none;letter-spacing:.2px}
-    .nav ul{display:flex;gap:16px;margin:0;padding:0;list-style:none}
-    .nav ul a{display:inline-block;padding:8px 10px;border-radius:10px;text-decoration:none;color:#0f172a}
-    .nav ul a:hover{background:#eef4ff}
+.layer{position:fixed;inset:0;pointer-events:none}
+.blobs{z-index:-3;filter:saturate(120%);opacity:.85}
+.blobs::before, .blobs::after{content:"";position:absolute;border-radius:50%;filter:blur(60px)}
+.blobs::before{width:60vmin;height:60vmin;left:-10vmin;top:-5vmin;background:radial-gradient(circle at 30% 30%, rgba(124,58,237,.5), transparent 60%)}
+.blobs::after{width:70vmin;height:70vmin;right:-10vmin;bottom:-10vmin;background:radial-gradient(circle at 70% 70%, rgba(6,182,212,.45), transparent 60%)}
+.grid{z-index:-2;background-image:linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);background-size:44px 44px;mask-image:radial-gradient(circle at 50% 40%, black 45%, transparent 80%);animation:gridPan 30s linear infinite}
+@keyframes gridPan{from{background-position:0 0,0 0}to{background-position:200px 120px,120px 200px}}
+.noise{z-index:-1;opacity:.08;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="140" height="140"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.6"/></svg>');mix-blend-mode:overlay}
 
-    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+.portrait{position:fixed;top:2vh;right:2vw;z-index:1;pointer-events:none;opacity:.65;filter:brightness(1.35);mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0 70%, rgba(0,0,0,.7) 85%, rgba(0,0,0,0) 100%);-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0 70%, rgba(0,0,0,.7) 85%, rgba(0,0,0,0) 100%)}
+.portrait img{width:min(46vw, 700px);height:auto;object-fit:cover;border:none;border-radius:0}
 
-    /* hero */
-    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center;margin-top:24px}
-    @media (max-width: 900px){ .hero{grid-template-columns:1fr} }
-    .chip{display:inline-flex;gap:10px;align-items:center;background:#ecf3ff;border:1px solid #dfe9ff;color:#1e3a8a;
-          padding:8px 12px;border-radius:999px;font-size:.92em}
-    h1{margin:.2em 0;font-size:clamp(30px,5.8vw,44px);letter-spacing:-.02em}
-    .lead{color:var(--muted);margin:.4em 0;max-width:680px}
-    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
-    .btn{display:inline-flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--line);
-         background:linear-gradient(180deg,#fff,#f4f8ff);border-radius:14px;box-shadow:var(--shadow);
-         text-decoration:none;color:#0b1220;font-weight:800;transition:transform .12s ease}
-    .btn:hover{transform:translateY(-2px)}
-    .btn.primary{background:linear-gradient(135deg,var(--p1),var(--p2));color:white;border-color:transparent}
+.wrap{max-width:1000px;margin:0 auto;padding:28px; padding-right:clamp(20px, 26vw, 340px); position:relative; z-index:2;}
+header{display:flex;align-items:center;gap:34px;flex-wrap:wrap}
+.title h1{margin:0;font-size:clamp(30px,5.4vw,46px);letter-spacing:-.02em}
+.title small{color:var(--muted);font-size:1.02em}
+.section{margin-top:38px}
+.lead{color:var(--muted);max-width:740px;font-size:1.05em}
 
-    /* contact panel */
-    .panel{margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;max-height:0;opacity:0;transform:translateY(-6px);transition:max-height .5s ease,opacity .35s ease,transform .35s ease}
-    .panel.open{max-height:260px;opacity:1;transform:none}
-    .row{display:flex;gap:12px;align-items:center;padding:14px 16px;border-top:1px solid var(--line);font-size:1rem}
-    .row:first-child{border-top:none}
-    .row a{text-decoration:none}
+/* console + dots spacing */
+.console{background:#0e1117;border:1px solid var(--stroke);border-radius:var(--radius);padding:18px;font-family:"JetBrains Mono",monospace;font-size:1.02em;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.console::before{
+  content:"● ● ●";
+  position:absolute;
+  top:6px;
+  left:10px;
+  color:#667085;
+  display:block;
+}
+#term{margin:16px 0 0;white-space:pre-wrap} /* pushes text below the dots */
+.prompt{color:#9ca3af}.cmd{color:#e5e7eb}.ok{color:var(--good)}
 
-    /* photo */
-    .photo{position:relative;justify-self:center}
-    .photo .glow{position:absolute;inset:-8px;border-radius:26px;background:conic-gradient(from 120deg, rgba(37,99,235,.18), rgba(6,182,212,.18), rgba(245,158,11,.18), rgba(37,99,235,.18));filter:blur(20px);opacity:.7;animation:spin 8s linear infinite;z-index:0}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .photo img{position:relative;z-index:1;width:min(380px,88vw);height:auto;border-radius:22px;border:1px solid var(--line);box-shadow:var(--shadow);background:#fff}
+.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cta{display:inline-flex;gap:10px;align-items:center;margin-top:16px;padding:14px 18px;border-radius:14px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#0b0d12;font-weight:800;text-decoration:none;border:1px solid rgba(255,255,255,.18);box-shadow:var(--shadow);transform:translateZ(0);cursor:pointer;font-size:1.02em}
+.cta:hover{transform:translateY(-2px)}
 
-    /* section headers */
-    .section{margin-top:36px}
-    .section h2{font-size:1.2rem;margin:0 0 8px 0}
-    .muted{color:var(--muted)}
+.contact-panel{margin-top:12px;background:rgba(255,255,255,.04);border:1px solid var(--stroke);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;max-height:0;opacity:0;transform:translateY(-6px);transition:max-height .5s ease, opacity .4s ease, transform .4s ease}
+.contact-panel.open{max-height:300px;opacity:1;transform:none}
+.contact-row{display:flex;gap:14px;align-items:center;padding:14px 16px;border-top:1px solid rgba(255,255,255,.06);font-size:1.02em}
+.contact-row:first-child{border-top:none}
+.contact-row a{color:var(--text);text-decoration:none}
+.icon{width:18px;height:18px;display:inline-block;flex:0 0 18px;opacity:.9}
 
-    /* terminal */
-    .terminal{background:#ffffff;border:1px solid var(--line);border-radius:16px;padding:16px;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;color:#0b1220;box-shadow:var(--shadow);position:relative;overflow:hidden}
-    .termbar{position:absolute;top:8px;left:10px;color:#64748b;letter-spacing:6px}
-    .term-body{margin-top:18px}
-    .prompt{color:#64748b}.cmd{color:#0f172a}.ok{color:var(--ok);margin-left:.35em}.caret{display:inline-block;width:10px;height:1.15em;background:#111827;vertical-align:-0.15em;animation:blink 1s steps(1) infinite}
-    @keyframes blink{50%{opacity:0}}
+footer{color:var(--muted);font-size:13px;margin:40px 0;text-align:center}
 
-    /* portfolio grid */
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    @media (max-width: 900px){ .grid{grid-template-columns:1fr 1fr} }
-    @media (max-width: 640px){ .grid{grid-template-columns:1fr} }
-    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
-    .card img{width:100%;height:160px;object-fit:cover}
-    .card .pad{padding:14px}
-    .card h3{margin:0 0 6px 0;font-size:1.05rem}
-    .card p{margin:0;color:var(--muted)}
-    .card a{margin:12px 0 6px 0;display:inline-block;font-weight:700;text-decoration:none;color:var(--p1)}
-    .badge{display:inline-block;background:#eef6ff;color:#184389;border:1px solid #ddebff;border-radius:999px;padding:4px 8px;font-size:.82rem;margin-right:6px}
+.parallax{transition:transform .2s ease-out;will-change:transform}
+.fadeIn{opacity:0;transform:translateY(10px);animation:fadeIn .7s ease forwards}
+@keyframes fadeIn{to{opacity:1;transform:none}}
 
-    /* timeline */
-    .timeline{border-left:2px solid var(--line);padding-left:16px}
-    .tl-item{margin:18px 0;position:relative}
-    .dot{position:absolute;left:-11px;top:4px;width:10px;height:10px;background:linear-gradient(135deg,var(--p1),var(--p2));border-radius:50%;box-shadow:0 0 0 4px #fff}
-    .tl-item h4{margin:0 0 4px 0;font-size:1rem}
-    .tl-item small{color:var(--muted)}
-    .tl-item p{margin:6px 0 0 0;color:var(--muted)}
+@media (prefers-reduced-motion: reduce){
+  .grid{animation:none}
+  .parallax{transition:none}
+}
 
-    /* footer */
-    footer{margin:40px 0;color:#6b7280;text-align:center;font-size:13px}
+.grid{
+  -webkit-mask-image: radial-gradient(circle at 50% 40%, black 45%, transparent 80%);
+}
+@media (max-width: 900px){
+  .wrap{ padding-right: 20px; }
+  .portrait{ opacity:.5; top:auto; bottom:6vh; right:-10vw; }
+  .portrait img{ width:min(60vw, 420px); }
+  .title h1{ font-size: clamp(28px, 7vw, 40px); }
+  .lead{ font-size: 1em; }
+  .console{ font-size: .98em; }
+}
+@media (max-width: 600px){
+  html,body{ font-size: 1em; }
+  .wrap{ padding: 22px; }
+  .portrait{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .portrait img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+  .wrap, .title, .lead, .section, .actions, footer{
+    position: relative;
+    z-index: 2;
+  }
+  .title h1,
+  .title small,
+  .lead,
+  .section,
+  .contact-row a,
+  footer {
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  }
 
-    /* reveal animation */
-    .reveal{opacity:0;transform:translateY(12px);transition:opacity .6s ease, transform .6s ease}
-    .reveal.show{opacity:1;transform:none}
-  </style>
+  .actions a.cta,
+  .actions button.cta {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 16px;
+    font-size: 1em;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #0b0d12;
+    font-weight: 800;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, .18);
+    box-shadow: var(--shadow);
+    transform: translateZ(0);
+    cursor: pointer;
+  }
+  .actions a.cta:hover,
+  .actions button.cta:hover {
+    transform: translateY(-2px);
+  }
+
+  .grid{
+    background-size:36px 36px;
+    mask-image: radial-gradient(circle at 50% 45%, black 55%, transparent 85%);
+    -webkit-mask-image: radial-gradient(circle at 50% 45%, black 55%, transparent 85%);
+  }
+  .contact-row{ padding:12px 14px; font-size:.98em }
+  footer{ font-size:12px; margin:32px 0 }
+}
+</style>
 </head>
 <body>
+  <div class="layer blobs parallax" data-depth="12"></div>
+  <div class="layer grid parallax" data-depth="6"></div>
+  <div class="layer noise"></div>
+  <div class="portrait parallax" data-depth="1">
+    <img id="portrait" src="sirish.jpeg" alt="Portrait of Sirish" loading="lazy" decoding="async">
+  </div>
 
-  <!-- sticky nav -->
-  <nav class="nav">
-    <div class="wrap">
-      <a class="logo" href="#top">SY</a>
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#work">Projects</a></li>
-        <li><a href="#timeline">Timeline</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download>Resume</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <main id="top" class="wrap">
-    <!-- hero -->
-    <section class="hero section" id="about">
-      <div class="reveal">
-        <span class="chip">cloud • network • terminal‑themed</span>
+  <main class="wrap">
+    <header class="fadeIn parallax" data-depth="2">
+      <div class="title">
         <h1>Sirish Yadav</h1>
-        <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
-        <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
-
-        <div class="actions">
-          <a class="btn primary" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download>
-            <!-- download icon -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m0 0l4-4m-4 4-4-4M5 21h14" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-            resume
-          </a>
-          <button class="btn" id="contactBtn">
-            <!-- mail icon -->
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" stroke="#0b1220" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="#0b1220" stroke-width="2"/></svg>
-            contact me
-          </button>
-        </div>
-
-        <!-- contact panel -->
-        <div id="contactPanel" class="panel" aria-hidden="true">
-          <div class="row">
-            📧 <a href="mailto:Sirish.chekutty@gmail.com">Sirish.chekutty@gmail.com</a>
-          </div>
-          <div class="row">
-            💼 <a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noopener">linkedin.com/in/sirishchekutty</a>
-          </div>
-          <div class="row">
-            💻 <a href="https://github.com/sirish-chekutty" target="_blank" rel="noopener">github.com/sirish-chekutty</a>
-          </div>
-        </div>
+        <small>IT Network & Systems Administrator @ 401 Group of Companies</small>
+        <p class="lead" style="margin:10px 0 0">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+        <p class="lead" style="margin:10px 0 0">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
+        <p class="lead" style="margin:10px 0 0">I keep things simple, reliable, and worry‑free.</p>
       </div>
+    </header>
 
-      <div class="photo reveal">
-        <div class="glow"></div>
-        <img src="sirish.jpeg" onerror="this.src='sirish.jpg'" alt="Portrait of Sirish"/>
-      </div>
+    <section class="section fadeIn parallax" data-depth="1.5">
+      <div class="console"><pre id="term"></pre></div>
     </section>
 
-    <!-- terminal -->
-    <section class="section reveal">
-      <div class="terminal">
-        <div class="termbar">● ● ●</div>
-        <div id="term" class="term-body"></div>
+    <section class="section fadeIn parallax" data-depth="1">
+      <div class="actions">
+        <a class="cta" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download>Resume</a>
+        <button id="contactBtn" class="cta" type="button">Contact me</button>
       </div>
-    </section>
-
-    <!-- portfolio / projects -->
-    <section class="section" id="work">
-      <h2 class="reveal">Projects</h2>
-      <p class="muted reveal">A few highlights. Swap images/links as you like.</p>
-      <div class="grid">
-        <article class="card reveal">
-          <img src="thumb-zammad.jpg" alt="Zammad POC"/>
-          <div class="pad">
-            <div class="badge">Azure</div><div class="badge">Zammad</div>
-            <h3>Ticketing POC on Azure</h3>
-            <p>Deployed Zammad (VM + DB), admin onboarding, test flows, and future plan to migrate on‑prem behind Forti edge.</p>
-            <a href="#">read more →</a>
-          </div>
-        </article>
-        <article class="card reveal">
-          <img src="thumb-network.jpg" alt="Branch Networking"/>
-          <div class="pad">
-            <div class="badge">Fortinet</div><div class="badge">Starlink</div>
-            <h3>Branch Connectivity Upgrade</h3>
-            <p>Replaced DSL tunnel with Starlink via Forti + DDNS; standardized VPN endpoints and monitoring.</p>
-            <a href="#">read more →</a>
-          </div>
-        </article>
-        <article class="card reveal">
-          <img src="thumb-printers.jpg" alt="Printer Automation"/>
-          <div class="pad">
-            <div class="badge">PowerShell</div><div class="badge">Intune</div>
-            <h3>Smart Default Printers</h3>
-            <p>Script assigns site‑correct default printer at boot using subnet detection; planned Intune rollout.</p>
-            <a href="#">read more →</a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- timeline -->
-    <section class="section" id="timeline">
-      <h2 class="reveal">Timeline</h2>
-      <div class="timeline">
-        <div class="tl-item reveal">
-          <div class="dot"></div>
-          <h4>IT Network & Systems Admin — 401 Group</h4>
-          <small>2024–present</small>
-          <p>Azure/Entra identity, Fortinet edge, site networking, automation, VOIP/PBX QoS.</p>
+      <div id="contactPanel" class="contact-panel" aria-hidden="true">
+        <div class="contact-row">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm8 5L4.5 7.5h15L12 11z"/></svg>
+          </span>
+          <a href="mailto:Sirish.chekutty@gmail.com">Sirish.chekutty@gmail.com</a>
         </div>
-        <div class="tl-item reveal">
-          <div class="dot"></div>
-          <h4>Telecom Systems Specialist — Fibernetics</h4>
-          <small>2021–2024</small>
-          <p>PBX deployments, SIP routing, VLAN/QoS, hardware servicing across client sites.</p>
+        <div class="contact-row">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zm7.5 0h3.8v2h.05c.53-1 1.83-2.05 3.76-2.05 4.02 0 4.77 2.65 4.77 6.1V23h-3.98v-6.5c0-1.55-.03-3.54-2.16-3.54-2.16 0-2.49 1.68-2.49 3.42V23H8V8.5z"/></svg>
+          </span>
+          <a href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noopener">linkedin.com/in/sirishchekutty</a>
         </div>
-        <div class="tl-item reveal">
-          <div class="dot"></div>
-          <h4>Certs & Learning</h4>
-          <small>Ongoing</small>
-          <p>AZ‑104 prep; RHCSA study; continuous lab work in networking & cloud.</p>
+        <!-- github row -->
+        <div class="contact-row">
+          <span class="icon" aria-hidden="true">
+            <!-- simple, solid github mark to match other icons -->
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.11.79-.24.79-.55 0-.27-.01-.98-.02-1.92-3.05.66-3.7-1.3-3.7-1.3-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.71.08-.71 1.16.08 1.77 1.19 1.77 1.19 1.04 1.78 2.72 1.27 3.38.97.11-.75.4-1.27.73-1.56-2.44-.28-5-1.22-5-5.44 0-1.2.43-2.18 1.14-2.95-.11-.28-.5-1.41.11-2.93 0 0 .95-.31 3.1 1.17a10.8 10.8 0 0 1 5.86 0c2.15-1.48 3.1-1.17 3.1-1.17.61 1.52.22 2.65.11 2.93.71.77 1.14 1.75 1.14 2.95 0 4.23-2.57 5.15-5.02 5.43.41.35.78 1.04.78 2.11 0 1.52-.01 2.75-.01 3.12 0 .3.21.66.8.55A11.5 11.5 0 0 0 12 .5z"/>
+            </svg>
+          </span>
+          <a href="https://github.com/sirish-chekutty" target="_blank" rel="noopener">sirish-chekutty</a>
         </div>
       </div>
     </section>
 
-    <!-- contact -->
-    <section class="section" id="contact">
-      <h2 class="reveal">Contact</h2>
-      <p class="muted reveal">Email me or connect on LinkedIn/GitHub — always happy to talk shop.</p>
-      <div class="actions reveal">
-        <a class="btn primary" href="mailto:Sirish.chekutty@gmail.com">Email</a>
-        <a class="btn" href="https://www.linkedin.com/in/sirishchekutty/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="btn" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </section>
-
-    <footer>© <span id="yy"></span> Sirish Yadav</footer>
+    <footer class="fadeIn">© <span id="yy"></span> Sirish Yadav</footer>
   </main>
 
-  <script>
-    // contact panel toggle
-    const contactBtn = document.getElementById('contactBtn');
-    const contactPanel = document.getElementById('contactPanel');
-    contactBtn.addEventListener('click', () => {
-      contactPanel.classList.toggle('open');
-      contactPanel.setAttribute('aria-hidden', String(!contactPanel.classList.contains('open')));
-    });
-
-    // looping terminal
-    const termLines = [
-      "az group create -n rg-401-prod -l canadacentral",
-      "az network vnet create -g rg-401-prod -n vnet-hub --address-prefix 10.130.0.0/16",
-      "az network vnet peering create --name hub-spoke --allow-vnet-access",
-      "fortigate vpn up --site wawa --ddns wawa-401.ddns.net",
-      "entra groups create --dynamic --unit dealerships",
-      "intune autopilot enroll --profile 'Standard Workstation' --hash @devices.csv",
-      "ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
-      "printf 'uptime: good\\n' && echo 'alerts: napping'"
-    ];
-    let I=0,J=0,cur=\"\",hist=[];
-    const termEl=document.getElementById('term');
-    function renderTerm(){
-      termEl.innerHTML = hist.map(l=>`<div><span class='prompt'>$</span> <span class='cmd'>${l}</span><span class='ok'>✔</span></div>`).join(\"\") +
-        `<div><span class='prompt'>$</span> <span class='cmd'>${cur}</span><span class='caret'></span></div>`;
+<script>
+const lines = [
+  {p:'sirish@edge',c:'$',t:" az group create -n rg-calm-networks -l canadacentral # because chaos is expensive"},
+  {p:'sirish@edge',c:'$',t:" az network vnet peering create --name make-friends --allow-vnet-access"},
+  {p:'sirish@edge',c:'$',t:" ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'"},
+  {p:'sirish@edge',c:'$',t:" for i in users/*; do onboard $i --no-drama; done"},
+  {p:'sirish@edge',c:'$',t:" printf 'uptime: good\\n' && echo 'alerts: napping'"}
+];
+const termEl = document.getElementById('term');
+let i=0,j=0,current="", resetting=false;
+function tick(){
+  if(!resetting && i >= lines.length){
+    resetting = true;
+    setTimeout(()=>{ i=0; j=0; current=""; termEl.innerHTML=""; resetting=false; }, 1200);
+  }
+  if(i < lines.length){
+    const L = lines[i];
+    const full = `${L.p} <span class='prompt'>${L.c}</span> <span class='cmd'>${L.t}</span>`;
+    if(j < full.length){
+      current += full[j++];
+      termEl.innerHTML = current + (j%2?"_":" ") + (i<lines.length?"\n":"");
+    } else {
+      termEl.innerHTML = current + "\n<span class='ok'>✔</span>\n";
+      current += "\n";
+      i++; j=0;
     }
-    function typeTick(){
-      const line = termLines[I % termLines.length];
-      if(J < line.length){ cur += line[J++]; renderTerm(); setTimeout(typeTick, 26); }
-      else { hist.push(line); if(hist.length>7) hist.shift(); cur=\"\"; J=0; I++; renderTerm(); setTimeout(typeTick, 700);
-        if(I % termLines.length === 0){ setTimeout(()=>{ hist=[]; renderTerm(); }, 500); }
-      }
-    }
-    typeTick();
+  }
+  requestAnimationFrame(()=>setTimeout(tick,18));
+}
+tick();
 
-    // section reveal on scroll
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('show'); });
-    }, { threshold:.15 });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+const layers=[...document.querySelectorAll('.parallax')];
+function parallax(e){
+  const x=(e.clientX/window.innerWidth-0.5)*2;
+  const y=(e.clientY/window.innerHeight-0.5)*2;
+  layers.forEach(el=>{
+    const d=parseFloat(el.dataset.depth||1);
+    el.style.transform=`translate(${x*d*4}px, ${y*d*3}px)`;
+  });
+}
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const smallScreen = window.matchMedia('(max-width: 900px)').matches;
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    // year
-    document.getElementById('yy').textContent = new Date().getFullYear();
-  </script>
+if(!(prefersReduced || smallScreen || isTouch)){
+  window.addEventListener('mousemove', parallax);
+}else{
+  layers.forEach(el=> el.style.transform='none');
+}
+
+document.getElementById('yy').textContent=new Date().getFullYear();
+const portrait=document.getElementById('portrait');
+portrait.addEventListener('error',()=>{ portrait.src='sirish.jpg'; });
+
+const contactBtn = document.getElementById('contactBtn');
+const contactPanel = document.getElementById('contactPanel');
+contactBtn.addEventListener('click', ()=>{
+  const open = contactPanel.classList.toggle('open');
+  contactPanel.setAttribute('aria-hidden', String(!open));
+});
+</script>
 </body>
 </html>
-
