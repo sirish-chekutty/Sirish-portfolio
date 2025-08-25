@@ -6,7 +6,7 @@
   <title>Sirish Yadav — IT Network & Systems Administrator</title>
   <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-  <!-- Handwriting fonts -->
+  <!-- Handwriting fonts for the intro -->
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
   <style>
@@ -15,10 +15,16 @@
       --ink:#0b0b0b;
       --muted:#3a3a3a;
       --line:#e9edf3;
-      --accent:#ffd200;           /* yellow */
-      --accent-ink:#111;          /* black */
+      --accent:#ffd200;           /* yellow accents */
       --shadow:0 20px 60px rgba(0,0,0,.12);
       --radius:24px;
+
+      /* terminal palette */
+      --term-bg:#0b0f12;
+      --term-username:#ffd200;    /* yellow */
+      --term-dollar:#9b5de5;      /* purple */
+      --term-text:#ffffff;        /* white for command */
+      --term-ok:#22c55e;          /* green tick */
     }
 
     *{box-sizing:border-box}
@@ -43,35 +49,39 @@
       align-items:start;
     }
 
-    /* --- RIGHT COLUMN PHOTO (no overlap) --- */
+    /* --- RIGHT COLUMN PHOTO (restored image) --- */
     .photo-wrap{
       position:relative;
       display:flex;
       align-items:center;
       justify-content:flex-end;
     }
-    .mark{
+    .photo{
+      position:relative;
+      display:inline-block;
+      border-radius:22px;          /* just for a modern shape; image is not cropped by masks */
+      overflow:visible;
+    }
+    .photo img{
+      display:block;
       width:min(520px, 36vw);
       height:auto;
-      display:block;
-      opacity:.98; /* mostly visible */
-      filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
-      /* Feather only corners/edges while keeping most of image visible */
-      -webkit-mask:
-        radial-gradient(240px 240px at 0 0,       transparent 0, transparent 22%, #000 40%),
-        radial-gradient(240px 240px at 100% 0,    transparent 0, transparent 22%, #000 40%),
-        radial-gradient(240px 240px at 0 100%,    transparent 0, transparent 22%, #000 40%),
-        radial-gradient(240px 240px at 100% 100%, transparent 0, transparent 22%, #000 40%),
-        linear-gradient(#000,#000);
-              mask:
-        radial-gradient(240px 240px at 0 0,       transparent 0, transparent 22%, #000 40%),
-        radial-gradient(240px 240px at 100% 0,    transparent 0, transparent 22%, #000 40%),
-        radial-gradient(240px 240px at 0 100%,    transparent 0, transparent 22%, #000 40%),
-        radial-gradient(240px 240px at 100% 100%, transparent 0, transparent 22%, #000 40%),
-        linear-gradient(#000,#000);
-      -webkit-mask-composite: source-over, source-over, source-over, source-over, xor;
-              mask-composite: exclude; /* works in modern browsers */
       border-radius:22px;
+      opacity:1; /* bright and clearly visible */
+      filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
+    }
+    /* Edge-blend overlay that gently lightens the extreme edges to blend like a watermark */
+    .photo::after{
+      content:"";
+      position:absolute; inset:-2%;
+      pointer-events:none;
+      border-radius:24px;
+      background:
+        radial-gradient(220px 220px at 0 0,       rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(220px 220px at 100% 0,    rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(220px 220px at 0 100%,    rgba(255,255,255,.85), transparent 55%),
+        radial-gradient(220px 220px at 100% 100%, rgba(255,255,255,.85), transparent 55%);
+      mix-blend-mode:screen; /* softly blend into the page instead of hiding image pixels */
     }
 
     /* --- LEFT COLUMN INTRO CARD --- */
@@ -86,21 +96,8 @@
       position:relative;
     }
 
-    /* HELLO = styled text, not a button */
-    .hello{
-      display:inline-block;
-      color:var(--accent-ink);
-      background:linear-gradient(180deg, #ffe564, #ffd200);
-      padding:2px 8px;
-      border-radius:8px;
-      border:1px solid rgba(0,0,0,.18);
-      font: 700 14px/1 "Patrick Hand", system-ui;
-      letter-spacing:.02em;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
-    }
-
     h1{
-      margin:12px 0 10px;
+      margin:0 0 10px;
       font-family:"Caveat", system-ui;
       font-weight:700;
       font-size: clamp(36px, 7vw, 64px);
@@ -135,14 +132,15 @@
     .icon svg{ width:22px; height:22px; fill:var(--accent) }
     .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-    /* --- macOS/iOS style terminal window (no laptop) --- */
+    /* --- iOS/macOS style terminal --- */
     .terminal{
       margin-top:24px;
       border-radius:18px;
-      background:#0b0f12;
+      background:var(--term-bg);
       border:1px solid rgba(0,0,0,.25);
       box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
       overflow:hidden;
+      max-width: 70ch; /* hard cap so it never overflows horizontally */
     }
     .term-bar{
       height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
@@ -158,20 +156,23 @@
 
     .term-body{
       font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-      color:#b6f3b1;
+      color:var(--term-text);
       padding:14px 16px 18px;
-      white-space:pre-wrap;          /* preserve formatting but allow wrapping */
-      overflow-wrap:anywhere;        /* wrap long tokens safely */
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
       min-height: 220px;
-      max-width: 70ch;               /* hard cap so it never overflows */
     }
-    .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:#b6f3b1; animation: blink .9s steps(1,end) infinite }
+    .u{ color:var(--term-username) } /* username */
+    .d{ color:var(--term-dollar) }   /* $ sign */
+    .t{ color:var(--term-text) }     /* command text (white) */
+    .ok{ color:var(--term-ok) }      /* green tick */
+    .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:#ffffff; animation: blink .9s steps(1,end) infinite }
     @keyframes blink{ 50%{ opacity:0 } }
 
     @media (max-width: 990px){
       .shell{ grid-template-columns: 1fr; }
       .photo-wrap{ order:2; justify-content:center }
-      .mark{ width:min(520px, 78vw) }
+      .photo img{ width:min(520px, 78vw) }
     }
 
     a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
@@ -182,7 +183,6 @@
     <section class="shell">
       <!-- LEFT: intro -->
       <article class="card" aria-label="Intro">
-        <span class="hello">hello</span>
         <h1>I'm Sirish Yadav</h1>
 
         <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
@@ -224,73 +224,140 @@
         </section>
       </article>
 
-      <!-- RIGHT: photo (separate column so no overlap) -->
+      <!-- RIGHT: photo in its own column (no overlap) -->
       <aside class="photo-wrap" aria-label="Portrait watermark">
-        <img class="mark" src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+        <figure class="photo">
+          <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+        </figure>
       </aside>
     </section>
   </main>
 
   <script>
-    // Typewriter loop: prints each line separately, then restarts
-    (function(){
-      const lines = [
-"sirish@edge $  az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
-"sirish@edge $  az network vnet peering create --name make-friends --allow-vnet-access",
-"sirish@edge $  ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
-"sirish@edge $  for i in users/*; do onboard $i --no-drama; done",
-"sirish@edge $  printf 'uptime: good\\n' && echo 'alerts: napping'",
-"✔"
-      ];
+    // Each command line is composed of 3 logical parts:
+    // [username-span] [dollar-span] [command-span typed gradually]
+    const LINES = [
+      "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
+      "az network vnet peering create --name make-friends --allow-vnet-access",
+      "ssh pbx 'qos --enable && echo call quality: chef\\'s kiss'",
+      "for i in users/*; do onboard $i --no-drama; done",
+      "printf 'uptime: good\\n' && echo 'alerts: napping'",
+      "✔"
+    ];
 
-      const term = document.getElementById('terminal');
-      const caret = document.createElement('span');
-      caret.className = 'caret';
+    const term = document.getElementById('terminal');
+    const caret = document.createElement('span');
+    caret.className = 'caret';
 
-      let li = 0, ci = 0, running = true;
+    function lineFactory(content, isTick=false){
+      const line = document.createElement('span');
 
-      function start(){
-        term.textContent = '';
-        li = 0; ci = 0; running = true;
-        tick();
+      if (isTick){
+        const ok = document.createElement('span');
+        ok.className = 'ok';
+        ok.textContent = "✔";
+        line.appendChild(ok);
+        return { line, target: ok, typeWhole: true };
       }
 
-      function tick(){
-        if(!running) return;
+      const user = document.createElement('span');
+      user.className = 'u';
+      user.textContent = 'sirish@edge';
 
-        if (term.lastElementChild !== caret) term.appendChild(caret);
+      const space1 = document.createTextNode(' ');
 
-        const current = lines[li];
+      const dollar = document.createElement('span');
+      dollar.className = 'd';
+      dollar.textContent = '$';
 
-        if (ci === 0 && li > 0){
-          term.insertBefore(document.createTextNode("\n"), caret);
-        }
+      const space2 = document.createTextNode('  ');
 
-        if (ci < current.length){
-          term.insertBefore(document.createTextNode(current.charAt(ci)), caret);
-          ci++;
-          setTimeout(tick, 12 + Math.random()*55);
-        } else {
-          li++; ci = 0;
-          if (li < lines.length){
-            setTimeout(tick, 320);
-          } else {
-            running = false;
-            setTimeout(()=>{
-              caret.remove();
-              term.style.transition = 'opacity .45s ease';
-              term.style.opacity = '0';
-              setTimeout(()=>{
-                term.style.transition = 'none';
-                term.style.opacity = '1';
-                start();
-              }, 480);
-            }, 1100);
-          }
-        }
+      const cmd = document.createElement('span');
+      cmd.className = 't';
+      cmd.textContent = ''; // will be typed
+
+      line.appendChild(user);
+      line.appendChild(space1);
+      line.appendChild(dollar);
+      line.appendChild(space2);
+      line.appendChild(cmd);
+
+      return { line, target: cmd, typeWhole: false, prefixNodes: [user, dollar] };
+    }
+
+    let li = 0, ci = 0, active, typing = false;
+
+    function start(){
+      term.textContent = '';
+      li = 0; ci = 0; typing = true;
+      typeNextLine();
+    }
+
+    function typeNextLine(){
+      if (li >= LINES.length){ return endCycle(); }
+
+      const isTick = (LINES[li] === '✔');
+      const { line, target, typeWhole } = lineFactory(LINES[li], isTick);
+
+      // new line except the very first
+      if (li > 0) term.appendChild(document.createTextNode('\n'));
+
+      term.appendChild(line);
+      active = target;
+
+      if (term.lastElementChild !== caret) term.appendChild(caret);
+
+      if (typeWhole){
+        // type the single tick
+        ci = 0;
+        tickChar('✔', true);
+      } else {
+        ci = 0;
+        tickChar(LINES[li]);
       }
-      start();
-    })();
+    }
+
+    function tickChar(str, tickOnly=false){
+      if (!typing) return;
+
+      if (tickOnly){
+        active.textContent = '✔';
+        li++;
+        setTimeout(typeNextLine, 500);
+        return;
+      }
+
+      if (ci < str.length){
+        active.textContent += str.charAt(ci);
+        ci++;
+        setTimeout(() => tickChar(str), 12 + Math.random()*55);
+      } else {
+        li++;
+        setTimeout(typeNextLine, 320);
+      }
+    }
+
+    function endCycle(){
+      typing = false;
+      setTimeout(()=>{
+        caret.remove();
+        term.style.transition = 'opacity .45s ease';
+        term.style.opacity = '0';
+        setTimeout(()=>{
+          term.style.transition = 'none';
+          term.style.opacity = '1';
+          start();
+        }, 480);
+      }, 1100);
+    }
+
+    // ensure caret is always last
+    const obs = new MutationObserver(()=>{
+      if (term.lastElementChild !== caret) term.appendChild(caret);
+    });
+    obs.observe(term, {childList:true});
+
+    start();
   </script>
 </body>
 </html>
