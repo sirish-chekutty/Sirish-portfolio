@@ -15,11 +15,16 @@
     --line:#e9edf3;
     --accent:#ffd200;
 
-    --card-bg: rgba(255,255,255,.86);
-    --shadow:0 22px 60px rgba(0,0,0,.12);
-    --radius:24px;
+    /* glass tuneables */
+    --card-bg: rgba(255,255,255,.52);         /* more transparent */
+    --card-stroke: rgba(255,255,255,.38);     /* soft glass edge */
+    --card-inner: rgba(255,255,255,.18);      /* subtle inner stroke */
+    --backdrop-blur: 20px;                    /* stronger blur */
+    --shadow:0 30px 80px rgba(0,0,0,.18);
+    --radius:26px;
 
-    --term-bg:#0b0f12;
+    /* terminal palette */
+    --term-bg:#0b0f12cc; /* semi-opaque so bg peeks through */
     --term-username:#ffd200;
     --term-dollar:#9b5de5;
     --term-text:#ffffff;
@@ -36,7 +41,7 @@
     overflow-x:hidden;
   }
 
-  /* animated svg bg */
+  /* animated svg background */
   .bg{
     position:fixed; inset:0; z-index:0;
     width:100%; height:100%;
@@ -45,51 +50,37 @@
   }
   .bg object, .bg svg{ width:100%; height:100%; display:block }
 
-  /* stage wraps everything above bg */
+  /* center stage */
   .stage{
     position:relative; z-index:1;
     min-height:100dvh;
     display:grid;
     place-items:center;
-    padding:48px 18px;
+    padding: clamp(24px, 4vw, 48px) 18px;
   }
 
-  /* watermark photo behind card */
-  .watermark{
-    position:absolute; inset:0; z-index:1; pointer-events:none;
-    display:grid; place-items:center;
-  }
-  .photo-body{
-    position:absolute;
-    width:min(700px, 80vw); height:auto;
-    opacity:.22; /* watermark faintness */
-    filter:saturate(1.05) contrast(1.05) drop-shadow(0 18px 48px rgba(0,0,0,.18));
-    transform:translateY(60px); /* push body down a bit behind the card */
-  }
-
-  /* pop the chest/face above the intro card */
-  .photo-pop{
-    position:absolute; z-index:3; pointer-events:none;
-    width:min(540px, 62vw); height:auto;
-    transform:translateY(-40px); /* pull up so face/chest overlap card top */
-    /* show only the upper portion (face/chest). mask supported on all modern browsers */
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0 55%, rgba(0,0,0,0) 80%);
-            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0 55%, rgba(0,0,0,0) 80%);
-    filter:saturate(1.05) contrast(1.05) drop-shadow(0 10px 30px rgba(0,0,0,.18));
-  }
-
-  /* centered intro card */
+  /* glass intro blade */
   .card{
-    position:relative; z-index:2; /* above body watermark, below pop image */
-    width:min(900px, 92vw);
+    position:relative;
+    width:min(860px, 92vw);
     background:var(--card-bg);
-    backdrop-filter: blur(16px) saturate(1.15);
-    -webkit-backdrop-filter: blur(16px) saturate(1.15);
-    border:1px solid rgba(0,0,0,.06);
+    backdrop-filter: blur(var(--backdrop-blur)) saturate(1.15);
+    -webkit-backdrop-filter: blur(var(--backdrop-blur)) saturate(1.15);
+    border:1px solid var(--card-stroke);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
-    padding:32px 28px 26px;
-    text-align:center; /* center text + terminal */
+    padding: clamp(22px, 3.6vw, 34px) clamp(18px, 3.6vw, 32px) clamp(20px, 3vw, 28px);
+    text-align:center;
+
+    /* subtle inner border for frosted glass effect */
+    overflow:hidden;
+  }
+  .card::after{
+    content:"";
+    position:absolute; inset:0;
+    border-radius:inherit;
+    pointer-events:none;
+    box-shadow: inset 0 0 0 1px var(--card-inner);
   }
 
   h1{
@@ -102,7 +93,7 @@
   .lead{
     font-family:"Patrick Hand", system-ui;
     font-size: clamp(18px, 2.4vw, 22px);
-    line-height:1.55;
+    line-height:1.6;
     color:var(--muted);
     margin: 6px 0 10px;
   }
@@ -128,21 +119,21 @@
   .icon svg{ width:22px; height:22px; fill:var(--accent) }
   .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-  /* terminal centered */
+  /* terminal */
   .terminal{
-    margin:24px auto 0 auto; /* center it */
+    margin: clamp(18px, 3vw, 26px) auto 0 auto;
     border-radius:18px;
     background:var(--term-bg);
-    border:1px solid rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.18);
     box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
     overflow:hidden;
     max-width: 70ch;
-    text-align:left; /* keep monospace left-aligned inside */
+    text-align:left;
   }
   .term-bar{
     height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
-    background:linear-gradient(180deg, #121416, #0f1113);
-    border-bottom:1px solid rgba(255,255,255,.06);
+    background:linear-gradient(180deg, #121416cc, #0f1113cc);
+    border-bottom:1px solid rgba(255,255,255,.12);
     color:#d2d2d2; font:12px/1 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   }
   .dots{ display:inline-flex; gap:6px; margin-right:8px }
@@ -166,30 +157,22 @@
   .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
   @keyframes blink{ 50%{ opacity:0 } }
 
-  /* accessibility focus */
   a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
 
-  /* responsive */
-  @media (max-width: 900px){
-    .photo-body{ width:min(600px, 92vw) }
-    .photo-pop { width:min(520px, 88vw) }
+  @media (max-width: 520px){
+    .terminal{ max-width: 88vw }
   }
 </style>
 </head>
 <body>
 
+<!-- animated svg background (your updated clouds.svg) -->
 <div class="bg" aria-hidden="true">
   <object type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
+<!-- centered content -->
 <div class="stage">
-  <!-- watermark body behind -->
-  <div class="watermark" aria-hidden="true">
-    <img class="photo-body" src="sirish.jpeg" alt="">
-    <img class="photo-pop"  src="sirish.jpeg" alt="">
-  </div>
-
-  <!-- centered intro card -->
   <article class="card" aria-label="Intro">
     <h1>I'm Sirish Yadav</h1>
 
