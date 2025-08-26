@@ -1,6 +1,6 @@
 <svg width="100vw" height="100vh" viewBox="0 0 1000 600" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Animated Sky Gradient -->
+    <!-- animated sky gradient -->
     <linearGradient id="skyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#87CEEB">
         <animate attributeName="stop-color" values="#87CEEB;#d0e7ff;#87CEEB" dur="20s" repeatCount="indefinite"/>
@@ -10,36 +10,43 @@
       </stop>
     </linearGradient>
 
-    <!-- Cloud Blur Filter -->
-    <filter id="cloud-blur">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="10"/>
-    </filter>
+    <filter id="cloud-blur"><feGaussianBlur in="SourceGraphic" stdDeviation="10"/></filter>
 
-    <!-- Glow Effect for Binary -->
     <filter id="glow">
       <feGaussianBlur stdDeviation="2.5" result="blurred"/>
-      <feMerge>
-        <feMergeNode in="blurred"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
+      <feMerge><feMergeNode in="blurred"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
 
-    <!-- Mask to Hide Binary Behind Clouds -->
+    <!-- binary occlusion uses same smaller/more-spread clouds as visible layer -->
     <mask id="binary-mask">
       <rect width="100%" height="100%" fill="white"/>
       <g filter="url(#cloud-blur)" fill="black">
-        <!-- Cloud Clusters -->
-        <g transform="translate(150,150)">
-          <circle cx="0" cy="0" r="70"/><circle cx="60" cy="-15" r="65"/><circle cx="120" cy="20" r="75"/>
+        <!-- clusters scaled to 70% radii and spread wider -->
+        <g transform="translate(120,120)">
+          <circle cx="0" cy="0" r="49"/><circle cx="42" cy="-10" r="45.5"/><circle cx="84" cy="14" r="52.5"/>
         </g>
-        <g transform="translate(500,250)">
-          <circle cx="0" cy="0" r="75"/><circle cx="60" cy="0" r="65"/><circle cx="120" cy="30" r="80"/>
+        <g transform="translate(470,210)">
+          <circle cx="0" cy="0" r="52.5"/><circle cx="44" cy="0" r="45.5"/><circle cx="92" cy="21" r="56"/>
         </g>
-        <g transform="translate(800,150)">
-          <circle cx="0" cy="0" r="65"/><circle cx="55" cy="-20" r="60"/><circle cx="110" cy="15" r="70"/>
+        <g transform="translate(780,110)">
+          <circle cx="0" cy="0" r="45.5"/><circle cx="38" cy="-14" r="42"/><circle cx="80" cy="10" r="49"/>
         </g>
-        <g transform="translate(300,450)">
-          <circle cx="0" cy="0" r="70"/><circle cx="50" cy="-25" r="65"/><circle cx="100" cy="10" r="75"/>
+        <g transform="translate(260,420)">
+          <circle cx="0" cy="0" r="49"/><circle cx="36" cy="-18" r="45.5"/><circle cx="76" cy="7" r="52.5"/>
+        </g>
+
+        <!-- four new clusters -->
+        <g transform="translate(150,300)">
+          <circle cx="0" cy="0" r="45.5"/><circle cx="38" cy="-12" r="42"/><circle cx="78" cy="12" r="49"/>
+        </g>
+        <g transform="translate(620,90)">
+          <circle cx="0" cy="0" r="42"/><circle cx="36" cy="-10" r="39"/><circle cx="70" cy="12" r="46"/>
+        </g>
+        <g transform="translate(900,360)">
+          <circle cx="0" cy="0" r="49"/><circle cx="40" cy="-14" r="45.5"/><circle cx="84" cy="8" r="52.5"/>
+        </g>
+        <g transform="translate(430,520)">
+          <circle cx="0" cy="0" r="45.5"/><circle cx="36" cy="-12" r="42"/><circle cx="76" cy="10" r="49"/>
         </g>
       </g>
     </mask>
@@ -57,36 +64,39 @@
     }
   </style>
 
-  <!-- Sky Background -->
+  <!-- sky -->
   <rect class="sky" width="100%" height="100%"/>
 
-  <!-- Clouds -->
+  <!-- visible clouds: same positions/radii as mask group above -->
   <g class="cloud">
-    <circle cx="150" cy="150" r="70"/><circle cx="210" cy="135" r="65"/><circle cx="270" cy="165" r="75"/>
-    <circle cx="500" cy="250" r="75"/><circle cx="560" cy="250" r="65"/><circle cx="620" cy="285" r="80"/>
-    <circle cx="800" cy="150" r="65"/><circle cx="855" cy="130" r="60"/><circle cx="910" cy="170" r="70"/>
-    <circle cx="300" cy="450" r="70"/><circle cx="350" cy="425" r="65"/><circle cx="400" cy="460" r="75"/>
+    <circle cx="120" cy="120" r="49"/><circle cx="162" cy="110" r="45.5"/><circle cx="204" cy="134" r="52.5"/>
+    <circle cx="470" cy="210" r="52.5"/><circle cx="514" cy="210" r="45.5"/><circle cx="562" cy="231" r="56"/>
+    <circle cx="780" cy="110" r="45.5"/><circle cx="818" cy="96" r="42"/><circle cx="860" cy="120" r="49"/>
+    <circle cx="260" cy="420" r="49"/><circle cx="296" cy="402" r="45.5"/><circle cx="336" cy="427" r="52.5"/>
+
+    <!-- four new clusters -->
+    <circle cx="150" cy="300" r="45.5"/><circle cx="188" cy="288" r="42"/><circle cx="228" cy="312" r="49"/>
+    <circle cx="620" cy="90"  r="42"/><circle  cx="656" cy="80"  r="39"/><circle cx="690" cy="102" r="46"/>
+    <circle cx="900" cy="360" r="49"/><circle cx="940" cy="346" r="45.5"/><circle cx="984" cy="368" r="52.5"/>
+    <circle cx="430" cy="520" r="45.5"/><circle cx="466" cy="508" r="42"/><circle cx="506" cy="520" r="49"/>
   </g>
 
-  <!-- Snake-Like Paths: Each goes from one cloud to another -->
-  <path id="path1" d="M170 150 C300 50, 600 50, 650 250" fill="none"/>
-  <path id="path2" d="M620 280 C700 400, 300 400, 290 450" fill="none"/>
-  <path id="path3" d="M400 460 C550 550, 850 200, 800 170" fill="none"/>
+  <!-- paths adjusted a bit for wider scene -->
+  <path id="path1" d="M130 120 C 290 40, 620 40, 670 230" fill="none"/>
+  <path id="path2" d="M560 230 C 720 390, 280 380, 240 420" fill="none"/>
+  <path id="path3" d="M340 427 C 520 540, 890 160, 860 120" fill="none"/>
 
-  <!-- 3 Binary Streams (5 digits each), alternating directions -->
-  <!-- Path 1: LTR -->
+  <!-- binary streams, masked to pass behind clouds -->
   <text class="binary" mask="url(#binary-mask)">
     <textPath href="#path1" startOffset="0%">10101
       <animate attributeName="startOffset" from="0%" to="100%" dur="12s" repeatCount="indefinite"/>
     </textPath>
   </text>
-  <!-- Path 2: RTL -->
   <text class="binary" mask="url(#binary-mask)">
     <textPath href="#path2" startOffset="100%">01010
       <animate attributeName="startOffset" from="100%" to="0%" dur="14s" repeatCount="indefinite"/>
     </textPath>
   </text>
-  <!-- Path 3: LTR -->
   <text class="binary" mask="url(#binary-mask)">
     <textPath href="#path3" startOffset="0%">11100
       <animate attributeName="startOffset" from="0%" to="100%" dur="16s" repeatCount="indefinite"/>
