@@ -6,7 +6,6 @@
 <title>Sirish Yadav — IT Network & Systems Administrator</title>
 <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-<!-- handwriting fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
@@ -20,7 +19,6 @@
     --shadow:0 22px 60px rgba(0,0,0,.12);
     --radius:24px;
 
-    /* terminal palette */
     --term-bg:#0b0f12;
     --term-username:#ffd200;
     --term-dollar:#9b5de5;
@@ -38,43 +36,62 @@
     overflow-x:hidden;
   }
 
-  /* full-page animated svg background */
+  /* animated svg bg */
   .bg{
     position:fixed; inset:0; z-index:0;
     width:100%; height:100%;
-    pointer-events:none; /* let clicks go to content */
+    pointer-events:none;
     overflow:hidden;
   }
-  .bg object,
-  .bg svg{
-    width:100%;
-    height:100%;
-    display:block;
+  .bg object, .bg svg{ width:100%; height:100%; display:block }
+
+  /* stage wraps everything above bg */
+  .stage{
+    position:relative; z-index:1;
+    min-height:100dvh;
+    display:grid;
+    place-items:center;
+    padding:48px 18px;
   }
 
-  /* content wrapper sits above background */
-  .wrap{
-    position:relative; z-index:2;
-    min-height:100dvh; padding:48px 18px;
+  /* watermark photo behind card */
+  .watermark{
+    position:absolute; inset:0; z-index:1; pointer-events:none;
     display:grid; place-items:center;
   }
-  .shell{
-    width:min(1200px, 96vw);
-    display:grid; gap:26px;
-    grid-template-columns: 1.05fr .95fr; /* left intro | right photo */
-    align-items:start;
+  .photo-body{
+    position:absolute;
+    width:min(700px, 80vw); height:auto;
+    opacity:.22; /* watermark faintness */
+    filter:saturate(1.05) contrast(1.05) drop-shadow(0 18px 48px rgba(0,0,0,.18));
+    transform:translateY(60px); /* push body down a bit behind the card */
   }
 
-  /* left column */
+  /* pop the chest/face above the intro card */
+  .photo-pop{
+    position:absolute; z-index:3; pointer-events:none;
+    width:min(540px, 62vw); height:auto;
+    transform:translateY(-40px); /* pull up so face/chest overlap card top */
+    /* show only the upper portion (face/chest). mask supported on all modern browsers */
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0 55%, rgba(0,0,0,0) 80%);
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0 55%, rgba(0,0,0,0) 80%);
+    filter:saturate(1.05) contrast(1.05) drop-shadow(0 10px 30px rgba(0,0,0,.18));
+  }
+
+  /* centered intro card */
   .card{
+    position:relative; z-index:2; /* above body watermark, below pop image */
+    width:min(900px, 92vw);
     background:var(--card-bg);
     backdrop-filter: blur(16px) saturate(1.15);
     -webkit-backdrop-filter: blur(16px) saturate(1.15);
     border:1px solid rgba(0,0,0,.06);
     border-radius:var(--radius);
     box-shadow:var(--shadow);
-    padding:28px 26px 24px;
+    padding:32px 28px 26px;
+    text-align:center; /* center text + terminal */
   }
+
   h1{
     margin:0 0 10px;
     font-family:"Caveat", system-ui;
@@ -90,7 +107,7 @@
     margin: 6px 0 10px;
   }
 
-  .cta-row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px }
+  .cta-row{ display:flex; justify-content:center; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px }
   .btn{
     display:inline-flex; align-items:center; gap:10px;
     padding:12px 16px; border-radius:14px; text-decoration:none;
@@ -111,15 +128,16 @@
   .icon svg{ width:22px; height:22px; fill:var(--accent) }
   .icon:hover{ transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 28px rgba(0,0,0,.24) }
 
-  /* terminal */
+  /* terminal centered */
   .terminal{
-    margin-top:24px;
+    margin:24px auto 0 auto; /* center it */
     border-radius:18px;
     background:var(--term-bg);
     border:1px solid rgba(0,0,0,.25);
     box-shadow: 0 20px 60px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.05);
     overflow:hidden;
     max-width: 70ch;
+    text-align:left; /* keep monospace left-aligned inside */
   }
   .term-bar{
     height:36px; display:flex; align-items:center; gap:10px; padding:0 10px;
@@ -148,104 +166,70 @@
   .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
   @keyframes blink{ 50%{ opacity:0 } }
 
-  /* right column photo */
-  .photo-wrap{
-    position:relative;
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-  }
-  .photo{
-    position:relative; display:inline-block; border-radius:22px;
-  }
-  .photo img{
-    display:block;
-    width:min(520px, 36vw);
-    height:auto;
-    border-radius:22px;
-    filter: drop-shadow(0 18px 48px rgba(0,0,0,.18)) saturate(1.02) contrast(1.02);
-  }
-  .photo::after{
-    content:"";
-    position:absolute; inset:-2%;
-    border-radius:24px; pointer-events:none;
-    background:
-      radial-gradient(220px 220px at 0 0,       rgba(255,255,255,.9), transparent 55%),
-      radial-gradient(220px 220px at 100% 0,    rgba(255,255,255,.9), transparent 55%),
-      radial-gradient(220px 220px at 0 100%,    rgba(255,255,255,.9), transparent 55%),
-      radial-gradient(220px 220px at 100% 100%, rgba(255,255,255,.9), transparent 55%);
-    mix-blend-mode:screen;
-  }
+  /* accessibility focus */
+  a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
 
   /* responsive */
   @media (max-width: 900px){
-    .shell{ grid-template-columns: 1fr; }
-    .photo-wrap{ order:2; justify-content:center }
-    .photo img{ width:min(520px, 78vw) }
+    .photo-body{ width:min(600px, 92vw) }
+    .photo-pop { width:min(520px, 88vw) }
   }
-  a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
 </style>
 </head>
 <body>
 
-<!-- animated svg background (served from clouds.svg in your repo) -->
 <div class="bg" aria-hidden="true">
   <object type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
-<main class="wrap">
-  <section class="shell">
-    <!-- left: intro -->
-    <article class="card" aria-label="Intro">
-      <h1>I'm Sirish Yadav</h1>
+<div class="stage">
+  <!-- watermark body behind -->
+  <div class="watermark" aria-hidden="true">
+    <img class="photo-body" src="sirish.jpeg" alt="">
+    <img class="photo-pop"  src="sirish.jpeg" alt="">
+  </div>
 
-      <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
-      <p class="lead">I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
-      <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.</p>
-      <p class="lead">I keep things simple, reliable, and worry-free.</p>
+  <!-- centered intro card -->
+  <article class="card" aria-label="Intro">
+    <h1>I'm Sirish Yadav</h1>
 
-      <div class="cta-row">
-        <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
-          download resume
+    <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
+    <p class="lead">I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+    <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.</p>
+    <p class="lead">I keep things simple, reliable, and worry-free.</p>
+
+    <div class="cta-row">
+      <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="#111" d="M12 3a1 1 0 0 1 1 1v8.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-4 4a1 1 0 0 1-1.414 0l-4-4A1 1 0 1 1 8.707 10.293L11 12.586V4a1 1 0 0 1 1-1z"/><path fill="#555" d="M5 17a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1z"/></svg>
+        download resume
+      </a>
+
+      <nav class="icons" aria-label="Social links">
+        <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
         </a>
+        <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
+          </svg>
+        </a>
+        <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
+        </a>
+      </nav>
+    </div>
 
-        <nav class="icons" aria-label="Social links">
-          <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
-            <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
-          </a>
-          <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-              <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
-            </svg>
-          </a>
-          <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
-            <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
-          </a>
-        </nav>
+    <section class="terminal" aria-label="Live terminal">
+      <div class="term-bar">
+        <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
+        <span>sirish@mac — zsh</span>
       </div>
-
-      <!-- terminal -->
-      <section class="terminal" aria-label="Live terminal">
-        <div class="term-bar">
-          <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
-          <span>sirish@mac — zsh</span>
-        </div>
-        <pre id="terminal" class="term-body" aria-live="polite"></pre>
-      </section>
-    </article>
-
-    <!-- right: photo -->
-    <aside class="photo-wrap" aria-label="Portrait watermark">
-      <figure class="photo">
-        <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
-      </figure>
-    </aside>
-  </section>
-</main>
+      <pre id="terminal" class="term-body" aria-live="polite"></pre>
+    </section>
+  </article>
+</div>
 
 <script>
-  /* terminal typing loop */
   const LINES = [
     "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
     "az network vnet peering create --name make-friends --allow-vnet-access",
@@ -268,25 +252,12 @@
       return { node: wrap, target: ok, isTick:true };
     }
     const wrap = document.createElement('span');
-
-    const u = document.createElement('span');
-    u.className = 'u';
-    u.textContent = 'sirish@edge';
-
-    const sp1 = document.createTextNode(' ');
-    const d = document.createElement('span');
-    d.className = 'd';
-    d.textContent = '$';
-
-    const sp2 = document.createTextNode('  ');
-    const t = document.createElement('span');
-    t.className = 't';
-    t.textContent = '';
-
-    wrap.appendChild(u); wrap.appendChild(sp1);
-    wrap.appendChild(d); wrap.appendChild(sp2);
+    const u = document.createElement('span'); u.className = 'u'; u.textContent = 'sirish@edge';
+    const d = document.createElement('span'); d.className = 'd'; d.textContent = '$';
+    const t = document.createElement('span'); t.className = 't'; t.textContent = '';
+    wrap.appendChild(u); wrap.appendChild(document.createTextNode(' '));
+    wrap.appendChild(d); wrap.appendChild(document.createTextNode('  '));
     wrap.appendChild(t);
-
     return { node: wrap, target: t, text, isTick:false };
   }
 
