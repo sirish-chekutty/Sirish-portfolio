@@ -6,7 +6,7 @@
 <title>Sirish Yadav — IT Network & Systems Administrator</title>
 <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-<!-- Handwriting fonts -->
+<!-- handwriting fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
@@ -22,10 +22,10 @@
 
     /* terminal palette */
     --term-bg:#0b0f12;
-    --term-username:#ffd200;  /* yellow */
-    --term-dollar:#9b5de5;    /* purple */
-    --term-text:#ffffff;      /* white */
-    --term-ok:#22c55e;        /* green */
+    --term-username:#ffd200;
+    --term-dollar:#9b5de5;
+    --term-text:#ffffff;
+    --term-ok:#22c55e;
     --caret:#ffffff;
   }
 
@@ -38,57 +38,23 @@
     overflow-x:hidden;
   }
 
-  /* ===== Layered background =====
-     1) .bg-binary (z:0) — animated binary strings
-     2) #clouds-holder (z:1) — inline SVG injected at runtime (clouds on top) */
-  .bg{ position:fixed; inset:0; pointer-events:none; }
-  .bg-binary{ z-index:0; }
-  #clouds-holder{ z-index:1; }
-
-  /* When SVG is injected, we style it here */
-  #clouds-holder svg{
+  /* full-page animated svg background */
+  .bg{
+    position:fixed; inset:0; z-index:0;
     width:100%; height:100%;
-    preserveAspectRatio:none;
-    filter: saturate(1.05) contrast(1.02) drop-shadow(0 8px 24px rgba(0,0,0,.05));
-    animation: cloudsDrift 28s ease-in-out infinite alternate;
+    pointer-events:none; /* let clicks go to content */
+    overflow:hidden;
   }
-  /* Many stock cloud SVGs (including yours) have a solid background rect in a group like #BACKGROUND.
-     We dim it a touch so the page stays bright while keeping clouds visible. */
-  #clouds-holder svg #BACKGROUND rect{ opacity:.35; }
-
-  @keyframes cloudsDrift{
-    0%{transform:translate3d(0,0,0) scale(1);}
-    50%{transform:translate3d(-1%,.8%,0) scale(1.01);}
-    100%{transform:translate3d(1.2%,-1%,0) scale(1.01);}
+  .bg object,
+  .bg svg{
+    width:100%;
+    height:100%;
+    display:block;
   }
 
-  /* ===== Binary packets under clouds ===== */
-  .packet{
-    position:absolute; left:0; top:0;
-    font:700 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    color:#2b7cff;
-    white-space:nowrap; letter-spacing:.1em;
-    text-shadow: 0 1px 0 rgba(255,255,255,.35);
-    opacity:.95;
-    offset-distance:0%;
-  }
-  /* Motion paths — tuned to cross typical cloud areas in a 500x500ish cloud scene.
-     Adjust control points if your clouds sit differently. */
-  @keyframes flowA{ to { offset-distance:100%; } }
-  @keyframes flowB{ to { offset-distance:100%; } }
-  @keyframes flowC{ to { offset-distance:100%; } }
-  @keyframes flowD{ to { offset-distance:100%; } }
-  @keyframes flowE{ to { offset-distance:100%; } }
-
-  .path-a{ offset-path:path("M -10vw 18vh C 18vw 10vh, 48vw 12vh, 80vw 18vh S 115vw 26vh, 135vw 18vh"); animation: flowA 12s linear infinite; }
-  .path-b{ offset-path:path("M -12vw 32vh C 20vw 26vh, 52vw 26vh, 88vw 32vh S 118vw 38vh, 138vw 30vh"); animation: flowB 14s linear infinite reverse; }
-  .path-c{ offset-path:path("M -8vw 50vh C 20vw 56vh, 50vw 58vh, 82vw 52vh S 118vw 44vh, 138vw 50vh"); animation: flowC 16s linear infinite; }
-  .path-d{ offset-path:path("M -10vw 70vh C 18vw 80vh, 50vw 84vh, 84vw 74vh S 118vw 62vh, 138vw 70vh"); animation: flowD 18s linear infinite reverse; }
-  .path-e{ offset-path:path("M -8vw 40vh C 16vw 20vh, 44vw 18vh, 78vw 28vh S 112vw 38vh, 136vw 28vh"); animation: flowE 20s linear infinite; }
-
-  /* ===== Two-column content ===== */
+  /* content wrapper sits above background */
   .wrap{
-    position:relative; z-index:2; /* sits above both bg layers */
+    position:relative; z-index:2;
     min-height:100dvh; padding:48px 18px;
     display:grid; place-items:center;
   }
@@ -222,29 +188,11 @@
 </head>
 <body>
 
-<!-- 1) Binary layer (UNDER clouds) -->
-<div class="bg bg-binary" aria-hidden="true">
-  <!-- multiple streams so it looks continuous and crosses several cloud zones -->
-  <div class="packet path-a">0101→ 1100→ 0011→ 1010→ 0110→</div>
-  <div class="packet path-a" style="animation-delay:-6s;">0101→ 1100→ 0011→ 1010→ 0110→</div>
-
-  <div class="packet path-b">←0010 ←1110 ←0101 ←1001 ←0111</div>
-  <div class="packet path-b" style="animation-delay:-8s;">←0010 ←1110 ←0101 ←1001 ←0111</div>
-
-  <div class="packet path-c">0101→ 0011→ 1110→ 0100→ 1011→</div>
-  <div class="packet path-c" style="animation-delay:-9s;">0101→ 0011→ 1110→ 0100→ 1011→</div>
-
-  <div class="packet path-d">0010→ 0101→ 1101→ 0111→ 0001→</div>
-  <div class="packet path-d" style="animation-delay:-11s;">0010→ 0101→ 1101→ 0111→ 0001→</div>
-
-  <div class="packet path-e">1010→ 0101→ 0010→ 1111→ 0000→</div>
-  <div class="packet path-e" style="animation-delay:-10s;">1010→ 0101→ 0010→ 1111→ 0000→</div>
+<!-- animated svg background (served from clouds.svg in your repo) -->
+<div class="bg" aria-hidden="true">
+  <object type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
-<!-- 2) Clouds layer (FRONT). We inline the SVG at runtime into this holder. -->
-<div id="clouds-holder" class="bg" aria-hidden="true"></div>
-
-<!-- 3) Content -->
 <main class="wrap">
   <section class="shell">
     <!-- left: intro -->
@@ -252,9 +200,9 @@
       <h1>I'm Sirish Yadav</h1>
 
       <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
-      <p class="lead">I make tech behave — Wi‑Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
-      <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on‑prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock‑solid.</p>
-      <p class="lead">I keep things simple, reliable, and worry‑free.</p>
+      <p class="lead">I make tech behave — Wi-Fi that works, phones that ring, and logins that feel effortless. Networks, servers, PBX, cloud… if it connects or stores data, I make it faster, safer, and easier to use.</p>
+      <p class="lead">Firewalls, VLANs, VPNs, Azure, Entra ID — from building Azure systems and virtual networks to syncing on-prem with the cloud, I keep everything running smoothly. If it needs automating, I automate it; if it needs building, I make it rock-solid.</p>
+      <p class="lead">I keep things simple, reliable, and worry-free.</p>
 
       <div class="cta-row">
         <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
@@ -277,7 +225,7 @@
         </nav>
       </div>
 
-      <!-- Terminal -->
+      <!-- terminal -->
       <section class="terminal" aria-label="Live terminal">
         <div class="term-bar">
           <span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
@@ -297,31 +245,7 @@
 </main>
 
 <script>
-  /* Inline your clouds.svg into the DOM (instead of <img>): */
-  (async function inlineClouds(){
-    try{
-      const holder = document.getElementById('clouds-holder');
-      const res = await fetch('clouds.svg');
-      const svgText = await res.text();
-      holder.innerHTML = svgText;          // inject raw SVG markup
-      const svg = holder.querySelector('svg');
-
-      // Make sure it fills the viewport nicely
-      svg.setAttribute('preserveAspectRatio','none');
-      svg.setAttribute('width','100%');
-      svg.setAttribute('height','100%');
-
-      // If your SVG has a #BACKGROUND group with a solid rect (yours does),
-      // keep clouds visible but soften the solid fill a little more if needed:
-      const bgRect = svg.querySelector('#BACKGROUND rect');
-      if (bgRect) bgRect.style.opacity = '.35';
-
-      // Optional: add a drift animation class via CSS
-      svg.style.animation = 'cloudsDrift 28s ease-in-out infinite alternate';
-    }catch(e){ console.error('Could not inline clouds.svg', e); }
-  })();
-
-  /* Terminal typing loop */
+  /* terminal typing loop */
   const LINES = [
     "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
     "az network vnet peering create --name make-friends --allow-vnet-access",
