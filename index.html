@@ -313,8 +313,48 @@
     </div>
   </aside>
 </div>
-
 <script>
+  // quotes: one will be chosen at random on each page load
+  const QUIPS = [
+    `to ping or not to ping — that is the question`,
+    `veni, vidi, vpc`,
+    `i route, therefore i am`,
+    `may the flows be with you`,
+    `you shall not pass — firewall policy 403`,
+    `roads? where we’re going, we need route tables`,
+    `show me the packets`,
+    `the truth is out there — check the logs`,
+    `move fast and don’t break prod`,
+    `you miss 100% of the pings you don’t send`,
+    `with great bandwidth comes great observability`,
+    `elementary, my dear wireshark`,
+    `the night is dark and full of 500s`,
+    `keep calm and carry packets`,
+    `ask not what your network can do for you — ask how you can shrink broadcast domains`,
+    `the best time to tag resources was yesterday; the second best is now`,
+    `do or do not — there is no try-catch in bash`,
+    `if it isn’t IaC, it doesn’t exist`,
+    `winter is coming… patch tuesday too`,
+    `fortune favors the cached`,
+    `beam me up — zero trust only`,
+    `houston, we have a misconfig`,
+    `i’ll be back… during the maintenance window`,
+    `not all who wander are roaming — check dhcp`,
+    `i have a dream… i call it a diagram`,
+    `the needs of the many outweigh the bandwidth of the few`,
+    `frankly, my dear, i don’t give a 503`,
+    `life finds a way — so will shadow it; add guardrails`,
+    `there is no spoon — it’s just someone else’s computer called “the cloud”`,
+    `if you build it, they will ddos — add a waf`
+  ];
+
+  function setRandomQuip(){
+    const q = document.querySelector('.quip');
+    if (!q || !QUIPS.length) return;
+    q.textContent = QUIPS[Math.floor(Math.random() * QUIPS.length)];
+  }
+
+  // existing terminal animation (unchanged)
   const LINES = [
     "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
     "az network vnet peering create --name make-friends --allow-vnet-access",
@@ -391,9 +431,15 @@
       }, 480);
     }, 900);
   }
+
   function appendCaret(){ if (term.lastElementChild !== caret) term.appendChild(caret); }
   new MutationObserver(appendCaret).observe(term, {childList:true});
+
+  // kick things off
   start();
+  setRandomQuip(); // pick a fresh quote on every page load
 </script>
+
+
 </body>
 </html>
