@@ -15,7 +15,7 @@
     --line:#e9edf3;
     --accent:#ffd200;
 
-    /* glass tuneables */
+    /* glass */
     --card-bg: rgba(255,255,255,.52);
     --card-stroke: rgba(255,255,255,.38);
     --card-inner: rgba(255,255,255,.18);
@@ -24,7 +24,7 @@
     --radius:26px;
 
     /* terminal palette */
-    --term-bg:#0b0f12cc; /* semi-opaque so bg peeks through */
+    --term-bg:#0b0f12cc;
     --term-username:#ffd200;
     --term-dollar:#9b5de5;
     --term-text:#ffffff;
@@ -41,28 +41,26 @@
     overflow-x:hidden;
   }
 
-  /* animated svg background */
+  /* animated clouds background (svg or img) */
   .bg{
-    position:fixed; inset:0; z-index:0;
-    width:100%; height:100%;
-    pointer-events:none;
-    overflow:hidden;
+    position:fixed; inset:0; z-index:0; width:100%; height:100%;
+    pointer-events:none; overflow:hidden;
   }
-  .bg object, .bg svg{ width:100%; height:100%; display:block }
+  .bg object,.bg img,.bg svg{ width:100%; height:100%; display:block }
 
-  /* page stage: now a 2-column layout so the profile card lives at right center */
+  /* two-column layout: intro left, lanyard right */
   .stage{
     position:relative; z-index:1;
     min-height:100dvh;
     display:grid;
-    grid-template-columns: minmax(0, 1fr) min(420px, 30vw);
-    align-items:center;            /* keeps the right card vertically centered */
-    justify-items:center;          /* centers items within each column */
+    grid-template-columns: minmax(0, 1fr) min(460px, 34vw);
+    align-items:center;
+    justify-items:center;
     gap: clamp(16px, 3vw, 36px);
     padding: clamp(24px, 4vw, 48px) 18px;
   }
 
-  /* glass intro blade (left column) */
+  /* left glass intro */
   .card{
     position:relative;
     width:min(860px, 92vw);
@@ -74,13 +72,12 @@
     box-shadow:var(--shadow);
     padding: clamp(22px, 3.6vw, 34px) clamp(18px, 3.6vw, 32px) clamp(20px, 3vw, 28px);
     text-align:center;
-    overflow:hidden; /* subtle inner border for frosted glass effect */
+    overflow:hidden;
   }
   .card::after{
     content:"";
     position:absolute; inset:0;
-    border-radius:inherit;
-    pointer-events:none;
+    border-radius:inherit; pointer-events:none;
     box-shadow: inset 0 0 0 1px var(--card-inner);
   }
 
@@ -139,92 +136,136 @@
   }
   .dots{ display:inline-flex; gap:6px; margin-right:8px }
   .dot{ width:10px; height:10px; border-radius:50%; background:#3a3a3a }
-  .dot:nth-child(1){ background:#ff5f56 }
-  .dot:nth-child(2){ background:#ffbd2e }
-  .dot:nth-child(3){ background:#27c93f }
+  .dot:nth-child(1){ background:#ff5f56 } .dot:nth-child(2){ background:#ffbd2e } .dot:nth-child(3){ background:#27c93f }
 
   .term-body{
     font: 14px/1.5 SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
     color:var(--term-text);
-    padding:14px 16px 18px;
-    white-space:pre-wrap;
-    overflow-wrap:anywhere;
-    min-height: 220px;
+    padding:14px 16px 18px; white-space:pre-wrap; overflow-wrap:anywhere; min-height: 220px;
   }
-  .u{ color:var(--term-username) }
-  .d{ color:var(--term-dollar) }
-  .t{ color:var(--term-text) }
-  .ok{ color:var(--term-ok) }
+  .u{ color:var(--term-username) } .d{ color:var(--term-dollar) } .t{ color:var(--term-text) } .ok{ color:var(--term-ok) }
   .caret{ display:inline-block; width:10px; height:1.1em; vertical-align:-.2em; margin-left:2px; background:var(--caret); animation: blink .9s steps(1,end) infinite }
   @keyframes blink{ 50%{ opacity:0 } }
 
   a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
 
-  /* glass profile card (right column) */
-  .profile{
+  /* right column: lanyard + id card */
+  .lanyard-wrap{
     width:100%;
-    max-width:420px;
-    background:var(--card-bg);
-    border:1px solid var(--card-stroke);
-    border-radius:var(--radius);
-    backdrop-filter: blur(var(--backdrop-blur)) saturate(1.1);
-    -webkit-backdrop-filter: blur(var(--backdrop-blur)) saturate(1.1);
-    box-shadow:var(--shadow);
-    padding:16px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .profile::after{
-    content:"";
-    position:absolute; inset:0;
-    border-radius:inherit;
-    pointer-events:none;
-    box-shadow: inset 0 0 0 1px var(--card-inner);
-  }
-  .profile h2{
-    margin:2px 6px 0; font:700 28px/1.15 "Caveat", system-ui;
-  }
-  .profile .role{
-    margin:0 6px 6px; color:#333; font:15px/1.4 "Patrick Hand", system-ui;
-  }
-  .profile .portrait{
-    width:100%;
-    aspect-ratio: 4/5;
-    border-radius:18px;
-    object-fit:cover;
-    object-position:center 20%;
-    display:block;
-    background:#eaeff6;
-    box-shadow: 0 18px 40px rgba(0,0,0,.12);
-  }
-  .profile .chip{
-    margin:0 6px; display:inline-flex; align-items:center; gap:8px;
-    border-radius:999px; padding:6px 10px;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,.66);
-    color:#111; font-size:12px;
-  }
-  .profile .dock{
-    margin:4px 2px 2px; display:flex; align-items:center; gap:10px;
-    background:rgba(255,255,255,.7);
-    border:1px solid var(--line);
-    border-radius:14px; padding:10px 12px;
-  }
-  .profile .dot{ width:8px; height:8px; border-radius:50%; background:#22c55e; box-shadow:0 0 6px #22c55e80 }
-  .profile .handle{ line-height:1.2 }
-  .profile .handle small{ display:block; color:#333; opacity:.8; font-size:12px }
-  .profile .spacer{ flex:1 }
-  .profile .btn{
-    background:#111; color:var(--accent); border:1px solid #222;
-    padding:10px 14px; border-radius:12px; box-shadow:0 8px 18px rgba(0,0,0,.18);
-    text-decoration:none; font-weight:700;
+    max-width:min(460px, 34vw);
+    height: clamp(520px, 68vh, 640px);
+    position:relative;
+    display:grid;
+    place-items:center end;
+    padding-right: clamp(0px, 1vw, 10px);
   }
 
-  /* responsive: stack on narrow screens to avoid overlap */
+  /* swinging group so strap and card move together slightly */
+  .swing{
+    position:relative;
+    width:min(360px, 78%);
+    transform-origin: top center;
+    animation: swing 6s ease-in-out infinite;
+  }
+  @keyframes swing{
+    0%,100%{ transform: rotate(2deg) }
+    50%{ transform: rotate(-2deg) }
+  }
+
+  /* the black lanyard strap */
+  .strap{
+    position:absolute;
+    top:-6px; left:50%; transform:translateX(-50%);
+    width:14px; height: 56%;
+    background: linear-gradient(180deg, #000, #111);
+    border-radius: 10px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 18px 28px rgba(0,0,0,.25);
+  }
+
+  /* metal clip + ring */
+  .clip{
+    position:absolute; left:50%; top:54%;
+    transform:translate(-50%,-50%);
+    width:38px; height:28px; border-radius:6px;
+    background: linear-gradient(180deg, #d9dde3, #b6bcc6);
+    box-shadow: 0 6px 18px rgba(0,0,0,.25), inset 0 0 0 1px #8d94a1;
+    display:grid; place-items:center;
+  }
+  .ring{
+    width:16px; height:16px; border-radius:50%;
+    border:2px solid #7f8795; box-shadow: inset 0 0 0 1px #aab1bd;
+    background: #e7eaf0;
+  }
+
+  /* id card body */
+  .idcard{
+    position:absolute; left:50%; top:calc(54% + 18px);
+    transform:translateX(-50%);
+    width: clamp(260px, 48vw, 360px);
+    aspect-ratio: 62 / 100;
+    background: var(--card-bg);
+    border:1px solid var(--card-stroke);
+    border-radius: 18px;
+    backdrop-filter: blur(var(--backdrop-blur)) saturate(1.1);
+    -webkit-backdrop-filter: blur(var(--backdrop-blur)) saturate(1.1);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  .idcard::after{
+    content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    box-shadow: inset 0 0 0 1px var(--card-inner);
+  }
+
+  /* card header with company logo (scaled to fit) */
+  .id-head{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 12px; background: rgba(255,255,255,.82);
+    border-bottom:1px solid var(--line);
+  }
+  .logo-box{
+    width:44px; height:44px; border-radius:10px; background:#fff;
+    border:1px solid var(--line); display:grid; place-items:center; overflow:hidden;
+    box-shadow: 0 6px 14px rgba(0,0,0,.06);
+  }
+  .logo-box img{
+    max-width: 90%; max-height: 90%; object-fit: contain; display:block;
+  }
+  .company{
+    font: 700 18px/1.2 system-ui, -apple-system;
+    color:#111;
+  }
+  .sub{ font: 12px/1.2 system-ui; color:#333; opacity:.8 }
+
+  /* photo block */
+  .photo{
+    margin:10px 12px 0 12px; border-radius:14px; overflow:hidden;
+    background:#eaeff6; box-shadow: 0 16px 28px rgba(0,0,0,.10);
+    aspect-ratio: 5/6;
+  }
+  .photo img{
+    width:100%; height:100%; object-fit:cover; object-position:center 20%; display:block;
+  }
+
+  /* name + title */
+  .meta{ padding:10px 12px 0 12px }
+  .name{ font: 700 26px/1.15 "Caveat", system-ui; margin: 2px 0 2px 0 }
+  .title{ font: 14px/1.4 "Patrick Hand", system-ui; color:#222 }
+  .hl{ color:#111; background:linear-gradient(180deg, rgba(255,210,0,.45), rgba(255,210,0,0)); padding:0 .12em }
+
+  /* footer info chip */
+  .chip{
+    margin:10px 12px 12px; display:flex; align-items:center; gap:8px;
+    border-radius:999px; padding:8px 12px; border:1px solid var(--line);
+    background:rgba(255,255,255,.72); color:#111; font-size:12px;
+  }
+  .chip .status{ width:8px; height:8px; border-radius:50%; background:#22c55e; box-shadow:0 0 6px #22c55e80 }
+
+  /* responsive: stack vertically on narrow screens */
   @media (max-width: 1100px){
     .stage{ grid-template-columns: 1fr }
-    .profile{ max-width: min(520px, 94vw) }
+    .lanyard-wrap{ height:auto; max-width:min(520px, 94vw) }
+    .swing{ width:min(420px, 92vw) }
   }
 
   @media (max-width: 520px){
@@ -234,13 +275,14 @@
 </head>
 <body>
 
-<!-- animated svg background (your clouds.svg) -->
+<!-- background -->
 <div class="bg" aria-hidden="true">
+  <!-- if you use an svg clouds file, keep the object tag; or switch to an img -->
   <object type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
-<!-- 2-column layout: intro on the left, profile card on the right -->
 <div class="stage">
+  <!-- left: your intro content -->
   <article class="card" aria-label="Intro">
     <h1>I'm Sirish Yadav</h1>
 
@@ -279,24 +321,38 @@
     </section>
   </article>
 
-  <!-- right-center profile card -->
-  <aside class="profile" aria-label="Profile card">
-    <h2>Sirish Yadav</h2>
-    <div class="role">Network & Systems Administrator</div>
+  <!-- right: lanyard + id card hanging at the right side -->
+  <aside class="lanyard-wrap" aria-label="Lanyard with ID card">
+    <div class="swing">
+      <div class="strap" aria-hidden="true"></div>
+      <div class="clip"><div class="ring" aria-hidden="true"></div></div>
 
-    <!-- your repo root image -->
-    <img class="portrait" src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+      <section class="idcard" aria-label="Employee ID card">
+        <header class="id-head">
+          <div class="logo-box">
+            <img src="company-logo.jpg" alt="The 401 Auto group logo" />
+          </div>
+          <div>
+            <div class="company">The 401 Auto group</div>
+            <div class="sub">employee id</div>
+          </div>
+        </header>
 
-    <div class="chip">enterprise networking • azure • fortinet</div>
+        <div class="photo">
+          <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+        </div>
 
-    <div class="dock">
-      <div class="dot" title="online"></div>
-      <div class="handle">
-        <div>@sirishchekutty</div>
-        <small>online</small>
-      </div>
-      <div class="spacer"></div>
-      <a class="btn" href="mailto:Sirish.chekutty@gmail.com">contact me</a>
+        <div class="meta">
+          <div class="name">Sirish Yadav</div>
+          <!-- using your requested exact wording -->
+          <div class="title"><span class="hl">IT network and Systems Adminstrator</span></div>
+        </div>
+
+        <div class="chip">
+          <span class="status" title="active"></span>
+          <span>@sirishchekutty • 401 Group</span>
+        </div>
+      </section>
     </div>
   </aside>
 </div>
@@ -344,7 +400,7 @@
   function typeNext(){
     if (i >= LINES.length) return loop();
     current = makeLine(LINES[i]);
-    if (i>0) term.appendChild(document.createTextNode('\n'));
+    if (i>0) term.appendChild(document.createTextNode('\\n'));
     term.appendChild(current.node);
     appendCaret();
     if (current.isTick){
