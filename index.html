@@ -446,50 +446,79 @@
     typeNext();
   }
 
-  function typeNext(){
-    if (i >= LINES.length) return loop();
-    current = makeLine(LINES[i]);
-    if (i>0) term.appendChild(document.createTextNode('\n'));
-    term.appendChild(current.node);
-    appendCaret();
-    if (current.isTick){
-      setTimeout(()=>{ i++; typeNext(); }, 450);
-    } else {
-      j=0; tick();
-    }
+ function typeNext(){
+  if (i >= LINES.length) return loop();
+  current = makeLine(LINES[i]);
+  if (i>0) term.appendChild(document.createTextNode('\n'));
+  term.appendChild(current.node);
+  appendCaret();
+  if (current.isTick){
+    setTimeout(()=>{ i++; typeNext(); }, 450);
+  } else {
+    j=0; tick();
   }
+}
 
-  function tick(){
-    if (!typing) return;
-    const s = LINES[i];
-    if (j < s.length){
-      current.target.textContent += s.charAt(j++);
-      setTimeout(tick, 12 + Math.random()*55);
-    } else {
-      i++; setTimeout(typeNext, 300);
-    }
+function tick(){
+  if (!typing) return;
+  const s = LINES[i];
+  if (j < s.length){
+    current.target.textContent += s.charAt(j++);
+    setTimeout(tick, 12 + Math.random()*55);
+  } else {
+    i++; setTimeout(typeNext, 300);
   }
+}
 
-  function loop(){
-    typing=false;
+function loop(){
+  typing=false;
+  setTimeout(()=>{
+    caret.remove();
+    term.style.transition = 'opacity .45s ease';
+    term.style.opacity = '0';
     setTimeout(()=>{
-      caret.remove();
-      term.style.transition = 'opacity .45s ease';
-      term.style.opacity = '0';
-      setTimeout(()=>{
-        term.style.transition = 'none';
-        term.style.opacity = '1';
-        start();
-      }, 480);
-    }, 900);
-  }
+      term.style.transition = 'none';
+      term.style.opacity = '1';
+      start();
+    }, 480);
+  }, 900);
+}
 
-  function appendCaret(){ if (term.lastElementChild !== caret) term.appendChild(caret); }
-  new MutationObserver(appendCaret).observe(term, {childList:true});
+function appendCaret(){ if (term.lastElementChild !== caret) term.appendChild(caret); }
+new MutationObserver(appendCaret).observe(term, {childList:true});
 
-  // kick things off
-  start();
-  setRandomQuip(); // pick a fresh quote on every page load
+// helper: wrap each word with an index for staggered animation
+function decorateQuipText(text){
+  // split on spaces but keep spaces as tokens so spacing is preserved
+  const parts = text.split(/(\s+)/);
+  return parts.map((p, i) => {
+    if (/^\s+$/.test(p)) return p; // keep spaces as-is
+    return `<span class="w" style="--i:${i}">${p}</span>`;
+  }).join("");
+}
+
+// pick and render a random quote into .quip with word-by-word animation
+function setRandomQuip(){
+  const q = document.querySelector('.quip');
+  if (!q || !QUIPS?.length) return;
+  const chosen = QUIPS[Math.floor(Math.random() * QUIPS.length)];
+  q.innerHTML = decorateQuipText(chosen);
+}
+
+/* kick everything off (works whether the script is in <head> or end of <body>) */
+function initPage(){
+  start();            // terminal typing
+  setRandomQuip();    // random animated quote
+  // optional: click the card to shuffle a new quote
+  document.querySelector('.idcard')?.addEventListener('click', setRandomQuip);
+}
+
+if (document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initPage);
+} else {
+  initPage();
+}
+
 </script>
 
 
