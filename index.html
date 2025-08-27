@@ -17,7 +17,7 @@
     body{
       margin:0; background:radial-gradient(1200px 800px at 80% -100px, #1a1d23 0%, #0b0b0c 60%), var(--bg);
       color:var(--ink); font:15px/1.6 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-      -webkit-font-smoothing:antialiased; -moz-osx-smoothing:grayscale;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
 
     header{padding:22px 18px 0}
@@ -69,6 +69,7 @@
     .f3{background:#7c8a99} .bp{background:#a0b4ff} .e3{background:#ef233c} .e5{background:#ffd43b}
     .nowrap{white-space:nowrap}
 
+    /* stacked bars per-dept */
     .stack{height:16px; border-radius:999px; overflow:hidden; display:flex; border:1px solid var(--line)}
     .seg{height:100%}
     .seg.f3{background:#7c8a99}
@@ -76,29 +77,35 @@
     .seg.e3{background:#ef233c}
     .seg.e5{background:#ffd43b}
 
+    /* callouts */
     .callout{display:grid; gap:6px; padding:12px; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.03)}
-
+    .callout .title{font-weight:700}
+      /* pdf embed */
     .pdfwrap{border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--paper); box-shadow:var(--shadow)}
     .pdfwrap iframe, .pdfwrap object{width:100%; height:900px; display:block; background:#0e1013}
 
+    /* full text transcription */
     .doc{display:grid; gap:10px}
     .doc details{border:1px solid var(--line); border-radius:12px; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)); padding:10px}
     .doc summary{cursor:pointer; font-weight:700; color:#e7eaf2}
     .doc .pre{white-space:pre-wrap; font-family:'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size:14px; line-height:1.65; color:#dfe3ea; margin:6px 0 0}
     .doc .hint{color:var(--muted); font-size:12px; margin-top:6px}
+      /* enhanced accordion visuals for PDF transcription */
     .acc{gap:12px}
     .acc details{position:relative; border:1px solid var(--line); border-radius:16px; background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.02)); overflow:hidden; transition:border-color .2s, box-shadow .2s, transform .2s}
     .acc details:hover{border-color:#2a2f37; box-shadow:0 10px 30px rgba(0,0,0,.25)}
     .acc details::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:linear-gradient(180deg, var(--red), var(--red-2)); opacity:.75}
     .acc summary{list-style:none; display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer; font-weight:700; color:#e7eaf2}
     .acc summary::-webkit-details-marker{display:none}
+    .acc summary::before{display:none !important; content:'' !important; width:0; height:0; box-shadow:none; background:none;}  
     .acc summary::after{content:'›'; margin-left:auto; font-size:18px; opacity:.85; transition:transform .25s ease}
     .acc details[open] summary::after{transform:rotate(90deg)}
     .acc .pre{padding:12px 16px 16px; border-top:1px solid var(--line)}
 
+    /* controls and chips */
     .doc-controls{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0 12px}
     .doc-controls .stretch{flex:1; min-width:260px}
-    .doc-controls input[type="search"]{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:#0e1013; color:#dfe3ea}
+    .doc-controls input[type="search"]{width:100%; padding:10px 12px; border-radius:12px; border:1px solid var(--line); background:#0e1013; color:var(--ink)}
     .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; text-decoration:none; background:#13161b; border:1px solid var(--line); color:#e7eaf2}
     .pill:hover{border-color:#2a2f37}
     .toc-chips{display:flex; gap:8px; flex-wrap:wrap; margin:0 0 8px}
@@ -106,49 +113,43 @@
     .toc-chips a.active{outline:1px solid var(--red-2); box-shadow:0 0 0 3px rgba(239,35,60,.18)}
     .copy-btn{margin-left:8px; font-size:12px; padding:4px 8px; border-radius:8px; border:1px solid var(--line); background:#121418; color:#dfe3ea}
     .copy-btn:hover{border-color:#2a2f37}
-
+      /* tables inside transcription */
     .doc table{width:100%; border-collapse:collapse; font-size:14px; background:rgba(255,255,255,.01)}
     .doc th, .doc td{padding:10px 8px; border-bottom:1px solid var(--line); vertical-align:top}
-
-    /* NEW: lanyard panel height + mount */
-    .lanyard-wrap{height:70vh; border-radius:12px; overflow:hidden; border:1px solid var(--line); background: #0e1013;}
-    #root{width:100%; height:100%}
+    .doc thead th{background:#0f1216; color:#cfd3db; position:sticky; top:0; z-index:1}
+    .doc tbody tr:nth-child(even){background:rgba(255,255,255,.02)}
   </style>
-
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
   <style>
+    /* helpers for transcription tables */
     .doc td.center, .doc th.center{ text-align:center }
     .doc td.nowrap{ white-space:nowrap }
   </style>
-
   <style>
-    .home-btn{
-      position:fixed; left:16px; bottom:16px; z-index:9999;
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 14px;
-      color:#fff; text-decoration:none; font-weight:700; letter-spacing:.2px;
-      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.18);
-      border-radius:14px;
-      backdrop-filter:blur(10px);
-      box-shadow:0 10px 30px rgba(0,0,0,.35);
-      transition:transform .06s ease, box-shadow .2s ease, border-color .2s ease;
-    }
-    .home-btn:hover{ border-color: rgba(239,35,60,.45); box-shadow:0 12px 36px rgba(239,35,60,.25); transform:translateY(-1px) }
-    .home-btn:focus-visible{ outline:2px solid #ef233c; outline-offset:3px }
-    .home-btn.top-right{ left:auto; right:16px; bottom:auto; top:16px }
+  .home-btn{
+    position:fixed; left:16px; bottom:16px; z-index:9999;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px;
+    color:#fff; text-decoration:none; font-weight:700; letter-spacing:.2px;
+    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.05));
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:14px;
+    backdrop-filter:blur(10px);
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    transition:transform .06s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .home-btn:hover{ border-color: rgba(239,35,60,.45); box-shadow:0 12px 36px rgba(239,35,60,.25); transform:translateY(-1px) }
+  .home-btn:focus-visible{ outline:2px solid #ef233c; outline-offset:3px }
+  .home-btn.top-right{ left:auto; right:16px; bottom:auto; top:16px }
 
-    .home-icon{
-      width:18px; height:18px; display:block;
-      stroke:currentColor; fill:none; stroke-width:2;
-      stroke-linecap:round; stroke-linejoin:round;
-    }
-    @media (max-width:640px){ .home-btn{ padding:8px 12px } .home-icon{ width:16px; height:16px } }
-  </style>
-  <script type="module" crossorigin src="https://sirish-chekutty.github.io/Sirish-portfolio/assets/index-BWA6NwaO.js"></script>
-  <link rel="stylesheet" crossorigin href="https://sirish-chekutty.github.io/Sirish-portfolio/assets/index-Dtn62Xmo.css">
+  .home-icon{
+    width:18px; height:18px; display:block;
+    stroke:currentColor; fill:none; stroke-width:2;
+    stroke-linecap:round; stroke-linejoin:round;
+  }
+  @media (max-width:640px){ .home-btn{ padding:8px 12px } .home-icon{ width:16px; height:16px } }
+</style>
 </head>
 <body>
   <header>
@@ -162,16 +163,6 @@
   </header>
 
   <main>
-    <!-- NEW: Interactive Lanyard (React mounts here) -->
-    <section class="panel">
-      <h2>Interactive Lanyard</h2>
-      <p class="note">Drag the card to play with the physics.</p>
-      <div class="lanyard-wrap">
-        <div id="root"></div>
-      </div>
-    </section>
-
-    <!-- the rest of your original sections remain unchanged -->
     <!-- at-a-glance -->
     <section class="panel">
       <h2>at a glance</h2>
@@ -189,7 +180,7 @@
         <span class="tag p2">entra p2 features</span>
       </div>
       <div class="bars" id="mixBars"></div>
-      <p class="note">p1 highlights: conditional access, dynamic groups, app proxy. p2 adds identity protection, risk-based CA, PIM, access reviews.</p>
+      <p class="note">p1 highlights: conditional access, dynamic groups, app proxy. p2 adds identity protection, risk‑based CA, PIM, access reviews.</p>
     </section>
 
     <!-- costs -->
@@ -258,28 +249,831 @@
       </table>
     </section>
 
-    <!-- department breakdown, pdf, transcription, etc. -->
-    <!-- (unchanged content continues …) -->
+    <!-- department breakdown with stacked mix -->
+    <section class="panel">
+      <h2>department breakdown</h2>
+      <div class="controls" style="margin-bottom:10px">
+        <div class="search"><input id="q" type="search" placeholder="filter departments…" /></div>
+        <a class="btn" id="exportCsv" href="#" download="401-licensing-by-dept.csv">export csv</a>
+        <a class="btn" id="exportDeptMix" href="#" download="401-licensing-mix-by-dept.csv">export mix csv</a>
+        <span class="mini nowrap">click column headers to sort</span>
+      </div>
+      <table id="deptTbl" aria-label="Department licensing breakdown">
+        <thead>
+          <tr>
+            <th data-k="dept">department</th>
+            <th class="num" data-k="headcount">headcount</th>
+            <th class="num" data-k="f3">f3</th>
+            <th class="num" data-k="bp">business premium</th>
+            <th class="num" data-k="e3">e3</th>
+            <th class="num" data-k="e5">e5</th>
+            <th>mix</th>
+            <th class="num" data-k="monthly">monthly (cad)</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- assumptions & notes -->
+    <section class="panel">
+      <h2>assumptions & notes</h2>
+      <ul>
+        <li>Headcount: 1,068 total across departments (rough estimate).</li>
+        <li>Pricing (CAD/user/mo): F3 $12 · Business Premium $29 · E3 $44 · E5 $70.</li>
+        <li>Vendor quote uses discounted pricing: E3 $43.15, Business Premium $25.33 (800 seats total: 500 E3, 300 BP).</li>
+        <li>Frontline (F3) mapped to receptionists, lot attendants, detailers, drivers, technicians, etc.; E5 reserved for executives and IT leadership.</li>
+        <li>Figures are planning estimates; adjust the mix as job roles change.</li>
+      </ul>
+      <p class="note">The Inforgraphics and content above is made from the PDF below</p>
+    </section>
+
+    <!-- full PDF (embedded for original layout/diagrams) -->
+    <section class="panel">
+      <h2>401Group Licensing Strategy - PDF with Detailed Analysis (downloadable)</h2>
+      <div class="pdfwrap">
+        <object data="Entra Environment Rough Summary 1.pdf#toolbar=1&navpanes=0&view=FitH" type="application/pdf">
+          <iframe src="Entra Environment Rough Summary 1.pdf#toolbar=1&navpanes=0&view=FitH"></iframe>
+        </object>
+      </div>
+      <p class="note">This PDF will be updated with any changes made to the strategy.
+      </p>
+    </section>
+
+    <!-- full text transcription from the PDF (no points omitted) -->
+    <section class="panel">
+      <h2>Full PDF text transcription</h2>
+      <p class="note">verbatim text from the document, structured into collapsible sections. This makes it easy to broswer through the text and take quick glance at sections.</p>
+      <div class="doc-controls">
+        <div class="stretch"><input id="pdfSearch" type="search" placeholder="search these sections…" /></div>
+        <a class="pill" id="pdfExpandAll" href="#">expand all</a>
+        <a class="pill" id="pdfCollapseAll" href="#">collapse all</a>
+      </div>
+      <div class="toc-chips" id="pdfToc"></div>
+      <div class="doc acc" id="pdfText">
+        <details>
+          <summary>office 365 / microsoft 365 → entra id licensing map</summary>
+          <div>
+            <table>
+              <thead>
+                <tr><th>plan / subscription</th><th>entra id tier</th><th>notes</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Office 365 E1</td><td>Entra ID Free</td><td>Basic MFA via Authenticator, SSPR, audit/sign-in logs; no Conditional Access.</td></tr>
+                <tr><td>Office 365 E3</td><td>Entra ID P1</td><td>Conditional Access, trusted IPs, app proxy, MFA flexibility, dynamic groups, Connect Health.</td></tr>
+                <tr><td>Office 365 E5</td><td>Entra ID P2</td><td>Risk-based CA, Identity Protection, Privileged Identity Management (PIM), Access Reviews.</td></tr>
+                <tr><td>Microsoft 365 Business Basic</td><td>Entra ID Free</td><td>Similar to O365 E1; basic productivity users.</td></tr>
+                <tr><td>Microsoft 365 Business Standard</td><td>Entra ID Free</td><td>Desktop apps added; no P1 features.</td></tr>
+                <tr><td>Microsoft 365 Business Premium</td><td>Entra ID P1</td><td>Full Conditional Access, MFA flexibility, Intune device management.</td></tr>
+                <tr><td>Microsoft 365 E3</td><td>Entra ID P1</td><td>P1 features plus Windows Enterprise & Intune.</td></tr>
+                <tr><td>Microsoft 365 E5</td><td>Entra ID P2</td><td>Advanced security, compliance, analytics.</td></tr>
+                <tr><td>Microsoft 365 F3 (Frontline)</td><td>Entra ID P1 (limited)</td><td>Conditional Access + MFA with frontline restrictions.</td></tr>
+              </tbody>
+            </table>
+            <div class="note" style="margin-top:10px">add-ons</div>
+            <table>
+              <thead><tr><th>add-on</th><th>resulting tier</th><th>notes</th></tr></thead>
+              <tbody>
+                <tr><td>Standalone Entra ID P1</td><td>Entra ID P1</td><td>Add-on when base plan is Free.</td></tr>
+                <tr><td>Standalone Entra ID P2</td><td>Entra ID P2</td><td>Add-on for advanced governance/risk.</td></tr>
+                <tr><td>Entra Suite Add-on (requires Entra ID P1)</td><td>Bundle</td><td>Private Access, Internet Access, ID Governance, ID Protection, Verified ID premium.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>microsoft 365 license comparison (business premium vs e3 vs e5)</summary>
+          <div>
+            <table>
+              <thead>
+                <tr><th>feature</th><th>business premium</th><th>microsoft 365 e3</th><th>microsoft 365 e5</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Max users</td><td>300</td><td>Unlimited</td><td>Unlimited</td></tr>
+                <tr><td>Office apps</td><td>Full apps (desktop/web/mobile)</td><td>Full apps (desktop/web/mobile)</td><td>Full apps (desktop/web/mobile)</td></tr>
+                <tr><td>Email & collaboration</td><td>Exchange, Teams, SharePoint, OneDrive (1 TB)</td><td>Exchange, Teams, SharePoint, OneDrive (1 TB)</td><td>Exchange, Teams, SharePoint, OneDrive (1 TB)</td></tr>
+                <tr><td>Windows licensing</td><td>Windows 10/11 Business</td><td>Windows 10/11 Enterprise</td><td>Windows 10/11 Enterprise</td></tr>
+                <tr><td>Device management</td><td>Intune included</td><td>Intune included</td><td>Intune included</td></tr>
+                <tr><td>Entra ID tier</td><td>P1</td><td>P1</td><td>P2</td></tr>
+                <tr><td>MFA</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
+                <tr><td>Conditional Access</td><td>Yes (P1)</td><td>Yes (P1)</td><td>Risk-based (P2)</td></tr>
+                <tr><td>Identity Protection</td><td>No</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Privileged Identity Management</td><td>No</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Access Reviews</td><td>No</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Lifecycle Workflows</td><td>No</td><td>No</td><td>Yes</td></tr>
+                <tr><td>Defender for Office 365</td><td>Basic</td><td>Basic</td><td>Advanced (Safe Links, Safe Attachments)</td></tr>
+                <tr><td>Compliance & DLP</td><td>Basic</td><td>Advanced DLP, BitLocker</td><td>Advanced compliance, Insider Risk, Customer Key</td></tr>
+                <tr><td>Best fit</td><td>SMBs needing strong security + device mgmt</td><td>Enterprises needing broad collaboration + endpoint security</td><td>Enterprises needing full Zero Trust, advanced compliance</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details>
+          <summary>microsoft teams features by license tier</summary>
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th>feature</th>
+                  <th class="center">business basic</th>
+                  <th class="center">business premium</th>
+                  <th class="center">e3</th>
+                  <th class="center">e5</th>
+                  <th class="center">f3</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>chat & collaboration</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td></tr>
+                <tr><td>teams meetings (audio/video)</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td></tr>
+                <tr><td>screen sharing</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td></tr>
+                <tr><td>meeting recording</td><td>✔ (cloud, limited retention)</td><td class="center">✔</td><td>✔ (advanced compliance options)</td><td class="center">✔</td><td class="center">✘</td></tr>
+                <tr><td>teams phone (cloud pbx)†</td><td class="center">add‑on</td><td class="center">add‑on</td><td class="center">add‑on</td><td>included (with e5 teams phone option)</td><td class="center">add‑on</td></tr>
+                <tr><td>pstn calling (external)</td><td class="center">add‑on</td><td class="center">add‑on</td><td class="center">add‑on</td><td>included (with e5 calling option)</td><td class="center">add‑on</td></tr>
+                <tr><td>breakout rooms</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td></tr>
+                <tr><td>teams apps & integrations</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td class="center">✔</td><td>limited</td></tr>
+                <tr><td>file sharing (onedrive/sharepoint)</td><td>1 tb/user</td><td>1 tb/user</td><td>1 tb/user</td><td>1 tb/user</td><td>2 gb/user</td></tr>
+                <tr><td>compliance & eDiscovery</td><td>basic</td><td>standard (via p1)</td><td>advanced (litigation hold, archive)</td><td>premium (insider risk, dlp, audit)</td><td>minimal</td></tr>
+                <tr><td>endpoint & app management</td><td class="center">✘</td><td>✔ (intune)</td><td>✔ (via p1)</td><td>✔ (via p2)</td><td class="center">✘</td></tr>
+                <tr><td>advanced security (mfa, ca)</td><td>basic</td><td>✔ (entra id p1)</td><td>✔ (entra id p1)</td><td>✔✔ (entra id p2)</td><td>basic only</td></tr>
+              </tbody>
+            </table>
+            <p class="note">† Teams Phone lets Teams act as a PBX. Included with the E5 Teams Phone option; otherwise available as an add‑on.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary>ms license tiers vs teams availability</summary>
+          <div class="pre">Business Plans
+• Business Basic → Teams included (full meetings, chat, collaboration)
+• Business Standard → Teams included (same as Basic)
+• Business Premium → Teams included (plus advanced security & device management)
+
+Enterprise Plans
+• E3 → Teams included (with full enterprise-level compliance features)
+• E5 → Teams included (adds advanced security, compliance, analytics)
+
+Frontline Plans
+• F1 → Teams included, but with restrictions (no recording, limited storage, etc.)
+• F3 → Teams included (better than F1, but lighter than Business Premium/E3)</div>
+        </details>
+
+        <details>
+          <summary>takeaways for 401 auto</summary>
+          <div class="pre">• Frontline staff (F3): Good for chat and quick collaboration, but no recording and limited OneDrive (2 GB).
+• Sales/Service/Admin (Business Premium): Full Teams experience with Intune and security.
+• Managers/Finance/HR (E3): Enterprise compliance (litigation hold, mailbox archive).
+• Executives/IT leadership (E5): Advanced security + Teams Phone for external calling, if required.</div>
+        </details>
+
+        <details>
+          <summary>departments and counts</summary>
+          <div class="pre">Departments (19): Accounting; Administration; Business Development Centre; Client Acquisition; Data; Facilities; Hospitality; Human Resources; Information Technology; Innovation and Digital Transformation; Legal Affairs; Marketing; Operations; Parts; Payroll; Sales; Service; The Blackshop; Vehicle Acquisition.
+
+Counts:
+• Accounting: 54
+• Administration: 81
+• Business Development Centre: 14
+• Client Acquisition: 2
+• Data: 2
+• Facilities: 3
+• Hospitality: 20
+• Human Resources: 9
+• Information Technology: 4
+• Innovation and Digital Transformation: 3
+• Legal Affairs: 1
+• Marketing: 11
+• Operations: 17
+• Parts: 34
+• Payroll: 5
+• Sales: 349
+• Service: 424
+• The Blackshop: 33
+• Vehicle Acquisition: 3
+Total employees: 1,068 (rough estimate)</div>
+        </details>
+
+        <details>
+          <summary>job titles by department (verbatim list)</summary>
+          <div class="pre">Accounting:
+- Accounting Analyst
+- Accounting Analyst-Deals
+- Accounting Assistant
+- Accounting Clerk
+- Accounting Supervisor
+- Accounting Supervisor - Banking
+- Accounting Supervisor - Trailer Deals
+- Accounts Payable
+- Accounts Payable Accountant
+- Accounts Payable Assistant
+- Accounts Payable Supervisor - Credit Cards
+- Assistant Accounts Payable Supervisor
+- Assistant Controller
+- Associate CFO
+- Controller, Baywest Division
+- Manager of Internal Audit
+- Marine Controller
+- Office Manager
+- Posting Department Manager
+- VP – Finance
+
+Administration:
+- Assistant Customer Care Manager
+- Funding Manager
+- Group Controller
+- HR Assistant
+- Inter-Company Supervisor
+- Inventory Administrator
+- Inventory Assistant
+- Inventory Auditor
+- Inventory Field Auditor
+- Receptionist
+- Senior Inventory Auditor
+- Vehicle Acquisition Assistant
+- Warranty Manager
+- YAL & Export Supervisor
+
+Business Development Centre:
+- BDC Representative
+
+Client Acquisition:
+- Client Acquisition Specialist
+- Front End Web Developer
+
+Data:
+- Data Analyst
+- Executive Data Engineer
+
+Facilities:
+- Construction Project Manager
+
+Hospitality:
+- Director, Hospitality
+- Hostess
+- Housekeeper
+- Lead Server
+- Line Cook
+- Server
+- Server/Bartender
+- Sous Chef
+
+Human Resources:
+- Health & Safety Manager
+- Human Resources Manager
+- Recruiting Assistant
+
+Information Technology:
+- Director, IT
+- IT Network and Systems Administrator
+- System Administrator
+
+Innovation and Digital Transformation:
+- Director of Innovation & Digital Transformation
+- Senior Product Manager
+
+Marketing:
+- Brand Specialist
+- Digital Marketing Specialist
+- Full Stack Engineer
+- Marketing Project Manager
+
+Operations:
+- Associate Vice President of Automotive
+- Associate Vice President, Franchise Operations
+- Business and Strategy Consultant
+- CEO
+- Director, 401 Operations
+- Director, Inventory
+- Director, RV Development
+- Senior Vice President
+
+Parts:
+- Assistant Parts Manager
+- Parts Advisor
+- Parts Auditor
+- Parts Delivery/Shuttle Driver
+- Parts Manager
+
+Payroll:
+- Payroll Coordinator
+- Payroll Manager - Pembroke and Renfrew Division
+
+Sales:
+- Automotive Business Manager
+- BDC Representative
+- Business Manager
+- Business Office Manager
+- Delivery Driver
+- F&I Advisor
+- Finance Manager
+- Floor Manager
+- General Manager
+- General Manager, RV
+- General Sales Manager
+- Lot Attendant
+- Lot Manager
+- Manager, Used Vehicle Franchise Operations
+- Powersport & Marine Sales
+- Product Specialist
+- RV Account Manager
+- RV Business Manager
+- RV Sales & Finance Manager
+- Regional Fixed Operations Manager - Baywest Division
+- Retail Sales Manager
+- Sales Manager
+- Sales Representative
+- Service Advisor
+- Shuttle Driver
+- Sub-Prime Finance Manager
+- Used Car Manager
+- Vehicle Delivery Coordinator
+- Vice President, 401 Auto RV Canada Inc.
+- Vice President, Baywest Division
+
+Service:
+- 310S Tech
+- 310s Technician
+- 310s Technician/Shop Foreman
+- Appointment Coordinator
+- Apprentice
+- Apprentice Technician
+- Assistant Automotive Service Manager
+- Assistant Fixed Operations Manager
+- Assistant RV Technician
+- Assistant Service Manager
+- Automotive Marketing
+- Campy Counselor
+- Co-op Student
+- Co-op Student/Apprentice
+- Delivery Driver
+- Detailer
+- Detailer/ Shuttle Driver
+- Detailer/Lot Attendant
+- Directing Manager of Logistics
+- Driver/General Labourer
+- Fixed Operations Manager
+- Fixed Operations, Volkswagen Division
+- Forklift Operator
+- General Labourer
+- General Labourer/Detailer
+- General Labourer/Lot Attendant
+- High Voltage Expert Technician
+- Junior Service Advisor
+- Lube & Tire Technician
+- Lube Technician
+- Marine Detailer
+- Master Tech
+- Parts Advisor
+- Parts and Service Advisor
+- Parts and Service Associate
+- Powersports & Marine Technician
+- Powersports Technician
+- Quality Assurance
+- RV Delivery Driver
+- RV Detailer
+- RV Detailer/General Labourer
+- RV Service Advisor
+- RV Tech - I
+- RV Tech - II
+- RV Technician
+- RV Technician Assistant
+- Red Seal Technician
+- Security
+- Security Supervisor
+- Senior Service Advisor
+- Service Advisor
+- Service Coordinator
+- Service Manager
+- Shop Foreman
+- Shop Helper/ Technician
+- Shuttle / Cleaner
+- Shuttle Driver
+- Technician
+- Technician Assistant
+- Technician/Shop Foreman
+- Warranty Administration Manager
+
+The Blackshop:
+- Cook
+- Dish Washer
+- Dishwasher/Prep Cook
+- Executive Chef
+- Hospitality Manager
+- Hostess
+- Line Cook
+- Sales Manager
+- Server
+- Sous Chef
+
+Vehicle Acquisition:
+- Director of Vehicle Acquisition
+- Vehicle Acquisition Assistant
+- Wholesale Remarketing Specialist
+
+Job titles (179 unique job titles)</div>
+        </details>
+
+        <details>
+          <summary>license distribution by department</summary>
+          <div class="pre">F3 (Frontline Worker): receptionists, lot attendants, detailers, shuttle drivers, technicians, etc.
+• Administration → 60 of 81
+• Parts → 25 of 34
+• Service → 350 of 424
+• The Blackshop → 28 of 33
+• Hospitality → 15 of 20
+Estimated F3 total: ~478 users
+
+E3 (Knowledge Workers): managers, finance, HR, accounting, payroll, sales managers, IT admins (without PIM), marketing, etc.
+• Accounting → 54
+• Administration → 20
+• Business Development Centre → 14
+• Client Acquisition → 2
+• Data → 2
+• Facilities → 3
+• Hospitality → 5
+• Human Resources → 9
+• Information Technology → 3
+• Innovation & Digital Transformation → 2
+• Legal Affairs → 1
+• Marketing → 10
+• Operations → 12
+• Payroll → 5
+• Sales → 200
+• Service → 65
+• The Blackshop → 5
+• Vehicle Acquisition → 3
+Estimated E3 total: ~409 users
+
+E5 (Execs + Security/Critical IT)
+• CEO, VPs, SVPs, EVPs, Associate VPs (~15 total across Sales, Ops, Finance, etc.)
+• IT Director (1) + System/Network Admin (2) → 3
+• Directors across Operations, Marketing, Legal, Innovation, Hospitality (~20)
+Estimated E5 total: ~38 users
+
+Business Premium: edge cases needing Intune/Defender but not full E3/E5 → ~143 users</div>
+        </details>
+
+        <details>
+          <summary>pricing and projections</summary>
+          <div class="pre">Pricing (CAD per user/month):
+• F3: $12 • Business Premium: $29 • E3: $44 • E5: $70
+
+Monthly Cost Projection:
+F3 478 × $12 = $5,736
+Business Premium 143 × $29 = $4,147
+E3 409 × $44 = $17,996
+E5 38 × $70 = $2,660
+Total = $30,539
+
+Annual Projection: $366,468</div>
+        </details>
+
+        <details>
+          <summary>department-by-department breakdown and monthly costs</summary>
+          <div class="pre">Accounting (54): F3 0 · E3 45 · E5 2 · BP 7 → $2,323
+Administration (81): F3 64 · E3 12 · E5 2 · BP 3 → $1,523
+Business Development Centre (14): F3 0 · E3 14 · E5 0 · BP 0 → $616
+Client Acquisition (2): F3 0 · E3 1 · E5 0 · BP 1 → $73
+Data (2): F3 0 · E3 1 · E5 0 · BP 1 → $73
+Facilities (3): F3 0 · E3 2 · E5 0 · BP 1 → $131
+Hospitality (20): F3 15 · E3 4 · E5 0 · BP 1 → $338
+Human Resources (9): F3 0 · E3 8 · E5 0 · BP 1 → $361
+Information Technology (4): F3 0 · E3 2 · E5 1 · BP 1 → $221
+Innovation & Digital (3): F3 0 · E3 2 · E5 1 · BP 0 → $158
+Legal Affairs (1): F3 0 · E3 0 · E5 1 · BP 0 → $70
+Marketing (11): F3 0 · E3 9 · E5 1 · BP 1 → $520
+Operations (17): F3 0 · E3 12 · E5 4 · BP 1 → $844
+Parts (34): F3 25 · E3 5 · E5 1 · BP 3 → $688
+Payroll (5): F3 0 · E3 4 · E5 0 · BP 1 → $217
+Sales (349): F3 105 · E3 191 · E5 18 · BP 35 → $13,731
+Service (424): F3 340 · E3 64 · E5 13 · BP 7 → $7,779
+The Blackshop (33): F3 26 · E3 5 · E5 1 · BP 1 → $612
+Vehicle Acquisition (3): F3 0 · E3 2 · E5 0 · BP 1 → $131
+
+Total across all departments (rough in source text): F3 ~570 · E3 ~387 · E5 ~44 · Business Premium ~67 → ≈ $30,500</div>
+        </details>
+
+        <details>
+          <summary>licensing proposal analysis and vendor comparison</summary>
+          <div class="pre">Context: vendor proposal for 800 employees vs internal 1,068.
+
+Vendor Quote (Trusted Tech Team):
+• E3: 500
+• Business Premium: 300
+• Monthly cost: $29,176.25 • Annual: $350,115.00
+• Pricing (CAD/user/mo): E3 $43.15 (disc. from $50.77), BP $25.33 (disc. from $29.80)
+• Claimed savings vs current vendor: $61,785/year
+
+Internal Projection (1,068 employees):
+• F3 478 • E3 409 • E5 38 • Business Premium 143
+• Monthly: ~$30,539 • Annual: ~$366,468
+
+Key differences:
+1) User base — Vendor 800 vs Internal 1,068
+2) License mix — Vendor only E3/BP vs Internal granular F3/E3/E5/BP
+3) Monthly costs — Vendor $29,176.25 (800 users) vs Internal $30,539 (1,068 users)
+   Per‑user: Vendor $36.47 vs Internal $28.59 (cheaper per user while covering more)
+
+Scaled vendor model to 1,068 employees:
+• E3 768 × $43.15 = $33,142.20
+• BP 300 × $25.33 = $7,599.00
+• Monthly total = $40,741.20 • Annual = $488,894.40
+
+Comparison at 1,068 employees:
+• Vendor (scaled) — Monthly $40,741 · Annual $488,894
+• Internal projection — Monthly $30,539 · Annual $366,468
+
+Key insight: internal model saves ≈ $8,374/mo (≈ $100,488/yr) vs scaled vendor while right‑sizing with F3 and securing exec/IT with E5.
+Scalability: vendor quote under‑licenses by 268 if applied as‑is; internal model covers all staff.
+
+Conclusion & recommendation:
+• Adjust vendor to 1,068 users • Introduce F3 for frontline • Reserve E5 for execs/IT
+This balances cost and operational/security needs. (figures are rough estimates as noted in source)</div>
+        </details>
+      </div>
+    </section>
 
     <section class="foot">
       projections are planning estimates; adjust mix as job roles change.
     </section>
   </main>
 
-  <!-- your existing scripts remain untouched -->
   <script>
-    /* (…your long JS block stays exactly as before…) */
+    // ---------- data (from your rough summary) ----------
+    const pricing = { F3:12, BP:29, E3:44, E5:70 }; // CAD per user/month
+
+    const tiers = [
+      { key:'F3', name:'F3 (Frontline)', users:478, color:'#7c8a99' },
+      { key:'BP', name:'Business Premium', users:143, color:'#a0b4ff' },
+      { key:'E3', name:'E3', users:409, color:'#ef233c' },
+      { key:'E5', name:'E5', users:38,  color:'#ffd43b' }
+    ];
+
+    // vendor numbers
+    const vendor = {
+      quote800: { seats:800, e3:500, bp:300, pE3:43.15, pBP:25.33 },
+      scaled1068: { seats:1068, e3:768, bp:300, pE3:43.15, pBP:25.33 }
+    };
+
+    const depts = [
+      {dept:'Accounting',                    headcount:54,  f3:0,   bp:7,  e3:45, e5:2,  monthly:2323},
+      {dept:'Administration',                headcount:81,  f3:64,  bp:3,  e3:12, e5:2,  monthly:1523},
+      {dept:'Business Development Centre',   headcount:14,  f3:0,   bp:0,  e3:14, e5:0,  monthly:616},
+      {dept:'Client Acquisition',            headcount:2,   f3:0,   bp:1,  e3:1,  e5:0,  monthly:73},
+      {dept:'Data',                          headcount:2,   f3:0,   bp:1,  e3:1,  e5:0,  monthly:73},
+      {dept:'Facilities',                    headcount:3,   f3:0,   bp:1,  e3:2,  e5:0,  monthly:131},
+      {dept:'Hospitality',                   headcount:20,  f3:15,  bp:1,  e3:4,  e5:0,  monthly:338},
+      {dept:'Human Resources',               headcount:9,   f3:0,   bp:1,  e3:8,  e5:0,  monthly:361},
+      {dept:'Information Technology',        headcount:4,   f3:0,   bp:1,  e3:2,  e5:1,  monthly:221},
+      {dept:'Innovation & Digital',          headcount:3,   f3:0,   bp:0,  e3:2,  e5:1,  monthly:158},
+      {dept:'Legal Affairs',                 headcount:1,   f3:0,   bp:0,  e3:0,  e5:1,  monthly:70},
+      {dept:'Marketing',                     headcount:11,  f3:0,   bp:1,  e3:9,  e5:1,  monthly:520},
+      {dept:'Operations',                    headcount:17,  f3:0,   bp:1,  e3:12, e5:4,  monthly:844},
+      {dept:'Parts',                         headcount:34,  f3:25,  bp:3,  e3:5,  e5:1,  monthly:688},
+      {dept:'Payroll',                       headcount:5,   f3:0,   bp:1,  e3:4,  e5:0,  monthly:217},
+      {dept:'Sales',                         headcount:349, f3:105, bp:35, e3:191,e5:18, monthly:13731},
+      {dept:'Service',                       headcount:424, f3:340, bp:7,  e3:64, e5:13, monthly:7779},
+      {dept:'The Blackshop',                 headcount:33,  f3:26,  bp:1,  e3:5,  e5:1,  monthly:612},
+      {dept:'Vehicle Acquisition',           headcount:3,   f3:0,   bp:1,  e3:2,  e5:0,  monthly:131}
+    ];
+
+    // ---------- helpers ----------
+    const sum = (arr, sel) => arr.reduce((a,x)=>a+(+x[sel]||0),0);
+    const fmt = n => n.toLocaleString('en-CA');
+
+    const totalUsers = sum(tiers,'users');            // 1068
+    const mTotalsByTier = Object.fromEntries(tiers.map(t=>[t.key, t.users * pricing[t.key]]));
+    const monthlyTotal = Object.values(mTotalsByTier).reduce((a,b)=>a+b,0); // 30539
+    const annualTotal = monthlyTotal * 12;
+
+    // ---------- KPIs ----------
+    const kpisEl = document.getElementById('kpis');
+    kpisEl.innerHTML = `
+      <div class="kpi">
+        <div class="v">${fmt(totalUsers)}</div>
+        <div class="l">total users covered</div>
+        <div class="chip"><span class="dot e3"></span> mix: ${tiers.map(t=>`${t.name.split(' ')[0]} ${fmt(t.users)}`).join(' · ')}</div>
+      </div>
+      <div class="kpi">
+        <div class="v">$${fmt(monthlyTotal)}</div>
+        <div class="l">projected monthly (CAD)</div>
+        <div class="chip"><span class="dot bp"></span> avg $${(monthlyTotal/totalUsers).toFixed(2)}/user/mo</div>
+      </div>
+      <div class="kpi">
+        <div class="v">$${fmt(annualTotal)}</div>
+        <div class="l">projected annual (CAD)</div>
+        <div class="chip"><span class="dot f3"></span> pricing: F3 $${pricing.F3}, BP $${pricing.BP}, E3 $${pricing.E3}, E5 $${pricing.E5}</div>
+      </div>
+    `;
+
+    // ---------- bars: license mix ----------
+    const maxUsers = Math.max(...tiers.map(t=>t.users));
+    const mixBars = document.getElementById('mixBars');
+    mixBars.innerHTML = tiers.map(t=>{
+      const w = Math.round((t.users/maxUsers)*100);
+      return `<div class="bar">
+        <div class="bar-label">${t.name}</div>
+        <div class="bar-rail"><div class="bar-fill" style="width:${w}%; background:${t.color}"></div></div>
+        <div class="bar-val">${fmt(t.users)} users</div>
+      </div>`;
+    }).join('');
+
+    // ---------- bars: costs ----------
+    const costData = [
+      {label:'F3', val: mTotalsByTier.F3, color:'#7c8a99'},
+      {label:'Business Premium', val: mTotalsByTier.BP, color:'#a0b4ff'},
+      {label:'E3', val: mTotalsByTier.E3, color:'#ef233c'},
+      {label:'E5', val: mTotalsByTier.E5, color:'#ffd43b'}
+    ];
+    const maxCost = Math.max(...costData.map(x=>x.val));
+    const costBars = document.getElementById('costBars');
+    costBars.innerHTML = costData.map(x=>{
+      const w = Math.round((x.val/maxCost)*100);
+      return `<div class="bar">
+        <div class="bar-label">${x.label}</div>
+        <div class="bar-rail"><div class="bar-fill" style="width:${w}%; background:${x.color}"></div></div>
+        <div class="bar-val">$${fmt(x.val)}</div>
+      </div>`;
+    }).join('');
+
+    // ---------- vendor comparison ----------
+    function vendorMonthly(v){
+      return v.e3 * v.pE3 + v.bp * v.pBP;
+    }
+    const vendor800Monthly = vendorMonthly(vendor.quote800);
+    const vendorScaledMonthly = vendorMonthly(vendor.scaled1068);
+
+    const cmpTbody = document.getElementById('cmpTbody');
+    const rows = [
+      {label:'Vendor quote (original)', seats:vendor.quote800.seats, monthly:vendor800Monthly},
+      {label:'Vendor model (scaled to 1,068)', seats:vendor.scaled1068.seats, monthly:vendorScaledMonthly},
+      {label:'Internal projection', seats:totalUsers, monthly:monthlyTotal}
+    ].map(r=>{
+      const annual = r.monthly * 12;
+      const avg = r.monthly / r.seats;
+      return `<tr>
+        <td>${r.label}</td>
+        <td class="num">${fmt(r.seats)}</td>
+        <td class="num">$${fmt(r.monthly)}</td>
+        <td class="num">$${fmt(annual)}</td>
+        <td class="num">$${avg.toFixed(2)}</td>
+      </tr>`;
+    }).join('');
+    cmpTbody.innerHTML = rows;
+
+    document.getElementById('vendor800Monthly').textContent = `$${fmt(vendor800Monthly)}`;
+    document.getElementById('scaledMonthly').textContent = `$${fmt(vendorScaledMonthly)}`;
+    const delta = monthlyTotal - vendorScaledMonthly; // negative means cheaper than vendor
+    const deltaEl = document.getElementById('deltaMonthly');
+    deltaEl.textContent = `${delta < 0 ? '-' : ''}$${fmt(Math.abs(delta))}`;
+    deltaEl.parentElement.querySelector('.l').textContent += ` (internal ${delta < 0 ? 'cheaper' : 'more expensive'})`;
+
+    // ---------- table: departments ----------
+    const tbody = document.querySelector('#deptTbl tbody');
+    const q = document.getElementById('q');
+    let sortKey = 'dept', sortDir = 1;
+
+    function mixCells(d){
+      const total = d.f3 + d.bp + d.e3 + d.e5 || 1;
+      const w = {
+        f3: (d.f3/total*100).toFixed(2),
+        bp: (d.bp/total*100).toFixed(2),
+        e3: (d.e3/total*100).toFixed(2),
+        e5: (d.e5/total*100).toFixed(2)
+      };
+      return `<div class="stack" title="F3 ${w.f3}% · BP ${w.bp}% · E3 ${w.e3}% · E5 ${w.e5}%">
+        <div class="seg f3" style="width:${w.f3}%"></div>
+        <div class="seg bp" style="width:${w.bp}%"></div>
+        <div class="seg e3" style="width:${w.e3}%"></div>
+        <div class="seg e5" style="width:${w.e5}%"></div>
+      </div>`;
+    }
+
+    function renderTable(){
+      const term = (q.value||'').toLowerCase().trim();
+      const rows = depts
+        .filter(d => !term || d.dept.toLowerCase().includes(term))
+        .slice()
+        .sort((a,b)=>{
+          const A=a[sortKey], B=b[sortKey];
+          if (typeof A==='string') return A.localeCompare(B)*sortDir;
+          return (A-B)*sortDir;
+        })
+        .map(d=>`<tr>
+            <td>${d.dept}</td>
+            <td class="num">${fmt(d.headcount)}</td>
+            <td class="num">${fmt(d.f3)}</td>
+            <td class="num">${fmt(d.bp)}</td>
+            <td class="num">${fmt(d.e3)}</td>
+            <td class="num">${fmt(d.e5)}</td>
+            <td>${mixCells(d)}</td>
+            <td class="num">$${fmt(d.monthly)}</td>
+          </tr>`).join('');
+      tbody.innerHTML = rows || `<tr><td colspan="8" class="note">no matches</td></tr>`;
+    }
+    renderTable();
+
+    q.addEventListener('input', renderTable);
+    document.querySelectorAll('#deptTbl th').forEach(th=>{
+      th.addEventListener('click', ()=>{
+        const k = th.dataset.k;
+        if(!k) return;
+        sortDir = (sortKey===k) ? -sortDir : 1;
+        sortKey = k; renderTable();
+      });
+    });
+
+    // ---------- export CSVs ----------
+    document.getElementById('exportCsv').addEventListener('click', (e)=>{
+      const header = ['Department','Headcount','F3','Business Premium','E3','E5','Monthly (CAD)'];
+      const rows = depts.map(d=>[d.dept,d.headcount,d.f3,d.bp,d.e3,d.e5,d.monthly]);
+      const csv = [header, ...rows].map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv],{type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      e.currentTarget.href = url;
+    });
+
+    document.getElementById('exportDeptMix').addEventListener('click', (e)=>{
+      const header = ['Department','F3 %','Business Premium %','E3 %','E5 %'];
+      const rows = depts.map(d=>{
+        const total = d.f3 + d.bp + d.e3 + d.e5 || 1;
+        return [
+          d.dept,
+          ((d.f3/total)*100).toFixed(2),
+          ((d.bp/total)*100).toFixed(2),
+          ((d.e3/total)*100).toFixed(2),
+          ((d.e5/total)*100).toFixed(2)
+        ];
+      });
+      const csv = [header, ...rows].map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv],{type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      e.currentTarget.href = url;
+    });
+      // --- enhanced UI for PDF transcription ---
+    (function(){
+      const acc = document.getElementById('pdfText');
+      if(!acc) return;
+      const details = Array.from(acc.querySelectorAll('details'));
+      const toc = document.getElementById('pdfToc');
+      const q = document.getElementById('pdfSearch');
+      const btnExp = document.getElementById('pdfExpandAll');
+      const btnCol = document.getElementById('pdfCollapseAll');
+
+      // build toc + ids
+      toc.innerHTML = details.map((d,i)=>{
+        const t = d.querySelector('summary')?.textContent?.trim()||`section ${i+1}`;
+        d.id = `s${i+1}`;
+        return `<a href="#s${i+1}" data-i="${i}">${t}</a>`;
+      }).join('');
+
+      toc.addEventListener('click', e=>{
+        const a = e.target.closest('a'); if(!a) return;
+        e.preventDefault();
+        const i = +a.dataset.i; const d = details[i];
+        if(!d) return; d.open = true; d.scrollIntoView({behavior:'smooth', block:'start'});
+        Array.from(toc.querySelectorAll('a')).forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+      });
+
+      // copy disabled per request
+      // expand / collapse
+      btnExp?.addEventListener('click', e=>{ e.preventDefault(); details.forEach(d=>d.open=true); });
+      btnCol?.addEventListener('click', e=>{ e.preventDefault(); details.forEach(d=>d.open=false); });
+
+      // search filter
+      q?.addEventListener('input', ()=>{
+        const term = (q.value||'').toLowerCase().trim();
+        details.forEach(d=>{
+          const txt = d.innerText.toLowerCase();
+          const hit = !term || txt.includes(term);
+          d.style.display = hit ? 'block' : 'none';
+          if(hit && term) d.open = true;
+        });
+      });
+
+      // scroll spy
+      const spy = ()=>{
+        const links = Array.from(toc.querySelectorAll('a'));
+        let idx = details.findIndex(d=>{
+          const r = d.getBoundingClientRect();
+          return r.top >= 0 && r.top < (window.innerHeight*0.35);
+        });
+        if(idx < 0) idx = details.length - 1;
+        links.forEach((a,i)=>a.classList.toggle('active', i===idx));
+      };
+      document.addEventListener('scroll', spy, {passive:true}); spy();
+    })();
   </script>
-
-  <!-- Vite/React entry: keeps the lanyard rendering inside #root -->
-
   <a class="home-btn top-right" href="/index.html" aria-label="Back to home" title="Home">
-    <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M3 10.5L12 3l9 7.5"></path>
-      <path d="M5 11.5v8.5a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 20V11.5"></path>
-      <path d="M10 21V14h4v7"></path>
-    </svg>
-    Home
-  </a>
+  <svg class="home-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <!-- minimalist home outline -->
+    <path d="M3 10.5L12 3l9 7.5"></path>
+    <path d="M5 11.5v8.5a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 20V11.5"></path>
+    <path d="M10 21V14h4v7"></path>
+  </svg>
+  Home
+</a>
 </body>
 </html>
