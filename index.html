@@ -6,7 +6,9 @@
 <title>Sirish Yadav — IT Network & Systems Administrator</title>
 <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
+<!-- fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -41,11 +43,16 @@
     overflow-x:hidden;
   }
 
-  /* animated clouds background (svg or img) */
+  /* denser animated clouds background */
   .bg{
     position:fixed; inset:0; z-index:0; width:100%; height:100%;
     pointer-events:none; overflow:hidden;
   }
+  .bg .cloud{position:absolute; width:120%; height:120%; inset:-10%}
+  .bg .base{opacity:.90; transform:none}
+  .bg .mirror{opacity:.70; transform:scaleX(-1)}
+  .bg .offset1{opacity:.55; transform:translate(-8%, -6%) scale(1.08)}
+  .bg .offset2{opacity:.50; transform:translate(8%, 6%) scale(1.10)}
   .bg object,.bg img,.bg svg{ width:100%; height:100%; display:block }
 
   /* two-column layout: intro left, lanyard right-top */
@@ -227,69 +234,55 @@
     width:100%; height:100%; object-fit:cover; object-position:center 20%; display:block;
   }
 
-  /* floating magical quote */
-.quip{
-  margin: 10px 14px 12px;
-  padding: 10px 12px 14px;
-  text-align: center;
-  font: 16px/1.55 "Patrick Hand", system-ui;
-  color:#111;
-  background: rgba(255,255,255,.75);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  backdrop-filter: blur(6px);
-  position: relative;
-  transform: translateZ(0);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-.quip:hover{
-  transform: rotate(-0.5deg) translateY(-2px);
-  box-shadow: 0 10px 28px rgba(0,0,0,.15);
-}
+  /* MAGIC SPELL SCROLL QUIP (parchment vibe) */
+  .quip{
+    --paper-top:#faf7e8;
+    --paper-bot:#f3ecd2;
+    --paper-grain: rgba(0,0,0,.03);
 
-/* each word fades in like a spell */
-.quip .w{
-  display:inline-block;
-  opacity:0;
-  will-change: transform, opacity, filter;
-  animation: spell .6s ease forwards;
-  animation-delay: calc(var(--i) * 80ms);
-}
-@keyframes spell{
-  from{ opacity:0; transform: translateY(6px) scale(.98); filter: blur(1px); }
-  to{   opacity:1; transform: translateY(0)  scale(1);    filter: blur(0);   }
-}
+    position:relative;
+    margin: 10px 14px 12px;
+    padding: 12px 16px 16px 46px; /* room for wand on the left */
+    text-align:center;
+    color:#3b2f1c;
+    font: 18px/1.5 "IM Fell English SC", serif;
 
-/* glow underline */
-.quip::after{
-  content:"";
-  position:absolute; left:8%; right:8%; bottom:6px; height:2px;
-  background: linear-gradient(90deg,#ffd200 0%, #ffffff 50%, #ffd200 100%);
-  border-radius:999px;
-  filter: drop-shadow(0 0 6px rgba(255,210,0,.75));
-  opacity:.95;
-}
+    background:
+      linear-gradient(180deg, var(--paper-top), var(--paper-bot)),
+      repeating-linear-gradient(45deg, var(--paper-grain) 0 2px, transparent 2px 6px);
+    border:2px dashed #d4b06a;
+    border-radius: 14px;
+    box-shadow: 0 8px 26px rgba(0,0,0,.10);
+    transition: box-shadow .25s ease, transform .25s ease;
+    backdrop-filter: blur(4px);
+  }
+  /* subtle torn-edge illusion (top & bottom) */
+  .quip .tear{
+    position:absolute; left:8px; right:8px; height:10px; pointer-events:none;
+    background:
+      radial-gradient(8px 6px at 8px 6px, rgba(0,0,0,.10) 52%, transparent 53%) repeat-x;
+    background-size:16px 10px;
+    opacity:.35;
+  }
+  .quip .tear.top{ top:-6px }
+  .quip .tear.bot{ bottom:-6px; transform:scaleY(-1) }
 
-/* tiny spark that slides along the underline */
-.quip::before{
-  content:"";
-  position:absolute; bottom:4px; left:8%;
-  width:14px; height:14px; border-radius:50%;
-  background: radial-gradient(circle, #ffffff, #ffd200 60%, rgba(255,210,0,0) 65%);
-  filter: blur(.2px);
-  animation: spark 2.6s ease-in-out infinite;
-}
-@keyframes spark{
-  0%   { transform: translateX(0); opacity:.8 }
-  50%  { opacity:1 }
-  100% { transform: translateX(84vw); opacity:.75 } /* wide travel; will be clipped by the card */
-}
+  /* wand icon on the left */
+  .quip .wand{
+    position:absolute; left:12px; top:50%; transform:translateY(-50%) rotate(-18deg);
+    font-size:20px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.2));
+  }
 
-/* subtle shimmer on hover */
-.quip:hover .w{
-  text-shadow: 0 0 6px rgba(255,210,0,.55);
-}
-
+  /* glowing underline appears on hover */
+  .quip::after{
+    content:""; position:absolute; left:14px; right:14px; bottom:8px; height:2px;
+    background: linear-gradient(90deg,#ffd36a 0%, #ffffff 50%, #ffd36a 100%);
+    border-radius:999px;
+    box-shadow:0 0 10px rgba(255,210,0,.55);
+    opacity:0; transition:opacity .25s ease;
+  }
+  .quip:hover::after{ opacity:1 }
+  .quip:hover{ box-shadow:0 14px 32px rgba(0,0,0,.16); transform: translateY(-2px) }
 
   /* responsive: stack vertically on narrow screens */
   @media (max-width: 1100px){
@@ -297,7 +290,6 @@
     .lanyard-wrap{ max-width:min(520px, 94vw) }
     .swing{ width:min(420px, 92vw) }
   }
-
   @media (max-width: 520px){
     .terminal{ max-width: 88vw }
   }
@@ -305,9 +297,12 @@
 </head>
 <body>
 
-<!-- background -->
+<!-- background: multiple layers (base, mirrored, offsets) to reduce empty spots -->
 <div class="bg" aria-hidden="true">
-  <object type="image/svg+xml" data="clouds.svg"></object>
+  <object class="cloud base"   type="image/svg+xml" data="clouds.svg"></object>
+  <object class="cloud mirror" type="image/svg+xml" data="clouds.svg"></object>
+  <object class="cloud offset1" type="image/svg+xml" data="clouds.svg"></object>
+  <object class="cloud offset2 mirror" type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
 <div class="stage">
@@ -360,11 +355,18 @@
         <div class="photo">
           <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
         </div>
-        <div class="quip">Wingardium VLAN-iosa — accio packets to the right segment.</div>
+        <!-- parchment-style quip -->
+        <div class="quip">
+          <span class="wand" aria-hidden="true">🪄</span>
+          <span class="paper">Wingardium VLAN-iosa — accio packets to the right segment.</span>
+          <span class="tear top" aria-hidden="true"></span>
+          <span class="tear bot" aria-hidden="true"></span>
+        </div>
       </section>
     </div>
   </aside>
 </div>
+
 <script>
   // quotes: one will be chosen at random on each page load
   const QUIPS = [
@@ -401,9 +403,9 @@
   ];
 
   function setRandomQuip(){
-    const q = document.querySelector('.quip');
-    if (!q || !QUIPS.length) return;
-    q.textContent = QUIPS[Math.floor(Math.random() * QUIPS.length)];
+    const slot = document.querySelector('.quip .paper');
+    if (!slot || !QUIPS.length) return;
+    slot.textContent = QUIPS[Math.floor(Math.random() * QUIPS.length)];
   }
 
   // existing terminal animation (unchanged)
@@ -446,81 +448,60 @@
     typeNext();
   }
 
- function typeNext(){
-  if (i >= LINES.length) return loop();
-  current = makeLine(LINES[i]);
-  if (i>0) term.appendChild(document.createTextNode('\n'));
-  term.appendChild(current.node);
-  appendCaret();
-  if (current.isTick){
-    setTimeout(()=>{ i++; typeNext(); }, 450);
-  } else {
-    j=0; tick();
+  function typeNext(){
+    if (i >= LINES.length) return loop();
+    current = makeLine(LINES[i]);
+    if (i>0) term.appendChild(document.createTextNode('\n'));
+    term.appendChild(current.node);
+    appendCaret();
+    if (current.isTick){
+      setTimeout(()=>{ i++; typeNext(); }, 450);
+    } else {
+      j=0; tick();
+    }
   }
-}
 
-function tick(){
-  if (!typing) return;
-  const s = LINES[i];
-  if (j < s.length){
-    current.target.textContent += s.charAt(j++);
-    setTimeout(tick, 12 + Math.random()*55);
-  } else {
-    i++; setTimeout(typeNext, 300);
+  function tick(){
+    if (!typing) return;
+    const s = LINES[i];
+    if (j < s.length){
+      current.target.textContent += s.charAt(j++);
+      setTimeout(tick, 12 + Math.random()*55);
+    } else {
+      i++; setTimeout(typeNext, 300);
+    }
   }
-}
 
-function loop(){
-  typing=false;
-  setTimeout(()=>{
-    caret.remove();
-    term.style.transition = 'opacity .45s ease';
-    term.style.opacity = '0';
+  function loop(){
+    typing=false;
     setTimeout(()=>{
-      term.style.transition = 'none';
-      term.style.opacity = '1';
-      start();
-    }, 480);
-  }, 900);
-}
+      caret.remove();
+      term.style.transition = 'opacity .45s ease';
+      term.style.opacity = '0';
+      setTimeout(()=>{
+        term.style.transition = 'none';
+        term.style.opacity = '1';
+        start();
+      }, 480);
+    }, 900);
+  }
 
-function appendCaret(){ if (term.lastElementChild !== caret) term.appendChild(caret); }
-new MutationObserver(appendCaret).observe(term, {childList:true});
+  function appendCaret(){ if (term.lastElementChild !== caret) term.appendChild(caret); }
+  new MutationObserver(appendCaret).observe(term, {childList:true});
 
-// helper: wrap each word with an index for staggered animation
-function decorateQuipText(text){
-  // split on spaces but keep spaces as tokens so spacing is preserved
-  const parts = text.split(/(\s+)/);
-  return parts.map((p, i) => {
-    if (/^\s+$/.test(p)) return p; // keep spaces as-is
-    return `<span class="w" style="--i:${i}">${p}</span>`;
-  }).join("");
-}
-
-// pick and render a random quote into .quip with word-by-word animation
-function setRandomQuip(){
-  const q = document.querySelector('.quip');
-  if (!q || !QUIPS?.length) return;
-  const chosen = QUIPS[Math.floor(Math.random() * QUIPS.length)];
-  q.innerHTML = decorateQuipText(chosen);
-}
-
-/* kick everything off (works whether the script is in <head> or end of <body>) */
-function initPage(){
-  start();            // terminal typing
-  setRandomQuip();    // random animated quote
-  // optional: click the card to shuffle a new quote
-  document.querySelector('.idcard')?.addEventListener('click', setRandomQuip);
-}
-
-if (document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', initPage);
-} else {
-  initPage();
-}
-
+  /* kick everything off */
+  function initPage(){
+    start();            // terminal typing
+    setRandomQuip();    // random parchment quote
+    // optional: click card to shuffle quip
+    document.querySelector('.idcard')?.addEventListener('click', setRandomQuip);
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initPage);
+  } else {
+    initPage();
+  }
 </script>
-
 
 </body>
 </html>
