@@ -148,14 +148,14 @@
 
   a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
 
-  /* lanyard + swing rig fixed at top-right on desktop */
+  /* lanyard + swing rig: fixed at top-right on desktop */
   .lanyard-wrap{
     position: fixed;
     top: max(12px, env(safe-area-inset-top));
     right: max(12px, env(safe-area-inset-right));
     width: min(360px, 34vw);
     z-index: 999;
-    pointer-events: none; /* container ignores clicks; contents re-enable */
+    pointer-events: none; /* container ignores clicks; children re-enable */
   }
   .swing{
     position:relative;
@@ -227,21 +227,27 @@
     padding: 10px 12px;
   }
 
-  /* responsive: on small screens place lanyard above content, no overlap */
-  @media (max-width: 700px){
-    /* let it flow at the top */
+  /* mobile layout switch — lanyard on top in normal flow, content below */
+  @media (max-width: 900px){
     .lanyard-wrap{
-      position: static;
+      position: relative;    /* leaves overlay mode */
       top: auto; right: auto;
-      width: min(86vw, 360px);
-      margin: 12px auto 6px;
+      width: 100%;
+      max-width: none;
+      display: grid;
+      place-items: center;
       pointer-events: auto;
-      z-index: auto;
+      z-index: 2;
+      margin: 12px 0 18px;   /* spacing above intro */
     }
-    /* prevent the stage from trying to fill full height behind it */
+    .swing{
+      width: min(420px, 86vw);
+    }
+    /* keep card centered inside swing; absolute layout still fine */
     .stage{
-      min-height: auto;
-      padding-top: 8px;
+      min-height: auto;      /* stop vertical centering from colliding */
+      padding-top: 0;
+      z-index: 1;
     }
   }
 
@@ -258,7 +264,7 @@
   <object type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
-<!-- lanyard rig first in DOM so it appears above on phones -->
+<!-- lanyard first in DOM so it appears above on phones -->
 <aside class="lanyard-wrap" aria-label="Lanyard with ID card">
   <div class="swing">
     <div class="strap" aria-hidden="true"></div>
