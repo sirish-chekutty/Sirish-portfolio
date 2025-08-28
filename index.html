@@ -6,7 +6,6 @@
 <title>Sirish Yadav — IT Network & Systems Administrator</title>
 <meta name="description" content="IT Network & Systems Administrator @ 401 Group of Companies — networks, servers, PBX, cloud." />
 
-<!-- fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 
 <style>
@@ -42,26 +41,22 @@
     overflow-x:hidden;
   }
 
-  /* background (single layer as in v2) */
+  /* background */
   .bg{
     position:fixed; inset:0; z-index:0; width:100%; height:100%;
     pointer-events:none; overflow:hidden;
   }
-  .bg object,.bg img,.bg svg{ width:100%; height:100%; display:block }
+  .bg object{ width:100%; height:100%; display:block }
 
-  /* stage: intro left, lanyard right */
+  /* centered main content */
   .stage{
     position:relative; z-index:1;
     min-height:100dvh;
     display:grid;
-    grid-template-columns: minmax(0, 1fr) min(460px, 34vw);
-    align-items:center;            /* keep overall center feel */
-    justify-items:start;
-    gap: clamp(16px, 3vw, 36px);
+    place-items:center;
     padding: clamp(24px, 4vw, 48px) 18px;
   }
 
-  /* left glass intro */
   .card{
     position:relative;
     width:min(860px, 92vw);
@@ -97,7 +92,6 @@
     margin: 6px 0 10px;
   }
 
-  /* resume button centered */
   .cta-row{
     display:flex; justify-content:center; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px
   }
@@ -111,7 +105,7 @@
   }
   .btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px rgba(0,0,0,.12) }
 
-  /* original icons style (used on the ID card) */
+  /* icons used inside the id card */
   .icons{ display:flex; gap:12px; align-items:center; justify-content:center }
   .icon{
     width:44px; height:44px; display:grid; place-items:center; border-radius:12px;
@@ -154,57 +148,12 @@
 
   a:focus-visible{ outline:3px solid var(--accent); outline-offset:2px; border-radius:6px }
 
-  /* right column: lanyard + id card */
-  .lanyard-wrap{
-    width:100%;
-    max-width:min(460px, 34vw);
-    position:relative;
-    display:grid;
-    justify-items:end;   /* push to the right edge */
-    align-items:start;  /* now sticks to top */
-    padding-right: clamp(0px, 1vw, 10px);
-  }
-
-  .swing{
-    position:relative;
-    width:min(360px, 78%);
-    transform-origin: top center;
-    animation: swing 6s ease-in-out infinite;
-  }
-  @keyframes swing{
-    0%,100%{ transform: rotate(2deg) }
-    50%{ transform: rotate(-2deg) }
-  }
-
-  /* move the hang point up a bit */
-  .strap{
-    position:absolute;
-    top:-6px; left:50%; transform:translateX(-50%);
-    width:14px; height: 26%; /* was 56% */
-    background: linear-gradient(180deg, #000, #111);
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 18px 28px rgba(0,0,0,.25);
-  }
-  .clip{
-    position:absolute; left:50%; top:26%; /* was 54% */
-    transform:translate(-50%,-50%);
-    width:38px; height:28px; border-radius:6px;
-    background: linear-gradient(180deg, #d9dde3, #b6bcc6);
-    box-shadow: 0 6px 18px rgba(0,0,0,.25), inset 0 0 0 1px #8d94a1;
-    display:grid; place-items:center;
-  }
-  .ring{
-    width:16px; height:16px; border-radius:50%;
-    border:2px solid #7f8795; box-shadow: inset 0 0 0 1px #aab1bd;
-    background: #e7eaf0;
-  }
-
-  /* auto-height id card that ends neatly under the icons */
+  /* top-right fixed id card */
   .idcard{
-    position:absolute; left:50%; top:calc(26% + 18px); /* was 54% + 18px */
-    transform:translateX(-50%);
-    width: clamp(260px, 48vw, 360px);
-    /* aspect-ratio removed so height hugs content */
+    position:fixed;
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    width: clamp(240px, 28vw, 340px);
     background: var(--card-bg);
     border:1px solid var(--card-stroke);
     border-radius: 18px;
@@ -213,13 +162,13 @@
     box-shadow: var(--shadow);
     overflow:hidden;
     display:flex; flex-direction:column;
-    padding-bottom: 12px; /* tidy end under icons */
+    padding-bottom: 12px;
+    z-index: 999;
   }
   .idcard::after{
     content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
     box-shadow: inset 0 0 0 1px var(--card-inner);
   }
-
   .photo{
     margin:12px 12px 8px 12px; border-radius:14px; overflow:hidden;
     background:#eaeff6; box-shadow: 0 16px 28px rgba(0,0,0,.10);
@@ -228,24 +177,18 @@
   .photo img{
     width:100%; height:100%; object-fit:cover; object-position:center 20%; display:block;
   }
-
-  /* icons box under the photo */
   .card-social{
-    margin: 6px 12px 0;        /* no bottom margin; card’s padding handles spacing */
+    margin: 6px 12px 0;
     background: rgba(255,255,255,.72);
     border:1px solid var(--line);
     border-radius: 14px;
     padding: 10px 12px;
   }
 
-  /* responsive */
-  @media (max-width: 1100px){
-    .stage{ grid-template-columns: 1fr }
-    .lanyard-wrap{ max-width:min(520px, 94vw) }
-    .swing{ width:min(420px, 92vw) }
-  }
+  /* small screens: make the card a bit narrower */
   @media (max-width: 520px){
     .terminal{ max-width: 88vw }
+    .idcard{ width: min(86vw, 340px) }
   }
 </style>
 </head>
@@ -256,8 +199,8 @@
   <object type="image/svg+xml" data="clouds.svg"></object>
 </div>
 
+<!-- main content -->
 <div class="stage">
-  <!-- left: intro -->
   <article class="card" aria-label="Intro">
     <h1>I'm Sirish Yadav</h1>
 
@@ -281,37 +224,30 @@
       <pre id="terminal" class="term-body" aria-live="polite"></pre>
     </section>
   </article>
-
-  <!-- right: lanyard + ID card -->
-  <aside class="lanyard-wrap" aria-label="Lanyard with ID card">
-    <div class="swing">
-      <div class="strap" aria-hidden="true"></div>
-      <div class="clip"><div class="ring" aria-hidden="true"></div></div>
-
-      <section class="idcard" aria-label="Profile ID card">
-        <div class="photo">
-          <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
-        </div>
-
-        <div class="card-social">
-          <nav class="icons" aria-label="Social links">
-            <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
-              <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
-            </a>
-            <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
-                <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
-              </svg>
-            </a>
-            <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
-            </a>
-          </nav>
-        </div>
-      </section>
-    </div>
-  </aside>
 </div>
+
+<!-- fixed id card at top right -->
+<section class="idcard" aria-label="Profile ID card">
+  <div class="photo">
+    <img src="sirish.jpeg" alt="Portrait of Sirish Yadav" />
+  </div>
+
+  <div class="card-social">
+    <nav class="icons" aria-label="Social links">
+      <a class="icon" href="mailto:Sirish.chekutty@gmail.com" target="_blank" rel="noopener" aria-label="Email Sirish">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4C2.895 4 2 4.895 2 6v12c0 1.105.895 2 2 2h16c1.105 0 2-.895 2-2V6c0-1.105-.895-2-2-2Zm0 2-8 5L4 6h16ZM4 18V8l8 5 8-5v10H4Z"/></svg>
+      </a>
+      <a class="icon" href="https://linkedin.com/in/sirishchekutty" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+          <path d="M4.983 3.5a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5ZM3 9h3.966V21H3V9Zm7.334 0H14.1v1.639h.048c.53-.972 1.83-1.996 3.768-1.996C21.1 8.643 22 11.1 22 14.23V21h-3.967v-6.06c0-1.445-.026-3.304-2.014-3.304-2.018 0-2.327 1.58-2.327 3.205V21H9.334V9Z"/>
+        </svg>
+      </a>
+      <a class="icon" href="https://github.com/sirish-chekutty" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24"><path d="M12 .5C5.73.5.99 5.24.99 11.5c0 4.85 3.15 8.96 7.51 10.41.55.1.75-.23.75-.52 0-.26-.01-1.08-.02-1.96-3.05.66-3.69-1.3-3.69-1.3-.51-1.23-1.24-1.56-1.24-1.56-1-.66.08-.65.08-.65 1.11.07 1.72 1.12 1.72 1.12 1 1.64 2.6 1.17 3.24.89.1-.71.39-1.17.72-1.44-2.43-.28-4.99-1.22-4.99-5.44 0-1.2.43-2.18 1.14-2.96-.12-.28-.49-1.39.11-2.9 0 0 .94-.3 3.07 1.12.9-.25 1.86-.38 2.81-.38s1.9.13 2.8.38c2.13-1.41 3.07-1.12 3.07-1.12.6 1.51.23 2.62.11 2.9.71.78 1.14 1.76 1.14 2.96 0 4.23-2.57 5.15-5.02 5.43.4.34.76 1.04.76 2.1 0 1.51-.02 2.73-.02 3.11 0 .3.2.63.77.52A10.99 10.99 0 0 0 23 11.5C23 5.24 18.27.5 12 .5Z"/></svg>
+      </a>
+    </nav>
+  </div>
+</section>
 
 <script>
   const LINES = [
