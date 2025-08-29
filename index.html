@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 
-
 <style>
   :root{
     --ink:#0b0b0b;
@@ -84,7 +83,7 @@
     display:grid; gap:12px; justify-items:center; margin-bottom:8px;
   }
 
-  /* Keep: animated name with yellow swipe */
+  /* Animated name with yellow swipe */
   .name{
     margin:0;
     font-family:"Caveat", system-ui;
@@ -114,7 +113,27 @@
     animation: swipeIn .9s cubic-bezier(.2,.7,.2,1) .25s forwards;
   }
 
-
+  /* Title line — same handwriting font as intro, no animation */
+  .title-line{
+    font-family:"Patrick Hand", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-weight:600;
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height:1.5;
+    color: var(--muted);
+    letter-spacing:.2px;
+    margin: 0;
+    white-space: nowrap;     /* single line on wider screens */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 1; transform: none; animation: none;
+    text-align: center;
+  }
+  @media (max-width: 520px){
+    .title-line{
+      white-space: normal;   /* allow wrapping on small screens */
+      text-wrap: balance;
+    }
+  }
 
   /* Intro body: improved readability (72ch), left-aligned, gentle spacing + stagger */
   .intro-wrap{
@@ -144,7 +163,7 @@
   @keyframes swipeIn{ to{ transform: scaleX(1) } }
 
   @media (prefers-reduced-motion: reduce){
-    .name, .subtitle, .intro-body .line{ animation:none; transform:none; opacity:1 }
+    .name, .title-line, .intro-body .line{ animation:none; transform:none; opacity:1 }
     .name .swipe::before{ transform:none }
   }
 
@@ -356,16 +375,14 @@
     <header class="intro-head">
       <h1 class="name">I’m <span class="swipe">Sirish Yadav</span></h1>
       <p class="title-line">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
-     </header>
+    </header>
 
     <!-- Improved spacing & measure -->
     <div class="intro-wrap">
       <section class="intro-body" aria-label="About">
-        <p class="line">I turn requirements into diagrams, diagrams into builds, and builds into steady uptime.I map data paths, segment networks, harden edges, and keep services calm with sensible monitoring and change control.</p>
-  
-      <p class="line">Hybrid is standard: on-prem stitched to Azure with vNets, private access, and Entra ID so apps feel local and access stays private.</p>
-        <p class="line">Workflow: discover → design → build → observe → refine. I automate the repeatable, keep dashboards honest, and trace packets when things get weird.Security lives in the design; reliability is boring on purpose. Expect tidy diagrams, sane configs, short incidents.</p>
-        
+        <p class="line">I turn requirements into diagrams, diagrams into builds, and builds into steady uptime. I map data paths, segment networks, harden edges, and keep services calm with sensible monitoring and change control.</p>
+        <p class="line">Hybrid is standard: on-prem stitched to Azure with vNets, private access, and Entra ID so apps feel local and access stays private.</p>
+        <p class="line">Workflow: discover → design → build → observe → refine. I automate the repeatable, keep dashboards honest, and trace packets when things get weird. Security lives in the design; reliability is boring on purpose. Expect tidy diagrams, sane configs, short incidents.</p>
       </section>
     </div>
 
