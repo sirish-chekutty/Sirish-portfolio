@@ -36,7 +36,7 @@
   html,body{height:100%}
   body{
     margin:0; color:var(--ink); background:#ffffff;
-    font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    font:16px/1.6 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
     -webkit-font-smoothing: antialiased;
     overflow-x:hidden;
   }
@@ -79,7 +79,7 @@
 
   /* ─────────── Intro header ─────────── */
   .intro-head{
-    display:grid; gap:8px; justify-items:center; margin-bottom:6px;
+    display:grid; gap:12px; justify-items:center; margin-bottom:8px;
   }
 
   /* Keep: animated name with yellow swipe */
@@ -112,46 +112,67 @@
     animation: swipeIn .9s cubic-bezier(.2,.7,.2,1) .25s forwards;
   }
 
-  /* New: subtle subtitle for role/company */
+  /* Subtle role/company styling */
   .subtitle{
-    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
-    font-weight:600;
-    font-size: clamp(14px, 1.8vw, 18px);
-    color: rgba(11,11,11,.78);
-    letter-spacing:.2px;
+    display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:center;
     transform: translateY(6px); opacity:0;
     animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .18s forwards;
   }
+  .subtitle .role{
+    padding:8px 12px;
+    border:1px solid var(--line);
+    border-radius:999px;
+    background:#fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,.06);
+    font-weight:700;
+    font-size: clamp(14px, 1.8vw, 18px);
+    color: rgba(11,11,11,.85);
+    letter-spacing:.2px;
+  }
   .subtitle .sep{
     opacity:.35;
-  }
-  .subtitle .company{
     font-weight:600;
   }
+  .subtitle .company{
+    font-weight:700;
+    font-size: clamp(14px, 1.8vw, 18px);
+    color:#0b0b0b;
+    letter-spacing:.2px;
+    position:relative;
+  }
+  .subtitle .company::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-2px;
+    height:2px; border-radius:2px;
+    background: linear-gradient(90deg, rgba(0,0,0,.1), rgba(0,0,0,.25));
+  }
 
-  /* body copy — no yellow side lines, just clean text + stagger */
-  .intro-body{ margin-top:10px; }
+  /* Intro body: improved readability (72ch), left-aligned, gentle spacing + stagger */
+  .intro-wrap{
+    max-width: 72ch;
+    margin: 12px auto 0;
+    text-align: left;
+  }
   .intro-body .line{
     font-family:"Patrick Hand", system-ui;
-    font-size: clamp(18px, 2.2vw, 22px);
-    line-height:1.6; color:var(--muted);
-    margin: 10px 0;
-    padding-left:0; border-left:none;
+    font-size: clamp(18px, 2.1vw, 22px);
+    line-height:1.7;
+    color:var(--muted);
+    margin: clamp(8px, 1.2vw, 14px) 0;
     transform: translateY(8px); opacity:0;
-    animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) forwards;
+    animation: fadeUp .6s cubic-bezier(.2,.7,.2,1) forwards;
   }
-  .intro-body .line:nth-child(1){ animation-delay:.32s }
-  .intro-body .line:nth-child(2){ animation-delay:.42s }
-  .intro-body .line:nth-child(3){ animation-delay:.52s }
-  .intro-body .line:nth-child(4){ animation-delay:.62s }
+  .intro-body .line:nth-child(1){ animation-delay:.30s }
+  .intro-body .line:nth-child(2){ animation-delay:.40s }
+  .intro-body .line:nth-child(3){ animation-delay:.50s }
+  .intro-body .line:nth-child(4){ animation-delay:.60s }
+  .intro-body .line:nth-child(5){ animation-delay:.70s }
 
   @keyframes fadeUp{
     from{ transform: translateY(12px); opacity:0 }
     to{ transform: translateY(0); opacity:1 }
   }
-  @keyframes swipeIn{
-    to{ transform: scaleX(1) }
-  }
+  @keyframes swipeIn{ to{ transform: scaleX(1) } }
 
   @media (prefers-reduced-motion: reduce){
     .name, .subtitle, .intro-body .line{ animation:none; transform:none; opacity:1 }
@@ -160,7 +181,7 @@
 
   /* CTA button */
   .cta-row{
-    display:flex; justify-content:center; flex-wrap:wrap; gap:12px; align-items:center; margin-top:16px
+    display:flex; justify-content:center; flex-wrap:wrap; gap:12px; align-items:center; margin-top:18px
   }
   .btn{
     display:inline-flex; align-items:center; gap:10px;
@@ -313,6 +334,7 @@
       padding-top: 0;
       z-index: 1;
     }
+    .intro-wrap{ margin-top: 10px }
   }
 
   @media (max-width: 520px){
@@ -371,14 +393,16 @@
       </div>
     </header>
 
-    <!-- Clean body copy (no yellow side lines) -->
-    <section class="intro-body" aria-label="About">
-      <p class="line">I turn requirements into diagrams, diagrams into builds, and builds into steady uptime.</p>
-      <p class="line">I map data paths, segment networks, harden edges, and keep services calm with sensible monitoring and change control.</p>
-      <p class="line">Hybrid is standard: on-prem stitched to Azure with vNets, private access, and Entra ID so apps feel local and access stays private.</p>
-      <p class="line">Workflow: discover → design → build → observe → refine. I automate the repeatable, keep dashboards honest, and trace packets when things get weird.</p>
-      <p class="line">Security lives in the design; reliability is boring on purpose. Expect tidy diagrams, sane configs, short incidents.</p>
-    </section>
+    <!-- Improved spacing & measure -->
+    <div class="intro-wrap">
+      <section class="intro-body" aria-label="About">
+        <p class="line">I turn requirements into diagrams, diagrams into builds, and builds into steady uptime.</p>
+        <p class="line">I map data paths, segment networks, harden edges, and keep services calm with sensible monitoring and change control.</p>
+        <p class="line">Hybrid is standard: on-prem stitched to Azure with vNets, private access, and Entra ID so apps feel local and access stays private.</p>
+        <p class="line">Workflow: discover → design → build → observe → refine. I automate the repeatable, keep dashboards honest, and trace packets when things get weird.</p>
+        <p class="line">Security lives in the design; reliability is boring on purpose. Expect tidy diagrams, sane configs, short incidents.</p>
+      </section>
+    </div>
 
     <div class="cta-row">
       <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
@@ -398,7 +422,7 @@
 </div>
 
 <script>
-  /* Terminal typing (unchanged) */
+  /* Terminal typing */
   const LINES = [
     "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
     "az network vnet peering create --name make-friends --allow-vnet-access",
