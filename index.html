@@ -77,23 +77,90 @@
     box-shadow: inset 0 0 0 1px var(--card-inner);
   }
 
-  h1{
-    margin:0 0 10px;
-    font-family:"Caveat", system-ui;
-    font-weight:700;
-    font-size: clamp(36px, 7vw, 64px);
-    line-height:1.02;
-  }
-  .lead{
-    font-family:"Patrick Hand", system-ui;
-    font-size: clamp(18px, 2.4vw, 22px);
-    line-height:1.6;
-    color:var(--muted);
-    margin: 6px 0 10px;
+  /* ─────────── Stylish intro header ─────────── */
+  .intro-head{
+    display:grid; gap:10px; justify-items:center; margin-bottom:8px;
   }
 
+  .name{
+    margin:0;
+    font-family:"Caveat", system-ui;
+    font-weight:700;
+    font-size: clamp(40px, 8vw, 74px);
+    line-height:1.02;
+    letter-spacing:.2px;
+    position:relative;
+    color:#0b0b0b;
+    text-shadow:
+      -1px -1px 0 #fff,
+       1px -1px 0 #fff,
+      -1px  1px 0 #fff,
+       1px  1px 0 #fff; /* subtle stroke for contrast on glass */
+    transform: translateY(6px);
+    opacity:0;
+    animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .05s forwards;
+  }
+  .name .swipe{
+    position:relative; display:inline-block; padding:0 .25em;
+  }
+  .name .swipe::before{
+    content:""; position:absolute; inset:auto 0 .1em 0; height:.6em; z-index:-1;
+    background: linear-gradient(90deg, rgba(255,210,0,.38), rgba(255,210,0,.85));
+    border-radius:8px;
+    transform-origin:left center; transform: scaleX(0);
+    animation: swipeIn .9s cubic-bezier(.2,.7,.2,1) .25s forwards;
+  }
+
+  .title-row{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center;
+    transform: translateY(6px); opacity:0;
+    animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) .18s forwards;
+  }
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 14px; border-radius:999px; font-weight:700; font-size:15px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.12);
+    border:1px solid var(--line);
+  }
+  .pill.dark{ background:#0b0b0b; color:var(--accent); }
+  .pill.accent{ background:var(--accent); color:#0b0b0b; }
+  .pill .dot{
+    width:8px; height:8px; border-radius:50%;
+    background: currentColor; opacity:.85;
+  }
+
+  /* body copy with subtle left accent & stagger */
+  .intro-body{ margin-top:10px; }
+  .intro-body .line{
+    font-family:"Patrick Hand", system-ui;
+    font-size: clamp(18px, 2.2vw, 22px);
+    line-height:1.6; color:var(--muted);
+    margin: 10px 0;
+    padding-left:14px; border-left:3px solid var(--accent);
+    transform: translateY(8px); opacity:0;
+    animation: fadeUp .7s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .intro-body .line:nth-child(1){ animation-delay:.32s }
+  .intro-body .line:nth-child(2){ animation-delay:.42s }
+  .intro-body .line:nth-child(3){ animation-delay:.52s }
+  .intro-body .line:nth-child(4){ animation-delay:.62s }
+
+  @keyframes fadeUp{
+    from{ transform: translateY(12px); opacity:0 }
+    to{ transform: translateY(0); opacity:1 }
+  }
+  @keyframes swipeIn{
+    to{ transform: scaleX(1) }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .name, .title-row, .intro-body .line{ animation:none; transform:none; opacity:1 }
+    .name .swipe::before{ transform:none }
+  }
+
+  /* CTA button */
   .cta-row{
-    display:flex; justify-content:center; flex-wrap:wrap; gap:12px; align-items:center; margin-top:12px
+    display:flex; justify-content:center; flex-wrap:wrap; gap:12px; align-items:center; margin-top:16px
   }
   .btn{
     display:inline-flex; align-items:center; gap:10px;
@@ -155,7 +222,7 @@
     right: max(12px, env(safe-area-inset-right));
     width: min(360px, 34vw);
     z-index: 999;
-    pointer-events: none; /* container ignores clicks; children re-enable */
+    pointer-events: none;
   }
   .swing{
     position:relative;
@@ -230,7 +297,7 @@
   /* mobile layout switch — lanyard on top in normal flow, content below */
   @media (max-width: 900px){
     .lanyard-wrap{
-      position: relative;    /* leaves overlay mode */
+      position: relative;
       top: auto; right: auto;
       width: 100%;
       max-width: none;
@@ -238,20 +305,16 @@
       place-items: center;
       pointer-events: auto;
       z-index: 2;
-      margin: 12px 0 18px;   /* spacing above intro */
+      margin: 16px 0 24px;
     }
-    .swing{
-      width: min(420px, 86vw);
-    }
-    /* keep card centered inside swing; absolute layout still fine */
+    .swing{ width: min(420px, 86vw) }
     .stage{
-      min-height: auto;      /* stop vertical centering from colliding */
+      min-height: auto;
       padding-top: 0;
       z-index: 1;
     }
   }
 
-  /* extra small tweaks */
   @media (max-width: 520px){
     .terminal{ max-width: 88vw }
   }
@@ -297,13 +360,24 @@
 <!-- main content -->
 <div class="stage">
   <article class="card" aria-label="Intro">
-    <h1>I'm Sirish Yadav</h1>
 
-    <p class="lead">IT Network &amp; Systems Administrator @ 401 Group of Companies</p>
-    <p class="lead">I turn requirements into diagrams, diagrams into builds, and builds into steady uptime. I map data paths, segment networks, harden edges, and keep services calm with sensible monitoring and change control.</p>
-    <p class="lead">I tie on-prem to Azure with vNets, private access, and Entra ID so apps feel local and access stays private. Wi-Fi gets a real plan, VPNs just connect, and voice gets the QoS it deserves.</p>
-    <p class="lead">Workflow: discover → design → build → observe → refine. I automate the repeatable, keep dashboards honest, and when things get weird I follow packets, logs, and metrics until the story adds up.</p>
-    <p class="lead">Security lives in the design; reliability is boring on purpose. Expect tidy diagrams, sane configs, short incidents—infra that fades into the background so people can get work done.</p>
+    <!-- New styled intro header -->
+    <header class="intro-head">
+      <h1 class="name">I’m <span class="swipe">Sirish Yadav</span></h1>
+      <div class="title-row" role="group" aria-label="Role and Company">
+        <span class="pill dark"><span class="dot" aria-hidden="true"></span> IT Network &amp; Systems Administrator</span>
+        <span class="pill accent">@ 401 Group of Companies</span>
+      </div>
+    </header>
+
+    <!-- New styled body copy -->
+    <section class="intro-body" aria-label="About">
+      <p class="line">I turn requirements into diagrams, diagrams into builds, and builds into steady uptime.</p>
+      <p class="line">I map data paths, segment networks, harden edges, and keep services calm with sensible monitoring and change control.</p>
+      <p class="line">Hybrid is standard: on-prem stitched to Azure with vNets, private access, and Entra ID so apps feel local and access stays private.</p>
+      <p class="line">Workflow: discover → design → build → observe → refine. I automate the repeatable, keep dashboards honest, and trace packets when things get weird.</p>
+      <p class="line">Security lives in the design; reliability is boring on purpose. Expect tidy diagrams, sane configs, short incidents.</p>
+    </section>
 
     <div class="cta-row">
       <a class="btn" href="Sirish-Yadav-Network%20and%20Systems%20Administrator.pdf" download aria-label="Download Resume as PDF">
@@ -323,6 +397,7 @@
 </div>
 
 <script>
+  /* Terminal typing (unchanged) */
   const LINES = [
     "az group create -n rg-calm-networks -l canadacentral # because chaos is expensive",
     "az network vnet peering create --name make-friends --allow-vnet-access",
